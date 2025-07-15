@@ -1,0 +1,7 @@
+.anyClass {
+ height:150px;
+ overflow-y: scroll;
+}
+textarea{
+    resize: vertical;
+}

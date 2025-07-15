@@ -1,0 +1,129 @@
+
+<div class="modal inmodal" id="alerts" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-md col-6 w-100" style="float: right; width: 450px; height: 100%;">
+    <div class="modal-content animated bounceInUp">
+      <div class="modal-header" style="padding-top: 15px; padding-bottom: 15px;">
+        <button type="button" (click)="onclose()" #closebutton class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">Alert</h4>
+        <form [formGroup]="NpmAlertModelForm">
+          <div style="margin-top: 20px;">
+            <div class="form-group col-12">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <span style="font-weight: bold; font-size: 20px;" *ngIf="isExpired" class="text-danger">Alert Expired*</span>
+                </div>
+                <div class="checkbox checkbox-primary">
+                    <input [attr.disabled]="disableForm?true:null" formControlName="Inactive" type="checkbox">
+                    <label>Inactive</label>
+                </div>
+            </div>
+            
+            </div>
+            <div class="form-group col-12">
+              <div style="display: flex; align-items: center;">
+                <h4 style="width: 100px; text-align: start;">Type<span class="text-danger">*</span></h4>
+                <select [attr.disabled]="disableForm?true:null" (change)="onTypeUsers($event)"
+                  style="width: 220px; margin-left: 10px; height: 25px;" formControlName="Type">
+                  <option value="A">Alert</option>
+                </select>
+              </div>
+              <!-- <div *ngIf="f.Type.invalid && (f.Type.dirty || f.Type.touched)" class="text-danger">
+                <div *ngIf="f.Type.errors.required">Type is required.</div>
+              </div> -->
+            </div>
+            <div class="form-group col-12">
+              <div style="display: flex; align-items: center;">
+                <h4>Effective From<span class="text-danger">*</span></h4>
+                <my-date-picker [disabled]="disableForm?true:null" style="width: 220px; margin-left: 10px;"
+                  [options]="myDateRangePickerOptions" [placeholder]="'MM/DD/YYYY'"
+                  (dateChanged)="onStartDateChangeStart($event)" formControlName="EffectiveFrom" [selDate]="selDateDD"
+                  (keydown)="onDateInputKeydown($event)">
+                </my-date-picker>
+              </div>
+            </div>
+            <div class="form-group col-12">
+              <div style="display: flex; align-items: center;">
+                <h4 style="width: 100px; text-align: start;">Priority<span class="text-danger">*</span></h4>
+                <select [attr.disabled]="disableForm?true:null" (change)="onPrioritychanged($event)"
+                  style="width: 220px; margin-left: 10px; height: 25px;" formControlName="Priority">
+                  <option value="H">High</option>
+                  <option value="M">Medium</option>
+                  <option value="L">Low</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-12">
+              <div style="display: flex; align-items: center;">
+                <h4>Applicable For<span class="text-danger">*</span></h4>
+                <select [attr.disabled]="disableForm?true:null" (change)="onPrioritychanged($event)"
+                  style="width: 220px; margin-left: 10px; height: 25px;" formControlName="ApplicableFor">
+                  <option value="S">Self only</option>
+                  <option value="A">All users</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-12">
+              <div style="display: flex; align-items: center;">
+                <h4 style="width: 100px; text-align: start;">Effective To</h4>
+                <my-date-picker [disabled]="disableForm?true:null" style="width: 220px; margin-left: 10px;"
+                  [options]="myDatePickerOptions" [placeholder]="'MM/DD/YYYY'"
+                  (dateChanged)="onDueDateChangeStart($event)" formControlName="EffectiveTo" [selDate]="selDateET">
+                </my-date-picker>
+              </div>
+            </div>
+            <div class="form-group col-12" style="text-align: left;">
+              <h4>Notes<span class="text-danger">*</span></h4>
+              <textarea [attr.disabled]="disableForm?true:null" formControlName="AlertMessage" rows="5" maxlength="200"
+                style="width: 100%; max-width: 100%;"></textarea>
+            </div>
+
+            <div class="form-group col-lg-12" style="text-align: left; margin-top: 10px;">
+              <h4 style="width: 100px; text-align: start;">Apply To</h4>
+              <div class="checkbox checkbox-primary">
+                <input [attr.disabled]="disableForm?true:null" type="checkbox" formControlName="Demographics">
+                <label style="width: 100px; text-align: start;">Demographics</label>
+              </div>
+              <div class="checkbox checkbox-primary form-group col-lg-12">
+                <input [attr.disabled]="disableForm?true:null" formControlName="ClaimSummary" type="checkbox">
+                <label>Claim Summary</label>
+              </div>
+
+                      <div class="checkbox checkbox-primary">
+              <div style="display: inline-block; align-items: center;">
+                  <input formControlName="Claim" type="checkbox" (change)="toggleField($event.target.checked)">
+                  <label>Claim  </label>
+                  <!-- {{ alertmodel && alertmodel[0] ? alertmodel[0].Claim : '' }} -->
+              </div>
+              <div  *ngIf="NpmAlertModelForm.get('Claim').value">
+                  <!-- Modified line below -->
+                  <ng-multiselect-dropdown [placeholder]="'Select Claims'" [settings]="dropdownSettings" [data]="claimDropdownData"
+                      formControlName="ClaimText" [disabled]="!NpmAlertModelForm.get('Claim').value">
+                  </ng-multiselect-dropdown>
+              </div>
+          </div>
+          
+              
+              
+              <div class="checkbox checkbox-primary">
+                <input [attr.disabled]="disableForm?true:null" type="checkbox" formControlName="AddNewClaim"
+                  style="width: 100px; text-align: start;">
+                <label>Add New Claim</label>
+              </div>
+              <div class="form-group col-lg-12 checkbox checkbox-primary">
+                <input [attr.disabled]="disableForm?true:null" formControlName="AddNewPayment" type="checkbox">
+                <label>Add New Payment</label>
+              </div>
+              <button [attr.disabled]="disableForm?true:null" id="Savebutton" type="button" (click)="saveAlert()"
+                class="btn btn-w-m btn-primary" style="float: right;">
+                {{ isCreateMode ? 'Save' : 'Update' }}
+              </button>
+            </div>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,167 @@
+<div class="ibox float-e-margins">
+  <div class="ibox-title">
+    <h5>{{iboxAddEditTitle}}</h5>
+  </div>
+  <div class="ibox-content">
+    <form [formGroup]="UserForm">
+      <div class="row">
+        <div class="col-lg-5 form-group">
+          <label>First Name<span class="text-danger">*</span></label>
+          <input type="text" [(ngModel)]="objUser.FirstName" class="form-control" formControlName="firstName"
+            maxlength="25" autocomplete="off">
+        </div>
+        <div class="col-lg-2 form-group">
+          <label>MI</label>
+          <input type="text" [(ngModel)]="objUser.MiddleInitial" class="form-control" formControlName="mi" maxlength="1"
+            autocomplete="off">
+        </div>
+        <div class="col-lg-5 form-group">
+          <label>Last Name<span class="text-danger">*</span></label>
+          <input type="text" [(ngModel)]="objUser.LastName" class="form-control" formControlName="lastName"
+            maxlength="25" autocomplete="off">
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-lg-6">
+          <label>Email<span class="text-danger">*</span></label>
+          <input type="email" class="form-control" (input)="verifyEmail($event.target.value)"
+            [(ngModel)]="objUser.Email" formControlName="email" maxlength="256" autocomplete="none">
+          <span *ngIf="isEmailAlreadyExist" class="text-danger">Email already taken</span>
+        </div>
+        <div class="form-group col-lg-6">
+          <label>Company</label>
+          <select class="form-control" [(ngModel)]="objUser.CompanyId" formControlName="company">
+            <option disabled>Select Company</option>
+            <option *ngFor="let c of userSelectListsViewModel.Companies" [value]="c.Id">{{c.Name}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6 form-group">
+          <label>Role<span class="text-danger">*</span></label>
+          <select class="form-control" [(ngModel)]="objUser.RoleId" formControlName="role">
+            <option disabled>Select Role</option>
+            <option *ngFor="let r of userSelectListsViewModel.Roles" [value]="r.Id">{{r.Name}}</option>
+          </select>
+        </div>
+
+        <!-- added by kamran -->
+        <div class="form-group col-lg-6">
+          <label>Emp.ID<span class="text-danger" *ngIf="UserForm.get('isEmployee').value">*</span></label>
+          <input type="text" placeholder="Emp.Id" class="form-control" (input)="empIdExists($event.target.value)"
+            [(ngModel)]="objUser.Empid" maxlength="19" onlyNumbers="true" formControlName="Empid" autocomplete="off">
+          <span *ngIf="isEmployeeExist" class="text-danger">EmpId already exists</span>
+        </div>
+
+        <!-- end kamran -->
+
+        <div class="form-group col-lg-2">
+          <label></label>
+          <div class="checkbox checkbox-primary">
+            <input id="isActive" type="checkbox" [(ngModel)]="objUser.IsActive" formControlName="isActive">
+            <label for="isActive">
+              Active
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-4">
+          <label></label>
+          <div class="checkbox checkbox-primary">
+            <input id="isEmployee" type="checkbox" [(ngModel)]="objUser.IsEmployee" formControlName="isEmployee"
+              (change)="toggleEmployeeId()" />
+            <label for="isEmployee">
+              Mark as Employee
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12 form-group">
+          <label>Practices</label>
+          <ng-multiselect-dropdown [placeholder]="'Assign Practices'" [data]="userSelectListsViewModel.Practices"
+            [settings]="dropdownSettings" formControlName="ngMultiSelect" [(ngModel)]="objUser.Practices">
+          </ng-multiselect-dropdown>
+        </div>
+      </div>
+      <div class="row" *ngIf="!(objUser.UserId!=null && objUser.UserId!=0 && objUser.UserId!=undefined)">
+        <div style="height:0; overflow:hidden">
+          <input style="opacity:0;" type="email" value="" class="" />
+          <input style="opacity:0;" type="password" value="" class="d-" />
+        </div>
+        <div class="form-group" formGroupName="pGroup">
+          <div class="col-lg-6">
+            <label><i class="fa fa-info-circle" data-toggle="popover" [popover]="myPopover"></i>
+              Password<span class="text-danger">*</span></label>
+            <input type="password" class="form-control" [(ngModel)]="objUser.Password" formControlName="password"
+              maxlength="100"
+              [ngClass]="{'password-group-error':(UserForm.controls.pGroup.controls.password.errors) && (UserForm.controls.pGroup.controls.password.touched || UserForm.controls.pGroup.controls.password.dirty)}">
+            <popover-content #myPopover title="Password Criteria" placement="left" [animation]="true"
+              [closeOnClickOutside]="true">
+              <p><b>1.</b> Must be eight characters or longer.</p>
+              <p><b>2.</b> At least 1 lowercase alphabetical character.</p>
+              <p><b>3.</b> At least 1 uppercase alphabetical character.</p>
+              <p><b>4.</b> At least 1 numeric character.</p>
+              <p><b>5.</b> At least one special character.</p>
+              <p><b>6.</b> Password and Verify Password should match.</p>
+            </popover-content>
+            <ng2-password-strength-bar [passwordToCheck]="objUser.Password">
+            </ng2-password-strength-bar>
+          </div>
+          <div class="col-lg-6">
+            <label>Verify Password<span class="text-danger">*</span></label>
+            <input type="password" class="form-control" [(ngModel)]="objUser.ConfirmPassword"
+              formControlName="confirmPassword" maxlength="100"
+              [ngClass]="{'password-group-error':(UserForm.controls.pGroup.controls.confirmPassword.errors) && (UserForm.controls.pGroup.controls.confirmPassword.touched || UserForm.controls.pGroup.controls.confirmPassword.dirty)}">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 form-group">
+          <label>Zip<span class="text-danger">*</span></label>
+          <input type="text" class="form-control" (blur)="GetCityState($event.target.value)"
+            [(ngModel)]="objUser.PostalCode" formControlName="zip" mask="00000-0000" maxlength="10">
+        </div>
+
+
+        <div class="col-lg-5 form-group">
+          <label>City<span class="text-danger">*</span></label>
+          <select id="city" class="form-control" name="city" [(ngModel)]="objUser.City" formControlName="city">
+            <option [ngValue]="null">Select City</option>
+            <option *ngFor="let city of ZipUser" [value]="city.CityName">
+              {{city.CityName | titlecase}}
+            </option>
+          </select>
+        </div>
+
+
+        <!-- <div class="col-lg-5 form-group">
+          <label>City<span class="text-danger">*</span></label>
+          <input type="text" class="form-control" [(ngModel)]="objUser.City" formControlName="city" maxlength="50"
+            disabled>
+        </div> -->
+
+
+        <div class="col-lg-3 form-group">
+          <label>State<span class="text-danger">*</span></label>
+          <input type="text" class="form-control" [(ngModel)]="objUser.State" formControlName="state" size="10"
+            maxlength="50" disabled>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12 form-group">
+          <label>Address<span class="text-danger">*</span></label>
+          <input type="text" class="form-control" [(ngModel)]="objUser.Address" formControlName="address"
+            maxlength="250">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <button class="btn btn-sm btn-default pull-right" type="reset" (click)="onCancelClick()">Cancel</button>
+          <button class="btn btn-sm btn-primary pull-right" type="submit" (click)="onSaveClick()"
+            [disabled]="!UserForm.valid || isEmailAlreadyExist || isEmployeeExist">Save</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

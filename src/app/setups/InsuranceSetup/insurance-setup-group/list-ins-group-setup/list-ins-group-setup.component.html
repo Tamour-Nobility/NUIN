@@ -1,0 +1,58 @@
+<p class="pb-15">
+  <a class="pull-right" (click)="GetGroupsList()"><i class="fa fa-refresh"></i> Refresh </a>
+</p>
+<div class="row">
+  <div class="col-lg-12">
+    <table id="tblInsGroup" class="table table-striped table-hover table-bordered table-responsive" width="100%">
+      <thead>
+        <tr>
+          <th>&nbsp;&nbsp;&nbsp;</th>
+          <th>Group Name</th>
+          <th class="text-center">Created By</th>
+          <th class="text-center">Created Date</th>
+          <th class="text-center">Modified By</th>
+          <th class="text-center">Modified Date</th>
+          <th class="text-center all">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pt of GroupModel">
+            <td></td>
+          <td>{{pt.Insgroup_Name | titlecase}}</td>
+          <td align="center">{{pt.Created_By_Name | titlecase}}</td>
+          <td align="center">{{pt.Created_Date | date:'MM/dd/yyyy'}}</td>
+          <td align="center">{{pt.Modified_By_Name | titlecase}}</td>
+          <td align="center">{{pt.Modified_Date | date:'MM/dd/yyyy'}}</td>
+          <td align="center" class="footable-visible footable-last-column">
+            <div class="btn-group">
+              <!-- <button class="btn-default btn btn-xs gridbtn" (click)="onViewClick(pt.Insgroup_Id)">View</button> -->
+              <button class="btn-default btn btn-xs gridbtn" (click)="openModal('Edit Insurance Group',pt.Insgroup_Id)">Edit</button>
+              <button class="btn-danger btn btn-xs gridbtn" (click)="onDeleteClick(pt.Insgroup_Id)">Delete</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade " bsModal #addEditGroupModal="bs-modal" tabindex="-1"  aria-labelledby="dialog-nested-name">
+  <div class="modal-dialog " >
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div style="display: flex; justify-content: space-between; padding: 10px;">
+        <h3>{{ modalTitle }}</h3>
+        <button type="button" class="close" (click)="closeModal()">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      
+      <!-- Pass Group ID and Modal Close Event -->
+      <app-add-edit-ins-group-setup 
+        [groupId]="selectedGroupId" 
+        (onSave)="onSaveGroup($event)"
+        (onCancel)="closeModal()">
+      </app-add-edit-ins-group-setup>
+    </div>
+  </div>
+</div>

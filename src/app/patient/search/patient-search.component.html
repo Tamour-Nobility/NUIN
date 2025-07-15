@@ -1,0 +1,179 @@
+<div class="row">
+   <div class="col-lg-12">
+      <div class="ibox float-e-margins">
+         <div class="ibox-title">
+            <h5><i class="fa fa-search"></i>&nbsp;Patient Search</h5>
+            <div class="tools">
+               <button
+               class="btn btn-primary btn-sm "
+               [disabled]="DisableBtn"
+               (click)="onAction({type:'New'})">
+                  <i class="fa fa-plus"></i>&nbsp;Add New Patient
+               </button>
+            </div>
+         </div>
+      <div class="ibox-content">
+            <form [formGroup]="SearchForm">
+               <div class="row col-lg-3">
+                  <div class="checkbox m-r-xs">
+                     <input type="checkbox" title="To Search patients with uncompleted information, please select"
+                        id="checkbox0" [(ngModel)]="searchModel.IncludePTLPatients" formControlName="ptl">
+                     <label for="checkbox0" data-placement="bottom">
+                        Draft Patient
+                     </label>
+                  </div>
+               </div>
+               <div class="clearfix"></div>
+               <div class="row">
+                  <div class="col-sm-3 col-md-3 col-lg-3">
+                     <div class="form-group">
+                        <label class="control-label" for="patAccont">Patient Account #</label>
+                        <input type="text" id="patAccont" placeholder="Enter Patient Account" class="form-control"
+                           maxlength="18" onlyNumbers="true" [(ngModel)]="searchModel.PatientAccount"
+                           formControlName="patientAccount" autocomplete="off">
+                     </div>
+                  </div>
+                  <div class="col-sm-3 col-md-3 col-lg-3">
+                     <div class="form-group">
+                        <label class="control-label" for="lName">Last Name</label>
+                        <input type="text" id="lName" placeholder="Enter Last Name" alphabetsWithSpace="true" noSpace
+                           autoFocus="true" class="form-control" [(ngModel)]="searchModel.LastName"
+                           formControlName="lastName" maxlength="50" autocomplete="off">
+                     </div>
+                  </div>
+                  <div class="col-sm-3 col-md-3 col-lg-3">
+                     <div class="form-group">
+                        <label class="control-label" for="fName">First Name</label>
+                        <input type="text" id="fName" placeholder="Enter First Name" alphabetsWithSpace="true" noSpace
+                           class="form-control" [(ngModel)]="searchModel.FirstName" formControlName="firstName"
+                           maxlength="50" autocomplete="off">
+                     </div>
+                  </div>
+                  <div class="col-sm-3 col-md-3 col-lg-3">
+                     <div class="form-group">
+                        <label class="control-label" for="SSN">SSN</label>
+                        <input type="text" id="SSN" placeholder="___-__-____" class="form-control"
+                           [(ngModel)]="searchModel.SSN" mask="000-00-0000" formControlName="ssn" autocomplete="off">
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-sm-3 col-md-3 col-lg-3">
+                     <div class="form-group">
+                        <label class="control-label" for="Claim">Claim #</label>
+                        <input type="text" id="Claim" value="" placeholder="Enter Claim No" class="form-control"
+                           maxlength="19" [(ngModel)]="searchModel.ClaimNo" onlyNumbers="true" formControlName="claimNo"
+                           autocomplete="off">
+                     </div>
+                  </div>
+                  <div class="col-sm-3 col-md-3 col-lg-3">
+                     <div class="form-group">
+                        <label class="control-label" for="Policy">Policy #</label>
+                        <input type="text" id="Policy" maxlength="19" placeholder="Enter Policy Number"
+                           class="form-control" [(ngModel)]="searchModel.PolicyNo" formControlName="policyNo"
+                           onlyNumbers="true" autocomplete="off">
+                     </div>
+                  </div>
+                  <div class="col-sm-3 col-md-3 col-lg-3">
+                     <div class="form-group">
+                        <label class="control-label" for="HomePhone">Home Phone</label>
+                        <input type="text" id="HomePhone" placeholder="(___) ___-____" class="form-control"
+                           mask="(000) 000 0000" formControlName="homePhone" maxlength="14"
+                           [(ngModel)]="searchModel.HomePhone" autocomplete="off">
+                     </div>
+                  </div>
+                  <div class="col-sm-3 col-md-3 col-lg-3">
+                     <div class="form-group">
+                        <label class="control-label" for="">ZIP</label>
+                        <input type="text" id="ZIP" placeholder="_____-____" class="form-control" mask="00000-0000"
+                           [(ngModel)]="searchModel.ZIP" formControlName="zip" autocomplete="off">
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-sm-3 col-md-3 col-lg-3">
+                     <div class="form-group">
+                        <label class="control-label" for="status">Date of Birth</label>
+                        <my-date-picker id="dtpDOB" [options]="myDatePickerOptions" (keyup)="dateMask($event)"
+                           [placeholder]="'MM/DD/YYYY'" [selDate]="searchModel.dob"
+                           (dateChanged)="onDateChangedDOB($event)"></my-date-picker>
+                     </div>
+                  </div>
+                  <div class="col-sm-3 col-md-3 col-lg-3">
+                     <div class="form-group">
+                        <label class="control-label" for="status">By Claim</label>
+                        <select id="dateRangeType" class="form-control" name="dateRangeType"
+                           [(ngModel)]="searchModel.dateType" formControlName="dateRangeType"
+                           (change)="onChangeDateRangeType()">
+                           <option [ngValue]="null" selected>Select</option>
+                           <option *ngFor="let type of dateRangeTypes" value={{type.id}}>
+                              {{type.label}}
+                           </option>
+                        </select>
+                     </div>
+                  </div>
+                  <div class="col-sm-3 col-md-3 col-lg-3">
+                     <div class="form-group">
+                        <label class="control-label" for="status">From - To<span class="text-danger"
+                              *ngIf="searchModel.dateType!==null">*</span></label>
+                        <my-date-range-picker [options]="myDateRangePickerOptions" [placeholder]="'MM/DD/YYYY'"
+                           componentDisabled="true" (dateRangeChanged)="onDateRangeChanged($event)"
+                           formControlName="DOSRange">
+                        </my-date-range-picker>
+                     </div>
+                  </div>
+               </div>
+               <div>
+                  <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit"
+                     (click)="searchPatient()">Search</button>
+                  <button class="btn btn-sm btn-white pull-right m-t-n-xs" (click)="resetFields()"
+                     type="reset">Clear</button>
+               </div>
+            </form>
+            <div class="row">
+               <div class="col-lg-12 pt-20">
+                  <div *ngIf="(patients && patients.length>0) || isSearchInitiated">
+                     <table class="table table-hover table-striped table-bordered dataTable dataTablePatients"
+                        width="100%">
+                        <thead>
+                           <tr>
+                              <th width="50">Patient Account</th>
+                              <th width="50">Last Name</th>
+                              <th width="50">First Name</th>
+                              <th width="50" class="text-center">Date of Birth</th>
+                              <th width="50" class="text-center">Practice Code</th>
+                              <th width="20" class="text-center">Draft Status</th>
+                              <th width="50" class="text-center">Actions</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr *ngFor="let pt of patients"
+                              (dblclick)="onDbcPatient(pt.Patient_Account, pt.Last_Name, pt.First_Name)">
+                              <td>{{pt.Patient_Account}}</td>
+                              <td>{{pt.Last_Name}}</td>
+                              <td>{{pt.First_Name}}</td>
+                              <td class="text-center">{{pt.Date_Of_Birth}}</td>
+                              <td class="text-center">{{pt.Practice_Code}}</td>
+                              <td class="text-center">
+                                 <div>
+                                    <input type="checkbox" id="checkbox11" [(ngModel)]="pt.PTL_STATUS" disabled>
+                                 </div>
+                              </td>
+                              <td class="text-center footable-visible footable-last-column">
+                                 <div class="btn-group">
+                                    <button class="btn-white btn btn-xs gridbtn"
+                                       (click)="onAction({type:'View',payload:{patientAccount:pt.Patient_Account,firstName:pt.First_Name,lastName:pt.Last_Name}})">View</button>
+                                    <button class="btn-white btn btn-xs gridbtn" [disabled]="DisableBtn"
+                                       (click)="onAction({type:'Edit',payload:{patientAccount:pt.Patient_Account,firstName:pt.First_Name,lastName:pt.Last_Name}})">Edit</button>
+                                 </div>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>

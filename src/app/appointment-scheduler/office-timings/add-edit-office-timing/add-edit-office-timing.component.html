@@ -1,0 +1,125 @@
+<div class="modal fade" bsModal #modalWindow="bs-modal" tabindex="-1" role="dialog" aria-labelledby="dialog-nested-name"
+  (onShown)="onModalShown($event)" (onHidden)="onModalHidden($event)">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close">
+          <span aria-hidden="true" (click)="modalWindow.hide();">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h3 class="modal-title" [innerHtml]="modalTitle"></h3>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="form">
+          <div class="row">
+            <div class="form-group col-lg-6">
+              <label for="date-range" class="control-label">Date Range<span class="text-danger">*</span></label>
+              <my-date-range-picker id="date-range" [options]="myDateRangePickerOptions" [placeholder]="'MM/DD/YYYY'"
+                (dateRangeChanged)="onDateRangeChanged($event)" formControlName="dateRange">
+              </my-date-range-picker>
+            </div>
+            <div class="col-lg-6 col-md-6">
+              <label for="" style="visibility: hidden;">Not to display</label>
+              <div>
+                <button *ngIf="modalMode == 'edit'" class="btn btn-sm btn-primary pull-right ml-2" (click)="onNew()"
+                  title="Add new Office Timing.">Add New</button>
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="existingSchedules.length>0">
+            <div class="col-lg-12">
+              <h4>Selected dates lies between below schedules, click to edit or select different dates.
+              </h4>
+              <ol>
+                <li *ngFor="let schedule of existingSchedules let ndx=index"><a (click)="goToEdit(ndx)">
+                    {{schedule.DateFrom | date:'MMMM, d y'}} -
+                    {{schedule.DateTo | date:'MMMM, d y'}}</a></li>
+              </ol>
+            </div>
+          </div>
+          <div class="row" *ngIf="timings.length>0">
+            <div class="col-lg-4">
+              <i class="fa fa-info-circle" [popover]="myPopover" style="cursor: pointer;"></i>
+              <popover-content #myPopover title="Office Timing Criteria" placement="left" [animation]="true"
+                [closeOnClickOutside]="true">
+                <p><b>1.</b> Week Day can be ON/OFF by using Day ON/OFF Checkbox.</p>
+                <p><b>2.</b> Office Timing and Slot Size are required for ON days.</p>
+                <p><b>3.</b> Break Timing is optional.</p>
+              </popover-content>
+            </div>
+          </div>
+        </form>
+        <div class="row" *ngIf="timings.length>0">
+          <div class="col-lg-12">
+            <table class="table table-striped table-hover table-bordered">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th colspan="2" class="text-center">
+                    <strong>Office Timing</strong>
+                  </th>
+                  <th colspan="2" class="text-center">
+                    <strong>Break Timing</strong>
+                  </th>
+                  <th></th>
+                  <th></th>
+                </tr>
+                <tr>
+                  <th>Week Day</th>
+                  <th>From</th>
+                  <th>To</th>
+                  <th>From</th>
+                  <th>To</th>
+                  <th class="text-center">Slot</th>
+                  <th class="text-center">Day ON/OFF</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let time of timings let ndx=index" [ngClass]="{'text-danger':!time.Day_on}">
+                  <td>{{time.dayNam | titlecase }}</td>
+                  <td>
+                    <input class="form-control" type="time" [id]="'timeFrom'+ndx" [disabled]="!time.Day_on"
+                      [(ngModel)]="time.Time_From" [attr.required]="time.Day_on?true:undefined">
+                  </td>
+                  <td>
+                    <input class="form-control" type="time" [id]="'timeTo'+ndx" [disabled]="!time.Day_on"
+                      [(ngModel)]="time.Time_To" [attr.required]="time.Day_on?true:undefined">
+                  </td>
+                  <td>
+                    <input [ngClass]="{'border-danger':time.hasBreakError}" class="form-control" type="time"
+                      [id]="'breakTimeFrom'+ndx" [disabled]="!time.Day_on" [(ngModel)]="time.Break_time_From"
+                      (input)="onInputBreakTiming($event,ndx)">
+                  </td>
+                  <td>
+                    <input [ngClass]="{'border-danger':time.hasBreakError}" class="form-control" type="time"
+                      [id]="'breakTimeTo'+ndx" [disabled]="!time.Day_on" [(ngModel)]="time.Break_Time_To"
+                      (input)="onInputBreakTiming($event,ndx)">
+                  </td>
+                  <td class="text-center">
+                    <select class="form-control" [id]="'slot'+ndx" [disabled]="!time.Day_on"
+                      [attr.required]="time.Day_on?true:undefined" [(ngModel)]="time.time_slot_size">
+                      <option value="15">15</option>
+                      <option value="30">30</option>
+                      <option value="45">45</option>
+                      <option value="60">60</option>
+                    </select>
+                  </td>
+                  <td class="text-center">
+                    <input type="checkbox" [(ngModel)]="time.Day_on" [id]="'dayOnOff'+ndx" (change)="onDayOnOff(ndx)">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <button *ngIf="timings.length>0" class="btn btn-sm btn-primary pull-right ml-2"
+              title="Submit/Save office timing." (click)="onSubmit()">Save</button>
+            <!-- <button class="btn btn-sm btn-default pull-right ml-2" title="Close Window"
+              (click)="modalWindow.hide()">Close</button> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

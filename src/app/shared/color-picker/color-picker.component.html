@@ -1,0 +1,8 @@
+<span [ngClass]="color?'border':'no-border'" class="color" [(colorPicker)]="color" 
+[style.background]="color"
+  [cpOKButton]="true" [cpSaveClickOutside]="false" [cpOKButtonClass]="'btn btn-primary btn-xs'" 
+  [cpCancelButton]="true"
+  [cpCancelButtonClass]="'btn btn-default btn-xs'" (colorPickerSelect)="onColorSelect($event)" 
+  [cpOutputFormat]="'hex'"
+  [cpPresetColors]="presetColors" [cpOKButtonText]="'Save'">
+  <span [style.visibility]="color?'hidden':'visible'"><a>Select Color</a></span></span>

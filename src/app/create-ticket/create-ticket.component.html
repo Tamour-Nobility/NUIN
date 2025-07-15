@@ -1,0 +1,506 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="ibox float-e-margins">
+      <div *ngIf="CallerComponent=='Response'" class="ibox-title">
+        <h5><i class="fa fa-hospital-o"></i>&nbsp;Ticket Generation</h5>
+      </div>
+      <div class="ibox-content">
+        <form [formGroup]="createForm">
+          <div class="tabs-container">
+            <div class="tab-content">
+              <div id="tab-1" class="tab-pane active">
+                <div class="panel-body">
+                  <div class="col-md-12">
+                    <div class="row tab-content-heading">
+                      <h3 style="margin-bottom: 4px;"><i aria-hidden="true"
+                          class="fa fa-info-circle"></i>&nbsp;<u>General
+                          Information</u></h3>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Ticket ID</label>
+                        <input type="text" id="ticketid" class="form-control" autocomplete="off"
+                          formControlName="Ticket_Id" disabled>
+                      </div>
+
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Responsible Dept</label><span style="color:red">*</span>
+                        <ngx-select formControlName="Department_Id" [items]="listDepartment"
+                          optionTextField="DisplayLabel" optionValueField="DepartmentId" [allowClear]="false"
+                          placeholder="Select" required (ngModelChange)="onDepartmentChange($event)">
+                        </ngx-select>
+                      </div>
+
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Ticket Type</label><span style="color:red">*</span>
+                        <select id="Ttype" class="form-control" formControlName="Ticket_Type"
+                          (change)="onSelectTicketType($event)">
+                          <option value="">Select</option>
+                          <option value="Insurance_Call">Insurance Call</option>
+                          <option value="Patient_Call">Patient Call</option>
+                        </select>
+                      </div>
+
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Ticket Reason</label><span style="color:red">*</span>
+                        <select id="TReason" class="form-control" formControlName="Ticket_Reason">
+                          <option value="">Select</option>
+                          <option *ngIf="checkTicketType" value="Claim_Status">Claim Status</option>
+                          <option *ngIf="checkTicketType" value="Reprocess">Reprocess</option>
+                          <option *ngIf="!checkTicketType" value="COB_Update">COB Update</option>
+                          <option *ngIf="!checkTicketType" value="Insurance_Verification"> Insurance Verification
+                          </option>
+                          <option value="Other">Other</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Ticket Priority</label><span style="color:red">*</span>
+                        <select id="Tpriority" class="form-control" formControlName="Ticket_Priority">
+                          <option value="">Select</option>
+                          <option value="Low">Low</option>
+                          <option value="Medium">Medium</option>
+                          <option value="High">High</option>
+                        </select>
+                      </div>
+
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Ticket Title</label><span style="color:red">*</span>
+                        <input type="text" id="ttitle" class="form-control" autocomplete="off" placeholder="Enter Title"
+                          formControlName="Ticket_Title">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-md-12">
+                        <label class="pl0 pr0 control-label">Enter Ticket Detail Req</label><span
+                          style="color:red">*</span>
+                        <div style="display: flex; align-items: flex-start;">
+                          <textarea rows="5" id="txtPatNotes" formControlName="Ticket_Message"
+                            style="width: 70%; border-radius: 10px; padding: 5px; resize: vertical; margin-right: 20px;">
+                    </textarea>
+
+                        </div>
+                      </div>
+
+                      <div class="form-group col-md-12">
+                        <a (click)="ticketAttachments.show()" style="margin-top: 5px; white-space: nowrap;">
+                          <i class="fa fa-paperclip"></i>&nbsp;Attachments
+                        </a>
+                        <button class="btn btn-sm btn-danger" (click)="onUpload()">Upload Files</button>
+                        <div class="selected-files mt-2" *ngIf="selectedFiles.length > 0"
+                          style="display: flex; overflow-x: auto; white-space: nowrap; padding: 5px; margin-left: 5px;">
+
+                          <div *ngFor="let file of selectedFiles; let i = index"
+                            style="display: inline-flex; align-items: center; background: #f0f0f0;  padding: 5px 10px; margin-right: 8px;">
+                            {{ file.name }}
+                            <button type="button" class="btn btn-sm btn-danger ms-2 p-1" style="margin-left: 5px;"
+                              (click)="removeFile(i)">
+                              &times;
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+
+
+
+
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="row tab-content-heading">
+                      <h3 style="margin-bottom: 4px;"><i class="fa fa-address-card-o"
+                          aria-hidden="true"></i>&nbsp;<u>Practice
+                          Information</u></h3>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-3 col-md-3 col-lg-3">
+                        <div class="form-group">
+                          <label class="control-label" for="Prac">Practice</label><span style="color:red">*</span>
+                          <ngx-select formControlName="Practice_Code" [items]="getPractices"
+                            optionTextField="PracticeLabel" optionValueField="PracticeCode" [allowClear]="false"
+                            placeholder="Select" (ngModelChange)="getPracInfo($event)">
+                          </ngx-select>
+                        </div>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Practice Address</label>
+                        <input type="text" id="pracAddress" class="form-control" autocomplete="off"
+                          placeholder="Address" formControlName="practiceAddress" disabled>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Phone</label>
+                        <input id="practicePhone" type="text" placeholder="(___) ___-____" mask="(000) 000 0000"
+                          formControlName="practicePhone" class="form-control" maxlength="14" disabled>
+                      </div>
+
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Fax</label>
+                        <input id="practiceFax" type="text" placeholder="(___) ___-____" mask="(000) 000 0000"
+                          formControlName="practiceFax" class="form-control" maxlength="14" disabled>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">NPI</label>
+                        <input id="NPI" type="text" placeholder="NPI No" formControlName="NPI" class="form-control"
+                          disabled>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Tax ID</label>
+                        <input id="taxId" type="text" placeholder="(___) ___-____" mask="(000) 000-0000"
+                          formControlName="taxId" class="form-control" disabled>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Taxonomy Code</label>
+                        <input id="taxId" type="text" placeholder="Taxonomy Code" formControlName="taxonomyCode"
+                          class="form-control" disabled>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Division</label>
+                        <input id="taxId" type="text" placeholder="Division" formControlName="division"
+                          class="form-control" disabled>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="col-md-12">
+                    <div class="row tab-content-heading">
+                      <h3 style="margin-bottom: 4px;"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;<u>Patient &
+                          Claim Info</u></h3>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-3 col-md-3 col-lg-3">
+                        <div class="form-group">
+                          <label class="control-label" for="pAccount">Patient Account</label>
+                          <span style="color:red">*</span>
+
+                          <!-- When checkSoft is true: show text input -->
+                          <input *ngIf="checkSoft" type="text" class="form-control" formControlName="Patient_Account"
+                            placeholder="Enter Patient Account" />
+
+                          <!-- When checkSoft is false: show searchable ngx-select -->
+                          <ngx-select *ngIf="!checkSoft" formControlName="Patient_Account" [items]="getPatients"
+                            optionTextField="PatientName" optionValueField="Patient_Account" [allowClear]="false"
+                            placeholder="Search Patient Account" (ngModelChange)="onPatientAccountChange($event)">
+                          </ngx-select>
+                        </div>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Claim #</label><span style="color:red">*</span>
+                        <input *ngIf="checkSoft" type="text" class="form-control" formControlName="Claim_No"
+                          placeholder="Enter Claim #" />
+                        <ngx-select *ngIf="!checkSoft" formControlName="Claim_No" [items]="getClaims"
+                          optionTextField="ClaimLabel" optionValueField="Claim_No" placeholder="Search Claim #"
+                          [allowClear]="false" (ngModelChange)="onClaimChange($event)">
+                        </ngx-select>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Patient First Name</label><span *ngIf="checkSoft"
+                          style="color:red">*</span>
+                        <input type="text" id="fName" class="form-control" autocomplete="off" placeholder="First Name"
+                          formControlName="First_Name" [attr.disabled]="!checkSoft ? true : null">
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Patient Middle Name</label><span *ngIf="checkSoft"
+                          style="color:red">*</span>
+                        <input type="text" id="pmiddlename" class="form-control" autocomplete="off"
+                          placeholder="Middle Name" formControlName="MI" [attr.disabled]="!checkSoft ? true : null">
+                      </div>
+                    </div>
+
+
+                    <div class="row">
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Patient Last Name</label><span *ngIf="checkSoft"
+                          style="color:red">*</span>
+                        <input type="text" id="plastname" class="form-control" autocomplete="off"
+                          placeholder="Last Name" formControlName="Last_Name"
+                          [attr.disabled]="!checkSoft ? true : null">
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Patient Cell Number</label><span
+                          *ngIf="checkSoft && ! checkTicketType" style="color:red">*</span>
+                        <input id="pPhone" type="text" placeholder="(___) ___-____" mask="(000) 000 0000"
+                          formControlName="PatientCell_Phone" class="form-control" maxlength="14"
+                          [attr.disabled]="!checkSoft ? true : null">
+                      </div>
+
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Patient Home Phone</label><span
+                          *ngIf="checkSoft && ! checkTicketType" style="color:red">*</span>
+                        <input id="pHonePhone" type="text" placeholder="(___) ___-____" mask="(000) 000 0000"
+                          formControlName="PatientHome_Phone" class="form-control" maxlength="14"
+                          [attr.disabled]="!checkSoft ? true : null">
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Patient DOB</label><span *ngIf="checkSoft"
+                          style="color:red">*</span>
+                        <my-date-picker id="patDOB" [options]="myDatePickerOptionForDOBAndDeath"
+                          (keyup)="dateMask($event)" [placeholder]="'MM/DD/YYYY'"
+                          (dateChanged)="onDateChangedDOB($event)" formControlName="Date_Of_Birth"
+                          [selDate]="selDateDOB" [disabled]="!checkSoft">
+                        </my-date-picker>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">SSN</label>
+                        <input id="pSSN" type="text" placeholder="SSN" formControlName="SSN" class="form-control"
+                          [attr.disabled]="!checkSoft ? true : null">
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Claim DOS</label><span *ngIf="checkSoft"
+                          style="color:red">*</span>
+                        <my-date-picker id="cDOS" [options]="myDatePickerOptionForDOBAndDeath"
+                          (keyup)="dateMask($event)" [placeholder]="'MM/DD/YYYY'"
+                          (dateChanged)="onDateChangedDOB($event)" formControlName="DOS" [selDate]="selDateDOS"
+                          [disabled]="!checkSoft">
+                        </my-date-picker>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Total Billed Amt</label><span *ngIf="checkSoft"
+                          style="color:red">*</span>
+                        <input id="tBilledAmt" type="text" placeholder="Total Billed Amt" formControlName="Total_Billed"
+                          class="form-control">
+                      </div>
+                      <div class="form-group col-md-3" *ngIf="!checkTicketType">
+                        <label class="pl0 pr0 control-label">Patient Due Amt</label>
+                        <input id="taxId" type="text" placeholder="Patient Due Amt" formControlName="Patient_Due"
+                          class="form-control" [attr.disabled]="!checkSoft ? true : null">
+                      </div>
+                      <div class="form-group col-md-3" *ngIf="checkTicketType">
+                        <label class="pl0 pr0 control-label">Claim Due Amt</label>
+                        <input id="taxId" type="text" placeholder="Due Amt" formControlName="Claim_Due"
+                          class="form-control" [attr.disabled]="!checkSoft ? true : null">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-md-3" *ngIf="checkTicketType">
+                        <label class="pl0 pr0 control-label">Insurance Mode</label><span style="color:red">*</span>
+
+                        <!-- Show input when checkSoft is true -->
+                        <input *ngIf="checkSoft" type="text" class="form-control" formControlName="Ins_Type"
+                          placeholder="Insurance Mode" />
+
+                        <!-- Show dropdown when checkSoft is false -->
+                        <select *ngIf="!checkSoft" class="form-control" formControlName="Ins_Type"
+                          (change)="onInsuranceChange($event)">
+                          <option [ngValue]="null">Select</option>
+                          <option *ngFor="let type of getInsurances" [ngValue]="type">
+                            {{ type.Pri_Sec_Oth_Type }}
+                          </option>
+                        </select>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Payer Name</label><span *ngIf="checkTicketType"
+                          style="color:red">*</span>
+                        <input id="payerName" type="text" placeholder="Payer Name" formControlName="Payer_Name"
+                          class="form-control" [attr.disabled]="!checkSoft && checkTicketType ? true : null">
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Payer ID</label><span *ngIf="checkTicketType"
+                          style="color:red">*</span>
+                        <input type="text" id="payerid" class="form-control" autocomplete="off" placeholder="Payer ID"
+                          formControlName="Payer_Id" [attr.disabled]="!checkSoft && checkTicketType ? true : null">
+                      </div>
+
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Policy #</label><span *ngIf="checkTicketType"
+                          style="color:red">*</span>
+                        <input type="text" id="pNumber" class="form-control" autocomplete="off" placeholder="Policy #"
+                          formControlName="Policy_No" [attr.disabled]="!checkSoft && checkTicketType ? true : null">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="row tab-content-heading">
+                      <h3 style="margin-bottom: 4px;"><i class="fa fa-user-md" aria-hidden="true"></i>&nbsp;<u>Rendering
+                          Provider</u></h3>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-3 col-md-3 col-lg-3">
+                        <div class="form-group">
+                          <label class="control-label" for="Prac">Rendering Provider</label>
+                          <span style="color:red">*</span>
+
+                          <!-- Show dropdown only if checkSoft is explicitly true -->
+
+                          <ng-container *ngIf="checkSoft">
+                            <ngx-select formControlName="renderingProvider" [items]="providers"
+                              optionValueField="PracticeCode" optionTextField="ProviderLabel"
+                              placeholder="Select Provider" [allowClear]="false"
+                              (ngModelChange)="handleRenderingProviderDropdownChange($event)">
+                            </ngx-select>
+                          </ng-container>
+
+                          <!-- Show disabled input only if checkSoft is explicitly false -->
+                          <ng-container *ngIf="!checkSoft">
+                            <input id="RP" type="text" placeholder="Rendering Provider"
+                              formControlName="renderingProvider" class="form-control" disabled>
+                          </ng-container>
+
+                        </div>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Address</label>
+                        <input id="rendAddress" type="text" placeholder="Address" formControlName="renderingAddress"
+                          class="form-control" disabled>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Office Phone</label>
+                        <input id="reneOfficePhone" type="text" placeholder="(___) ___-____" mask="(000) 000 0000"
+                          formControlName="reneringOfficePhone" class="form-control" maxlength="14" disabled>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">NPI</label>
+                        <input id="rendNPI" type="text" placeholder="(___) ___-____" mask="(000) 000 0000"
+                          formControlName="renderingNPI" class="form-control" maxlength="14" disabled>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Group NPI</label>
+                        <input id="rendGroupNPI" type="text" placeholder="(___) ___-____" mask="(000) 000 0000"
+                          formControlName="renderingGroupNPI" class="form-control" maxlength="14" disabled>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">SSN</label>
+                        <input id="rendSSN" type="text" placeholder="SSN" formControlName="renderingSSN"
+                          class="form-control" disabled>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Taxonomy Code</label>
+                        <input id="rendTaxonomyCode" type="text" placeholder="Taxonomy Code"
+                          formControlName="renderingTaxonomyCode" class="form-control" disabled>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="row tab-content-heading">
+                      <h3 style="margin-bottom: 4px;"><i class="fa fa-user-md" aria-hidden="true"></i>&nbsp;<u>Billing
+                          Provider</u></h3>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-3 col-md-3 col-lg-3">
+                        <div *ngIf="!checkSoft" class="form-group">
+                          <label class="control-label" for="Prac">Billing Provider</label><span
+                            style="color:red">*</span>
+                          <input id="BP" type="text" placeholder="Billing Provider" formControlName="billingProvider"
+                            class="form-control" [attr.disabled]="!checkSoft ? true : null">
+                        </div>
+                        <div *ngIf="checkSoft" class="form-group">
+                          <label class="control-label" for="Prac">Billing Provider</label><span
+                            style="color:red">*</span>
+
+                          <ngx-select formControlName="billingProvider" [items]="providers"
+                            optionValueField="PracticeCode" optionTextField="ProviderLabel"
+                            placeholder="Select Provider" [allowClear]="false"
+                            (ngModelChange)="handleBillingProviderDropdownChange($event)">
+                          </ngx-select>
+                        </div>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Address</label>
+                        <input id="billAddress" type="text" placeholder="Address" formControlName="billingAddress"
+                          class="form-control" disabled>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Office Phone</label>
+                        <input id="billOfficePhone" type="text" placeholder="(___) ___-____" mask="(000) 000 0000"
+                          formControlName="billingOfficePhone" class="form-control" maxlength="14" disabled>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">NPI</label>
+                        <input id="billNPI" type="text" placeholder="(___) ___-____" mask="(000) 000 0000"
+                          formControlName="billingNPI" class="form-control" maxlength="14" disabled>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Group NPI</label>
+                        <input id="billGroupNPI" type="text" placeholder="(___) ___-____" mask="(000) 000 0000"
+                          formControlName="billingGroupNPI" class="form-control" maxlength="14" disabled>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">SSN</label>
+                        <input id="billSSN" type="text" placeholder="SSN" formControlName="billingSSN"
+                          class="form-control" disabled>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label class="pl0 pr0 control-label">Taxonomy Code</label>
+                        <input id="billTaxonomyCode" type="text" placeholder="Taxonomy Code"
+                          formControlName="billingTaxonomyCode" class="form-control" disabled>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div *ngIf="CallerComponent !='Response'" class="row pull-right">
+                    <div class="col-lg-12">
+                      <div class="btn-group">
+                        <button class="btn btn-danger btn-sm" (click)="onCancel()">Cancel</button>
+                        <button class="btn btn-primary btn-sm" (click)="onCreateReset()"
+                          [disabled]="!restButton">Reset</button>
+                        <button class="btn btn-primary btn-sm" (click)="onSubmit()">Save</button>
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade" bsModal #ticketAttachments="bs-modal" tabindex="-1" role="dialog"
+  aria-labelledby="dialog-nested-name1" (onShown)="onPatientAttachmentsShown()"
+  (onHidden)="onPatientAttachmentsHidden()">
+  <div class="modal-dialog modal-lg modal-dialog-centered" style="margin-top: 13%;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" (click)="ticketAttachments.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title w-100 text-center" style="font-size: 20px;">Ticket Attachments</h4>
+        <div class="btn-group pull-right">
+        </div>
+        <!-- <span>Account # {{PatientAccount}}</span> -->
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="form">
+          <div class="row pat-attach-uploader-container">
+            <div class="col-lg-10">
+              <div class="file-upload">
+                <div class="file-select">
+                  <div class="file-select-button" id="fileName" style="width: 200px;">Choose file</div>
+                  <div class="file-select-name" id="noFile">No file chosen</div>
+
+                 <input type="file" name="files" (change)="onFileSelected($event)" multiple
+                        accept=".pdf,.csv,.xls,.xlsx,text/plain,image/jpg,image/png,image/jpeg,image/gif,.doc,.docx">
+                </div>
+              </div>
+
+            </div>
+            <div class="col-lg-2">
+              <button style="margin-top: 5px;" type="submit" class="btn btn-primary btn-upload btn-block"
+                title="Upload & Save File" (click)="onUpload()" [disabled]="uploading">
+                <i *ngIf="!uploading" class="fa fa-upload fa-lg"></i>
+                <span *ngIf="uploading">Uploading...</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

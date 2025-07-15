@@ -1,0 +1,24 @@
+<div class="tab-pane">
+  <table class="table table-striped table-hover table-bordered dataTableRole">
+    <thead>
+      <tr>
+        <!-- <th>ID</th> -->
+        <th>Name</th>
+        <th style="text-align:center">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let role of listRoles let ndx=index" [class.selected]="ndx === selectedRow">
+        <!-- <td>{{role.RoleId}}</td> -->
+        <td>{{role.RoleName }}</td>
+        <td class="text-center footable-visible footable-last-column" width="20%">
+          <div class="btn-group">
+            <button class="btn-default btn btn-xs gridbtn" (click)="onViewClick(ndx)">View</button>
+            <button class="btn-default btn btn-xs gridbtn" (click)="onEditClick(ndx)">Edit</button>
+            <button class="btn-danger btn btn-xs gridbtn" (click)="onDeleteClick(ndx)">Delete</button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

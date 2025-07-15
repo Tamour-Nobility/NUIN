@@ -1,0 +1,65 @@
+<div class="row">
+  <div class="col-lg-12">
+    <h3 style="color: black;">Pending 999 Report</h3>
+    <form [formGroup]="SearchForm">
+      <div class="row">
+        <div class="form-group col-lg-3">
+          <label class="control-label">Practices<span class="text-danger">*</span></label>
+          <select class="form-control" formControlName="PracCode" (change)="onchangePractices(SearchForm.value.PracCode)">
+            <option value="" disabled selected>Select Practice</option>
+            <option *ngFor="let c of listPracticesList" [value]="c.Id">{{c.Name}}</option>
+          </select>
+        </div>
+      </div>
+    </form>
+
+    <!-- Button positioned slightly left from the right -->
+    <div class="row">
+      <div class="col text-right">
+        <!-- Adding some right margin to shift it slightly left -->
+        <button class="btn btn-primary btn-sm mr-3" style="margin-right: 20px;" type="submit" (click)="getPendingBatchReport(SearchForm.value.PracCode)" [disabled]="!isDisabled">Search</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3 style="color: #808080;"*ngIf="firstLoad">Pending 999 Report</h3>
+<div class="row">
+  <h3 *ngIf="isRouted" [ngClass]="isRouted == true ? 'center-heading' : null">Pending 999 report</h3>
+  <div class="col-lg-12 pt-20">
+    <div class="table-responsive">
+      <div>
+        <table class="table table-striped table-hover table-bordered dataTablePR" width="100%" *ngIf="firstLoad">
+          <thead>
+            <tr>
+              <th>Batch Name</th>
+              <th>Provider</th>
+              <th>Batch Status</th>
+              <th>Created Date</th>
+              <th>Uploaded Date</th>
+              <th>Uploaded By</th>
+              <th>Aging</th>
+              <th>999 Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="PendingBatchReport.length === 0">
+              <td colspan="8" class="text-center">No data available</td>
+            </tr>
+            <tr *ngFor="let p of PendingBatchReport">
+              <td>{{p.Batch_Name}}</td>
+              <td>{{p.Provider}}</td>
+              <td>{{p.Batch_Status}}</td>
+              <td>{{p.Created_Date | date:'MM/dd/yyyy'}}</td>
+              <td>{{p.Uploaded_Date | date:'MM/dd/yyyy'}}</td>
+              <td>{{p.Uploaded_User_Name}}</td>
+              <td>{{p.Aging}}</td>
+              <td>{{p.Batch_Status999}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+  </div>
+</div>

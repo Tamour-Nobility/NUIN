@@ -1,0 +1,23 @@
+<div class="ibox float-e-margins">
+  <div class="ibox-title">
+    <h5>{{iboxAddEditTitle}}</h5>
+  </div>
+  <div class="ibox-content">
+    <form [formGroup]="RoleForm">
+      <div class="row">
+        <div class="form-group col-lg-12">
+          <label>Role Name<span class="text-danger">*</span></label>
+          <input type="text" [(ngModel)]="objRole.RoleName" class="form-control" formControlName="roleName"
+            maxlength="50" autocomplete="off">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <button class="btn btn-sm btn-primary pull-right" type="submit" (click)="onSaveClick()"
+            [disabled]="!RoleForm.valid">Save</button>
+          <button class="btn btn-sm btn-default pull-right" type="reset" (click)="onCancelClick()">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

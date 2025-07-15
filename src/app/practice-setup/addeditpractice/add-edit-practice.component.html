@@ -1,0 +1,371 @@
+<!-- <div class="row mt10">
+    <div class="pull-right">
+        <button class="btn btn-primary ml-2" (click)="enableSynchronization()" style="float: right;"
+            [attr.disabled]="show?true:null"><i class="fa fa-refresh" aria-hidden="true">&nbsp; Sync</i></button>
+    </div>
+</div> -->
+<div class="ibox-body">
+    <!-- GENERAL INFORMATION  Section -->
+    <div class="row mt10">
+        <div class="form-group col-md-3">
+            <label class="pl0 pr0 control-label">Legal Business Name</label><span style="color:red">*</span>
+            <input class="form-control" maxlength="100" placeholder="Legal Business Name" id="ipracName"
+                name="ipracName" #ipracName="ngModel" [readonly]="!isEdit"
+                [(ngModel)]="PracticeModel.Response.PracticeModel.Prac_Name" placeholder="Legal Name" type="text"
+                required minlength="4"
+                (input)="PracticeModel.Response.PracticeModel.Prac_Name = PracticeModel.Response.PracticeModel.Prac_Name.toUpperCase()">
+        </div>
+        <div class="form-group col-md-3">
+            <!-- <div class="col-md-3 pl0 pr0"><label class="pl0 pr0 control-label">Name:</label> <span style="color:red">*</span> </div>
+                <div class="col-md-5 pl0 pr0">
+                    <input class="form-control" maxlength="200"  id="PracName" name="PracName" #PracName="ngModel" required minlength="4"  [readonly]="!isEdit"  placeholder="Name" [(ngModel)]="PracticeModel.Response.PracticeModel.Prac_Name" type="text">
+                </div> -->
+            <label class="pl0 pr0 control-label">Doing Business As</label>
+            <input class="form-control" maxlength="100" placeholder="Legal Name" id="DoingBus" name="DoingBus"
+                #DoingBus="ngModel" [readonly]="!isEdit"
+                [(ngModel)]="PracticeModel.Response.PracticeModel.prac_doing_business"
+                (input)="PracticeModel.Response.PracticeModel.prac_doing_business = PracticeModel.Response.PracticeModel.prac_doing_business.toUpperCase()"
+                placeholder="Doing Business as" type="text" minlength="4">
+        </div>
+        <div class="form-group col-md-3">
+            <label class="pl0 pr0 control-label">Zip:</label><span style="color:red">*</span>
+            <input class="form-control" (blur)="onBlurMethod(0)" placeholder="_____-____" [readonly]="!isEdit"
+                [(ngModel)]=" PracticeModel.Response.PracticeModel.Prac_Zip" name="Prac_Zip" id="Prac_Zip"
+                #Prac_Zip="ngModel" type="text" required mask="00000-0000"
+                onkeypress="return(event.charCode >= 48 && event.charCode <= 57) || (event.keyCode == 8) || (event.keyCode == 9) || (event.keyCode == 16) || (event.keyCode == 37) || (event.keyCode == 39) || (event.keyCode == 46)">
+
+        </div>
+        <div class="form-group col-md-3">
+            <label for="city" class="pl0 pr0 control-label">City<span class="text-danger">*</span></label>
+            <select id="city" class="form-control" name="city"
+                [(ngModel)]="PracticeModel.Response.PracticeModel.Prac_City" [disabled]="!isEdit">
+                <option [ngValue]="null">Select City</option>
+                <option *ngFor="let city of zipPracData" [value]="city.CityName">
+                    {{city.CityName | titlecase}}
+                </option>
+            </select>
+        </div>
+        <div class="form-group col-md-3">
+            <label class="pl0 pr0 control-label">State:</label>
+            <input disabled class="form-control" [(ngModel)]=" PracticeModel.Response.PracticeModel.Prac_State"
+                name="State" type="text" maxlength="2">
+        </div>
+        <div class="form-group col-md-3">
+            <label class="pl0 pr0 control-label">Email:</label><span style="color:red">*</span>
+            <input type="email" class="form-control" maxlength="50" placeholder="yourname@example.com" name="PracEmail"
+                id="PracEmail" #PracEmail="ngModel" required minlength="4" [readonly]="!isEdit"
+                [(ngModel)]="PracticeModel.Response.PracticeModel.Email_Address"
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" (keydown.space)="$event.preventDefault();">
+        </div>
+        <div class="form-group col-md-3">
+            <label class="pl0 pr0 control-label">Address:</label><span style="color:red">*</span>
+            <input class="form-control" placeholder="Address" maxlength="200" name="PracAddress" id="PracAddress"
+                #PracAddress="ngModel" required minlength="4" [readonly]="!isEdit"
+                [(ngModel)]=" PracticeModel.Response.PracticeModel.Prac_Address"
+                (input)="PracticeModel.Response.PracticeModel.Prac_Address = PracticeModel.Response.PracticeModel.Prac_Address.toUpperCase()"
+                type="text">
+        </div>
+        <div class="form-group col-md-3">
+            <label class="pl0 pr0 control-label">Phone:</label><span style="color:red">*</span>
+            <input class="form-control" name="Phone" placeholder="(___) ___-____" mask="(000) 000-0000"
+                [readonly]="!isEdit" [(ngModel)]=" PracticeModel.Response.PracticeModel.Prac_Phone" name="Prac_Phone"
+                id="Prac_Phone" #Prac_Phone="ngModel" required minlength="10" type="text">
+            <!-- <div *ngIf="Prac_Phone.invalid && (Prac_Phone.dirty || Prac_Phone.touched)" class="alert alert-danger">
+                    <div *ngIf="Prac_Phone.errors.required">
+                        Phone No. is required.
+                    </div>
+                    <div *ngIf="Prac_Phone.errors.minlength">
+                        Phone must be 10 digits long.
+                    </div>
+                </div> -->
+        </div>
+        <div class="form-group col-md-3">
+            <label class="pl0 pr0 control-label">Fax:</label>
+            <input class="form-control" name="Fax" placeholder="(___) ___-____" mask="(000) 000-0000"
+                [readonly]="!isEdit" [(ngModel)]=" PracticeModel.Response.PracticeModel.Prac_Alternate_Phone"
+                type="text" id="Prac_Alternate_Phone">
+        </div>
+        <div class="form-group col-md-3">
+            <label class="pl0 pr0 control-label">NPI:</label><span style="color:red">*</span>
+            <input class="form-control" placeholder="NPI No" maxlength="10" name="PracNPI" id="PracNPI"
+                #PracNPI="ngModel" required minlength="4" [readonly]="!isEdit"
+                [(ngModel)]="PracticeModel.Response.PracticeModel.NPI" type="text"
+                onkeypress="return(event.charCode >= 48 && event.charCode <= 57) || (event.keyCode == 8) || (event.keyCode == 9) || (event.keyCode == 16) || (event.keyCode == 37) || (event.keyCode == 39) || (event.keyCode == 46)">
+        </div>
+        <div class="form-group col-md-3">
+            <label class="pl0 pr0 control-label">Tax ID:</label><span style="color:red">*</span>
+            <input class="form-control" placeholder="(__-_______)" name="PracTaxID" id="PracTaxID" #PracTaxID="ngModel"
+                required minlength="4" [readonly]="!isEdit" mask="00-0000000"
+                [(ngModel)]=" PracticeModel.Response.PracticeModel.Prac_Tax_Id" maxlength="10" type="text"
+                onkeypress="return(event.charCode >= 48 && event.charCode <= 57) || (event.keyCode == 8) || (event.keyCode == 9) || (event.keyCode == 16) || (event.keyCode == 37) || (event.keyCode == 39) || (event.keyCode == 46)">
+        </div>
+    </div>
+    <!-- Primary Contact  Section -->
+    <div class="row mt10">
+        <h3 style="margin-bottom: 4px;"><i class="fa fa-address-card-o" aria-hidden="true"></i>&nbsp;<u>Primary
+                Contact</u></h3>
+        <!-- <hr style="margin-top: 10px;border-top: 2px solid #12a451;" /> -->
+    </div>
+    <div class="row mt10">
+        <div class="form-group col-md-3">
+            <label class="pl0 pr0 control-label">Office Manager:</label><span style="color:red">*</span>
+            <input class="form-control" maxlength="100" name="OfficeAddress" #OfficeAddress="ngModel" required
+                placeholder="Manager Name" [readonly]="!isEdit" id="Office_Manager"
+                [(ngModel)]=" PracticeModel.Response.PracticeModel.Office_Manager" name="MAddress" type="text"
+                pattern="[a-zA-Z. ]{4,50}" style="text-transform:capitalize">
+        </div>
+        <div class="form-group col-md-3">
+            <label class="pl0 pr0 control-label">Phone:</label><span style="color:red">*</span>
+            <input class="form-control" placeholder="(___) ___-____" mask="(000) 000-0000" [readonly]="!isEdit"
+                [(ngModel)]=" PracticeModel.Response.PracticeModel.Contact_Person_Phone" name="Contact_Person_Phone"
+                id="Contact_Person_Phone" #Contact_Person_Phone="ngModel" required minlength="10" type="text">
+            <!-- <div *ngIf="Contact_Person_Phone.invalid && (Contact_Person_Phone.dirty || Contact_Person_Phone.touched)"class="alert alert-danger">
+                        <div *ngIf="Contact_Person_Phone.errors.required">
+                        Phone is required.
+                        </div>
+                        <div *ngIf="Contact_Person_Phone.errors.minlength">
+                        Phone must be 10 digits long.
+                        </div>
+                     </div> -->
+        </div>
+        <div class="form-group col-md-3">
+            <label class="pl0 pr0 control-label">Email:</label>
+            <input class="form-control" maxlength="50" placeholder="yourname@example.com" [readonly]="!isEdit"
+                [(ngModel)]="PracticeModel.Response.PracticeModel.Email_Contact_Person" name="MCity" type="text"
+                id="Email_Contact_Person" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                (keydown.space)="$event.preventDefault();">
+        </div>
+    </div>
+    <!-- Mailing Address Section -->
+    <div class="row mt10">
+        <h3 style="margin-bottom: 4px;"><i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp;<u>Mailing Address</u>
+        </h3>
+        <!-- <hr style="margin-top: 10px;border-top: 2px solid #12a451;" /> -->
+    </div>
+    <div class="row mt10">
+        <div class="form-group col-md-3">
+            <label class="pl0 pr0 control-label">Address:</label><span style="color:red">*</span>
+            <input class="form-control" maxlength="50" placeholder="Mailing Address" name="MailingAddress"
+                id="MailingAddress" #MailingAddress="ngModel" required minlength="4" [readonly]="!isEdit"
+                [(ngModel)]="PracticeModel.Response.PracticeModel.Mailing_Address"
+                (input)="PracticeModel.Response.PracticeModel.Mailing_Address = PracticeModel.Response.PracticeModel.Mailing_Address.toUpperCase()"
+                name="MAddress" type="text">
+        </div>
+
+
+
+        <div class="form-group col-md-3">
+            <label class="pl0 pr0 control-label">Zip:</label><span style="color:red">*</span>
+            <input class="form-control" maxlength="10" placeholder="_____-____" (blur)="onBlurMethod(1)"
+                [readonly]="!isEdit" [(ngModel)]="PracticeModel.Response.PracticeModel.Mailing_Zip" name="MZip" required
+                minlength="5" id="MZip" #MZip="ngModel" type="text" mask="00000-0000"
+                onkeypress="return(event.charCode >= 48 && event.charCode <= 57) || (event.keyCode == 8) || (event.keyCode == 9) || (event.keyCode == 16) || (event.keyCode == 37) || (event.keyCode == 39) || (event.keyCode == 46)">
+            <!-- <div *ngIf="MZip.invalid && (MZip.dirty || MZip.touched)" class="alert alert-danger">
+                    <div *ngIf="MZip.errors.required">
+                        Zip is required.
+                    </div>
+                    <div *ngIf="MZip.errors.minlength">
+                        Mailing Zip No. must be 5 to 9 digits long.
+                        </div> 
+                </div> -->
+        </div>
+
+
+        <div class="form-group col-md-3">
+            <label for="city" class="pl0 pr0 control-label">City<span class="text-danger">*</span></label>
+            <select id="city" class="form-control" name="city"
+                [(ngModel)]="PracticeModel.Response.PracticeModel.Mailing_City" [disabled]="!isEdit">
+                <option [ngValue]="null">Select City</option>
+                <option *ngFor="let city of zipMalingData" [value]="city.CityName">
+                    {{city.CityName | titlecase}}
+                </option>
+            </select>
+        </div>
+
+
+        <!-- <div class="form-group col-md-3">
+            <label class="pl0 pr0 control-label">City:</label>
+            <input disabled class="form-control" [(ngModel)]="PracticeModel.Response.PracticeModel.Mailing_City"
+                name="MCity" type="text">
+        </div> -->
+
+
+
+
+
+        <div class="form-group col-md-3">
+            <label class="pl0 pr0 control-label">State:</label>
+            <input disabled class="form-control" [(ngModel)]="PracticeModel.Response.PracticeModel.Mailing_State"
+                name="MState" type="text" maxlength="2">
+        </div>
+    </div>
+    <!-- Additional Information Section -->
+    <div class="row mt10">
+        <h3 style="margin-bottom: 4px;"><i class="fa fa fa-bars" aria-hidden="true"></i>&nbsp;<u>Additional
+                Information</u></h3>
+        <!-- <hr style="margin-top: 10px;border-top: 2px solid #12a451;" /> -->
+    </div>
+    <div class="row mt10">
+        <div class="form-group col-md-3">
+            <label class="pl0 pr0 control-label">Practice Type:</label><span style="color:red">*</span>
+            <select class="form-control" maxlength="1" placeholder="Practice Type" [disabled]="!isEdit"
+                [(ngModel)]="PracticeModel.Response.PracticeModel.Prac_Type" name="PracticeType" type="text"
+                id="Prac_Type">
+                <option value="I">I</option>
+                <option value="G">G</option>
+            </select>
+        </div>
+
+        <div class="form-group col-md-3">
+            <label class="pl0 pr0 control-label">Commencement Date:<span style="color:red">*</span></label>
+            <my-date-picker [options]="myDatePickerOptions" [disabled]="!isEdit" [selDate]="strComDate" required
+                (dateChanged)="onDateChangedExp($event)" [placeholder]="placeholdertxt"></my-date-picker>
+        </div>
+        <div class="form-group col-md-3">
+            <label class="pl0 pr0 control-label">Billing Type:<span style="color:red">*</span></label>
+            <select class="form-control" [disabled]="!isEdit"
+                [(ngModel)]="PracticeModel.Response.PracticeModel.Billing_Type" name="Billing_Type" type="text"
+                id="Billing_Type">
+                <option value="Professional">Professional</option>
+                <option value="Institutional">Institutional</option>
+                <option value="P&I">Professional and Institutional</option>
+            </select>
+        </div>
+        <!-- Added By hamza akhaq for ticket tracker -->
+        <div class="form-group col-md-3">
+            <label class="pl0 pr0 control-label">Billing Soft:<span style="color:red">*</span></label>
+            <select class="form-control" [disabled]="!isEdit"
+                [(ngModel)]="PracticeModel.Response.PracticeModel.Prac_Soft" name="Billing_Type" type="text"
+                id="Billing_Type">
+                <option value="NPMSoft">NPM Soft</option>
+                <option value="OtherSoft">Other Soft</option>
+            </select>
+        </div>
+
+        <!-- <div class="col-md-3 pl0 pr0">
+                <div class="form-group col-md-3"><label class="pl0 pr0 control-label">EFS Date:<span
+                        *ngIf="PracticeModel.Response.PracticeModel.EFS == true" style="color:red">*</span></label>
+            </div>
+            <div class="col-md-8 pl0 pr0">
+                <my-date-picker [options]="myDatePickerOptions" [disabled]="!isEdit" [selDate]="strEfsDate" required
+                    (dateChanged)="onDateChangedEfs($event)" [placeholder]="placeholdertxt"></my-date-picker>
+            </div>
+        </div> -->
+        <!-- <div class="col-md-3 pl0 pr0">
+                <div class="form-group col-md-3"><label class="pl0 pr0 control-label"> Billing At:</label></div>
+                <div class="col-md-8 pl0 pr0">
+                <input class="form-control" [readonly]="!isEdit" [(ngModel)]="PracticeModel.Response.PracticeModel.Billing_Percentage" name="BillingAT"  type="text" onkeypress="return(event.charCode >= 48 && event.charCode <= 57) || (event.keyCode == 8) || (event.keyCode == 9) || (event.keyCode == 16) || (event.keyCode == 37) || (event.keyCode == 39) || (event.keyCode == 46)" maxlength="4">
+                </div>
+            </div> -->
+    </div>
+    <div class="row mt10">
+        <div style="margin-top: 15px;">
+            <div class="form-group col-md-2">
+                <input class="form-check-input" type="checkbox" [disabled]="!isEdit"
+                    [(ngModel)]="PracticeModel.Response.PracticeModel.EFS" id="chkEfs">
+                <label for="chkEfs" style="margin-left: 5px;"> Fee Schedule </label>
+            </div>
+            <div class="form-group col-md-2">
+                <input class="form-check-input" type="checkbox" [disabled]="!isEdit"
+                    [(ngModel)]="PracticeModel.Response.PracticeModel.Noshow_Charges" id="chkNoShowCharges">
+                <label for="chkNoShowCharges" style="margin-left: 5px;"> No Show Charges </label>
+            </div>
+            <div class="form-group col-md-2">
+                <input class="form-check-input" type="checkbox" [disabled]="!isEdit"
+                    [(ngModel)]="PracticeModel.Response.PracticeModel.isAutofillClaimDetails"
+                    id="isAutofillClaimDetails"
+                    tooltip="Auto-fill Location, Rendering Provider, Billing Provider and Diagnosis details in new claim from the most recent previous claim"
+                    tooltipPlacement="top">
+
+                <label for="isAutofillClaimDetails" style="margin-left: 5px;"> Auto-fill Previous Claim Details
+                </label>
+            </div>
+
+
+
+
+        </div>
+    </div>
+    <!-- Taxonomy Section -->
+    <div class="row mt10">
+        <h3 style="margin-bottom: 4px;"><i class="fa fa-plus-square-o" aria-hidden="true"></i>&nbsp; <u>Taxonomy</u>
+        </h3>
+        <!-- <hr style="margin-top: 10px;border-top: 2px solid #12a451;" /> -->
+    </div>
+    <div class="row mt10">
+        <div class="form-group col-md-3">
+            <label class="pl0 pr0 control-label">Type:</label><span style="color:red">*</span>
+            <select [disabled]="!isEdit" class="form-control form-select m-b"
+                (change)="onChangeSpecialityGroup($event.target.value)"
+                [(ngModel)]="PracticeModel.Response.PracticeModel.GroupNo" id="GroupNo">
+                <option disabled value="">Please Select</option>
+                <option *ngFor="let specGroup of listSpecialtyGroups" value="{{specGroup.GROUP_NO}}">
+                    {{specGroup.GROUP_NAME | titlecase}}
+                </option>
+            </select>
+        </div>
+        <div class="form-group col-md-3">
+            <label class="pl0 pr0 control-label">Code One:</label><span style="color:red">*</span>
+            <select [disabled]="!isEdit" class="form-control form-select m-b"
+                (change)="onChangePracticeSpecialityCategoryOne($event.target.value)"
+                [(ngModel)]="PracticeModel.Response.PracticeModel.TAXONOMY_CODE" id="TAXONOMY_CODE">
+                <option disabled value="">Please Select</option>
+                <option *ngFor="let specCategOne of specialtyCategoryOne" value="{{specCategOne.TAXONOMY_CODE}}">
+                    {{specCategOne.TAXONOMY_CODE}} | {{specCategOne.CATEGORY_NAME | titlecase}}
+                </option>
+            </select>
+        </div>
+        <div class="form-group col-md-3">
+            <label class="pl0 pr0 control-label">Code Two:</label>
+            <select [disabled]="!isEdit" class="form-control form-select m-b">
+                <option>Please Select</option>
+                <option *ngFor="let specCategTwo of specialtyCategoryTwo" value="{{specCategTwo.TAXONOMY_CODE}}">
+                    {{specCategTwo.TAXONOMY_CODE}} | {{specCategTwo.CATEGORY_NAME | titlecase}}
+                </option>
+            </select>
+        </div>
+    </div>
+    <!-- Vender Section -->
+    <div class="row mt10">
+        <h3 style="margin-bottom: 4px;"><i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp; <u>Vendor</u>
+        </h3>
+        <!-- <hr style="margin-top: 10px;border-top: 2px solid #12a451;" /> -->
+    </div>
+    <div class="row mt10">
+        <div class="form-group col-md-3">
+            <label class="pl0 pr0 control-label">Type:</label>
+            <select [disabled]="!isEdit || newPractice" class="form-control form-select m-b"
+                (change)="onChangeVender($event.target.value)" [(ngModel)]="selectedVendor">
+                <option disabled value="">Please Select</option>
+                <option *ngFor="let Vendor of  allVendorList" value="{{Vendor.Id}}">
+                    {{Vendor.Name}}
+                </option>
+            </select>
+        </div>
+
+    </div>
+
+
+
+    <!-- Buttons -->
+    <div class="form-group col-md-12  right-full row" *ngIf="!isEdit">
+        <div class="col-smd-12 text-right m-t-md pl0 pr0">
+            <button class="btn btn-white ml-2" type="button" id="btnCancelPractice" title=""
+                [routerLink]='["/PracticeList"]'>Cancel</button>
+            <button class="btn btn-primary ml-2" type="submit" id="btnSaveAddEditPractice"
+                *ngIf="PracticeModel.Response.PracticeModel.Is_Active" (click)="loadEditPractice()">Edit </button>
+        </div>
+    </div>
+    <div class="form-group col-md-12  right-full row" *ngIf="isEdit">
+        <div class="col-sm-12 text-right m-t-md pl0 pr0">
+            <button class="btn btn-white ml-2" type="button" id="btnCancelPractice" title=""
+                [routerLink]='["/PracticeList"]'>Cancel</button>
+            <button class="btn btn-primary ml-2" type="submit" id="btnresetPractice"
+                (click)="resetPracticeDetails()">Reset
+            </button>
+            <button class="btn btn-primary ml-2" type="submit" id="btnSaveAddPractice"
+                (click)="AddEditPracticeDetails()">Save
+            </button>
+        </div>
+    </div>
+</div>

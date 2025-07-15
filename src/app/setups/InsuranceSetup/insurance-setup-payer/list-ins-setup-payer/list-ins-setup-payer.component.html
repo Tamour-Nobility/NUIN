@@ -1,0 +1,69 @@
+<div class="row">
+  <div class="form-group col-lg-3">
+    <label>Group Name<span class="text-danger">*</span></label>
+    <ngx-select [items]="groupsSelectList" (typed)="onTypeGroups($event)" optionValueField="Id" optionTextField="Name"
+      [allowClear]="true" (select)="onSelectGroup($event)" (remove)="onRemoveGroup($event)"
+      [(ngModel)]="insPayerSearchModel.InsuranceGroupId" placeholder="Search Groups" [disabled]="isSeacrhId">
+    </ngx-select>
+  </div>
+  <div class="form-group col-lg-3">
+    <label>Name<span class="text-danger">*</span></label>
+    <ngx-select [items]="nameSelectList" (typed)="onTypeName($event)" optionValueField="Id" optionTextField="Name"
+      [allowClear]="true" (select)="onSelectName($event)" (remove)="onRemoveName($event)"
+      [(ngModel)]="insPayerSearchModel.InsuranceNameId" placeholder="Search Names" [disabled]="isSeacrhId">
+    </ngx-select>
+  </div>
+  <div class="form-group col-lg-3">
+    <label for="payerId">Payer Id</label>
+    <input type="text" placeholder="Enter Payer Id" maxlength="50" class="form-control" #payerId
+      [(ngModel)]="insPayerSearchModel.InsurancePayer_Id" autocomplete="off"
+      (keyup.enter)="GetInsPayerById($event, payerId.value)" (focus)="onFocusIdSearch($event)"
+      (blur)="onBlurIdSearch($event)">
+  </div>
+  <div class="form-group col-lg-3">
+    <label>State</label>
+    <input type="text" placeholder="Enter State" maxlength="2" onlyAlphabets="true" #payerState
+      [(ngModel)]="insPayerSearchModel.InsurancePayer_State" class="form-control" autocomplete="off"
+      (keyup.enter)="GetInsPayerByState($event, payerState.value)" [disabled]="isSeacrhId">
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12">
+    <table id="tblInsPayer" class="table table-striped table-hover tblInsPayer table-bordered table-responsive"
+      width="100%">
+      <thead>
+        <tr>
+          <th>&nbsp;&nbsp;&nbsp;</th>
+          <th>Payer Name</th>
+          <th>Ins. Name</th>
+          <th class="text-center">Plan</th>
+          <th class="text-center">Created By</th>
+          <th class="text-center">Created Date</th>
+          <th class="text-center">Modified By</th>
+          <th class="text-center">Modified Date</th>
+          <th class="text-center all">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of insPayerLIst">
+          <td></td>
+          <td>{{p.Inspayer_Description}}</td>
+          <td>{{p.InsuranceNameDescription}}</td>
+          <td align="center">{{p.Inspayer_Plan}}</td>
+          <td align="center">{{p.Created_By_Name}}</td>
+          <td align="center">{{p.Created_Date | date:'MM/dd/yyyy'}}</td>
+          <td align="center">{{p.Modified_By_Name}}</td>
+          <td align="center">{{p.Modified_Date | date:'MM/dd/yyyy'}}</td>
+          <td align="center" class="footable-visible footable-last-column">
+            <div class="btn-group">
+              <button class="btn-default btn btn-xs gridbtn" (click)="onViewClick(p.Inspayer_Id)">View</button>
+              <button class="btn-default btn btn-xs gridbtn" (click)="onEditClick(p.Inspayer_Id)">Edit</button>
+              <button class="btn-danger btn btn-xs gridbtn"
+                (click)="onDeleteClick(p.Inspayer_Id,p.Insname_Id)">Delete</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

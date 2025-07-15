@@ -1,0 +1,146 @@
+
+/* Modal's Style 
+==========================================*/
+.modal-section {
+    position: relative;
+}
+
+.modal-open {
+    padding-right: 17px !important;
+}
+
+.modal {
+}
+
+.d-flex{
+    display: flex;
+    
+}
+
+.text{
+    width: 50% !important;
+}
+.text1{
+    width: 20% !important;
+}
+.mtop{
+    margin-top: 5px;
+}
+
+.box{
+    border: solid thin gray;
+    border-radius: 5px;
+    width: 100%;
+    margin-left: 5px;
+    padding-left: 3px;
+}
+
+.box1{
+    border: solid thin gray;
+    border-radius: 5px;
+    width: 15%;
+    padding-left: 3px;
+}
+
+.modal-dialog {
+    border-radius: 3px;
+}
+
+.modal-header {
+    border: none;
+    padding: 5px 15px;
+}
+
+    .modal-header h4 {
+        color: #fff;
+        font-weight: 600;
+        padding-top: 3px;
+    }
+
+    .modal-header .close {
+        font-size: 13px;
+        color: #fff;
+        opacity: 1;
+        margin-top: 0;
+        line-height: 25px;
+    }
+
+        .modal-header .close i {
+            font-size: 13px;
+        }
+
+        .modal-header .close:hover {
+            color: #fff;
+        }
+
+.modal-content {
+    border-radius: 0px;
+    border: none;
+    box-shadow: none;
+}
+
+.legend-footer {
+    background: #eff3f6;
+    border-top: 1px solid #e3e3e3;
+    border-right: 0px;
+    border-bottom: 0px;
+    border-left: 0px;
+    margin-bottom: -10px;
+    margin-left: -10px;
+    margin-right: -10px;
+    padding: 10px;
+}
+
+.modal-table-footer {
+    background: #eff3f6;
+    border-top: 1px solid #e3e3e3;
+    border-right: 0px;
+    border-bottom: 0px;
+    border-left: 0px;
+    margin-bottom: -5px;
+    margin-left: -5px;
+    margin-right: -5px;
+    padding: 5px 10px;
+}
+
+.bottom-fixed {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 0px;
+    width: 100%;
+}
+
+.modal-footer {
+    background: #eff3f6;
+    /* border-top: 1px solid #8d8e90; */
+    padding: 10px 15px;
+}
+/*Modal Primary Css*/
+.modal.modal-primary .modal-header {
+    background: #104d8c;
+}
+
+.modal.modal-primary .modal-dialog {
+    border: 3px solid #fff;
+}
+
+/*Modal Extral large Style*/
+.modal .modal-dialog.modal-xlg {
+    width: 1170px;
+}
+
+/*Modal Double Extral large Style*/
+.modal .modal-dialog.modal-xxlg {
+    width: 95%;
+}
+.legend-footer {
+    background: #eff3f6;
+    border-top: 1px solid #e3e3e3;
+    border-right: 0px;
+    border-bottom: 0px;
+    border-left: 0px;
+    margin-bottom: -10px;
+    margin-left: -10px;
+    margin-right: -10px;
+    padding: 10px;
+}

@@ -1,0 +1,29 @@
+<div class="ibox float-e-margins">
+  <div class="ibox-title">
+    <h5>{{iboxAddEditTitle}}</h5>
+  </div>
+  <div class="ibox-content">
+    <form [formGroup]="ModuleForm">
+      <div class="row">
+        <div class="form-group col-lg-12">
+          <label>Name<span class="text-danger">*</span></label>
+          <input type="text" [(ngModel)]="objModule.Module_Name" class="form-control" formControlName="moduleName"
+            maxlength="50" autocomplete="off">
+          <!-- <span *ngIf="ModuleForm.controls.moduleName.errors && (ModuleForm.controls.moduleName.touched || ModuleForm.controls.moduleName.dirty)">
+          <span *ngIf="ModuleForm.controls.moduleName.errors.required && !ModuleForm.controls.moduleName.errors.maxlength"
+            class="error" for="txtModuleName">Module Name is required.</span>
+          <span *ngIf="ModuleForm.controls.moduleName.errors.maxlength && !ModuleForm.controls.moduleName.errors.required"
+            class="error" for="txtModuleName">Maximum length 50</span>
+        </span> -->
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <button class="btn btn-sm btn-primary pull-right" (click)="onSaveClick()" [disabled]="!ModuleForm.valid"
+            type="submit">Save</button>
+          <button class="btn btn-sm btn-default pull-right" (click)="onCancelClick()" type="reset">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

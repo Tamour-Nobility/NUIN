@@ -1,0 +1,171 @@
+<div class="container">
+  <div class="ibox-title">
+    <h5>
+      <i class="fa fa-hospital-o"></i>&nbsp;Custom-Edits</h5>
+  </div>
+  <div class="ibox-content">
+    <div class="tab-container">
+      <ul class="nav nav-tabs">
+        <li class="active green-tab"><a data-toggle="tab">CustomEdits</a></li>
+      </ul>
+      <div class="tab-content">
+        <div id="tab-1" class="tab-pane active">
+          <div class="panel-body">
+
+            <div class="col-sm-3 col-md-2 col-lg-3 form-group">
+              <label for="editname" class="control-label bold">Edit Name</label><span style="color: red;">*</span>
+              <div>
+                <input type="text" class="form-control" [(ngModel)]="Editname" placeholder="Edit Name" required [disabled]="ViewMode">
+                
+              </div>
+            </div>
+
+
+            <div class="col-sm-3 col-md-2 col-lg-3 form-group">
+              <label for="editdescription" class="control-label bold">Edit Description</label><span
+                style="color: red;">*</span>
+              <div>
+                <input type="text" class="form-control" [(ngModel)]="Editdescription" placeholder="Edit Description" required [disabled]="ViewMode">
+                
+              </div>
+            </div>
+
+            <div class="row">
+              <div class=" col-sm-3 col-md-3 col-lg-3 form-group">
+                <label for="usererror" class="control-label bold">Edit Error Message:</label><span
+                  style="color:red;">*</span>
+                <div>
+                  <input type="text" class="form-control" [(ngModel)]="ErrorMessage" placeholder="Edit Error Message" required [disabled]="ViewMode"> 
+                 
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div>
+              <h5 class="control-label bold">&nbsp; &nbsp;Block claim, If claim meets </h5>
+            </div>
+
+
+            <div class="row">
+              <div class="col-lg-12">
+                <h4 class="pull-left">
+                  <i aria-hidden="true" class="fa fa-money"></i>&nbsp;<u>Create Edits</u>&nbsp;
+                </h4>
+                <div class="pull-right">
+                  <span class="checkbox checkbox-primary checkbox-inline">
+                    <input [attr.disabled]="isViewMode?true:null" class="styled" id="expand-payment-table"
+                      type="checkbox">
+                  </span>
+                </div>
+              </div>
+
+              <div class="col-lg-12 pt-10">
+                <div class="table-horizontal-scroll" id="payments-section">
+                  <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th width="40">Action</th>
+                        <th> Entity 1 </th>
+                        <th>Field 1 </th>
+                        <th> Operator</th>
+                        <th> Value</th>
+                        <th> Entity 2</th>
+                        <th>Field 2</th>
+                      </tr>
+                    </thead>
+                    <tbody class="row-selected">
+                      <tr *ngFor="let c of customedits; let i = index">
+                        <td align="center" width="50">
+                          <button class="btn btn-xs btn-default" title="Delete" (click)="DeleteRowOfCustomRule(i)" [disabled]="disableCrossButton">
+                            <i class="fa fa-remove text-danger" id="delbtn" title="Delete"></i>
+                        </button>
+                        </td>
+                        <td width="130" >
+                          <select class="form-control" id="table" [(ngModel)]="c.Entity1" [disabled]="ViewMode"
+                            (change)="getColumsList_againstTable(c,i,'ColumnName_List')"
+                            (change)="SelectemptyValueCase(c.Entity1,i)"
+                            (change)="HandlePriviousselectionofEntity(i)">
+                            <option></option>
+                            <option *ngFor="let table of TableList" [value]="table">{{table}}
+                            </option>
+                          </select>
+                        </td>
+                        <td width="130">
+                          <select class="form-control" id="column" [(ngModel)]="c.Field1" name="ColumnName_List" [disabled]="ViewMode">
+                            <option *ngFor="let column of c.ColumnName_List" [value]="column">{{column}}</option>
+                          </select>
+                        </td>
+
+                        <td width="100">
+                          <select class="form-control" id="Operator" [(ngModel)]="c.Operator" [disabled]="ViewMode">
+                            <option *ngFor="let op of Operators" [value]="op.value">{{op.displayName}}</option>
+                          </select>
+                        </td>
+
+                        <td width="100">
+                          <ng-container
+                            *ngIf="c.Field1 !== 'DOS' && c.Field1!=='Bill_Date' && c.Field1!=='Hospital_To' && c.Field1!=='Hospital_From'   
+                                   && c.Field1!=='Current_Visit' && c.Field1!=='Allowed_Visit' && c.Field1!=='Accident_Date'&& c.Field1!=='Last_Seen_Date'
+                                   && c.Field1!=='Current_Illness_Date' && c.Field1!=='Injury_Date' && c.Field1!=='DeathDate' && c.Field1!=='Date_Of_Birth'; else dateInput">
+                            <input type="text" class="form-control" id="userValue" [disabled]="ViewMode || isDisabled(c.Entity2)" [(ngModel)]="c.Value"    autocomplete="off"  >
+                          </ng-container>
+                          <ng-template #dateInput>
+                            <my-date-picker id="i"  [options]="myDatePickerOptions" [placeholder]="'YYYY-MM-DD'"  [selDate]="c.Value" [disabled]="ViewMode || isDisabled(c.Entity2)"
+                              (dateChanged)="onDateChangedForDate($event,i)"> </my-date-picker>
+                          </ng-template>
+                        </td>
+
+                        
+                        <td width="130">
+                            <select class="form-control" id="table" [(ngModel)]="c.Entity2" name="Table_List1" [disabled]="ViewMode || isDisabled(c.Value)"
+                              (change)="getColumsList_againstTable1(c, i, 'ColumnName_List1')"
+                              (change)="SelectemptyValueCase1(c.Entity2,i)"
+                              (change)="HandlePriviousselectionofEntityForEntity2(i)">
+                              <option></option>
+                              <option *ngFor="let table of TableList" [value]="table">{{table}}</option>
+                            </select>
+                        </td>
+
+                        <td width="130" >
+                          
+                          <select class="form-control" id="column" [(ngModel)]="c.Field2" [disabled]="ViewMode || isDisabled(c.Value)"  name="ColumnName_List1">
+                            <option *ngFor="let column of c.ColumnName_List1" [value]="column">{{column}}</option>
+                          </select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="27">
+                          <button [attr.disabled]="isViewMode ? true : null || isFromposting ? false : null"
+                            class="btn-primary" style="border: none;" title="AND" (click)="AddRowForCustomEdits()">
+                            AND
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          <hr>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-12">
+              <button class="btn btn-primary btn-sm pull-right" type="submit" (click)="AddCustomEdits()" [disabled]="ViewMode" >Save</button>
+              <button class="btn btn-primary btn-sm pull-right" type="submit" (click)="resetFields()" [disabled]="ViewMode">Reset</button>
+              <button class="btn btn-primary btn-sm pull-right" type="button" (click)="showConfirmationDialog()" [disabled]="CancelViewMode" >Cancel</button>
+              <button class="btn btn-primary btn-sm pull-right" type="submit" (click)="getEditDataById()" [disabled]="!ViewMode"  >Edit</button>
+              <div *ngIf="showConfirmation" class="modal-dialog modal-dialog-centered">
+              <button (click)="onNoClick()">No</button>
+              <button (click)="onYesClick()">Yes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

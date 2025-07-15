@@ -1,0 +1,213 @@
+<div class="tab-content">
+    <div id="tab-3" class="tab-pane active">
+        <div class="panel-body">
+            <div class="col-md-12 pl0 pr0">
+                <div class="row  tab-content-heading" style="margin-left: 0px;">
+                    <div>
+                        <button class="btn btn-success" type="button" id="btnAddEditFacility" title=""
+                            style="float: right;" (click)="showFacility();showAdd()"><i class="fa fa-plus pull-left"
+                                style="padding-top: 3px;"></i>
+                            Add New Facility</button>
+                    </div>
+                    <h3 style="margin-bottom: 4px;margin-left: 14px;">Facilities</h3>
+                </div>
+            </div>
+            <div id="List" *ngIf="isList">
+                <div id="ManageFacility"></div>
+                <div id="listFacility">
+                    <div class="table-responsive left-full">
+                        <table class="table table-striped table-hover table-bordered facilitytbl">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Code</th>
+                                    <th>Address</th>
+                                    <th>City</th>
+                                    <th>Phone</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let fac of practiceFacilityModel.Response" class="gradeX">
+                                    <td>{{fac.Name}}</td>
+                                    <td>{{fac.Code}}</td>
+                                    <td>{{fac.Address}}</td>
+                                    <td>{{fac.City}}</td>
+                                    <td>{{fac.Phone}}</td>
+                                    <td class="text-right footable-visible footable-last-column">
+                                        <div class="btn-group">
+                                            <button class="btn-white btn btn-xs gridbtn"
+                                                (click)="ViewFacility(fac.PracticeFacilityCode)">View</button>
+                                            <button class="btn-white btn btn-xs gridbtn"
+                                                (click)="EditFacility(fac.PracticeFacilityCode)"
+                                                id="editAddEditFacility" name="">Edit</button>
+                                            <button class="btn-white btn btn-xs gridbtn"
+                                                (click)="DeleteFacility(fac.PracticeFacilityCode)"
+                                                id="deleteAddEditFacility" name="">Delete</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <div id="Add" *ngIf="isAdd">
+                <div class="row">
+                    <div class="form-group col-lg-4">
+
+                        <div class="col-md-2 pl0 pr0"><label class="pl0 pr0 control-label">Place of Service:</label>
+                        </div>
+                        <div class="col-md-4 pl0 pr0">
+                            <select class="form-control" id="ddlfacilities" [(ngModel)]="practiceFacility.POS">
+                                <option *ngFor="let p of objPracticeModel.Response.LocationComboFillingList"
+                                    value="{{p.Location_Code}}">{{p.Location_Name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="checkbox m-r-xs">
+                        <input type="checkbox" id="checkbox0" [(ngModel)]="practiceFacility.isDefault">
+                        <label for="checkbox0" data-placement="bottom"> Default </label>
+                    </div>
+
+
+
+                </div>
+                <!-- <div class="row">
+                <div class="col-md-8 pl0 pr0">
+                    <div class="col-md-3 pl0 pr0">
+                        <label class="pl0 pr0 control-label">Search Facility:</label>
+                    </div>
+                    <div class="col-md-5 pl0 pr0">
+                            <input class="form-control" [(ngModel)]="practiceFacility.FacilityCode" name="Code" placeholder="Code" type="text">
+                    </div>
+
+                    <span class="input-group-btn">
+                            <button type="button" class="btn btn-sm btn-white" (click)="showFacility()"> <i class="fa fa-search"></i> Search Facility</button>
+                    </span>
+
+                </div>
+           </div> -->
+                <!-- <div class="hr-line-solid left-full"></div> -->
+                <div class="row mt10">
+                    <div class="col-md-6 pl0 pr0">
+                        <div class="col-md-2 pl0 pr0"><label class="pl0 pr0 control-label">Facility Code:</label></div>
+                        <div class="col-md-4 pl0 pr0">
+                            <input class="form-control" readonly [(ngModel)]="practiceFacility.Facility_Code"
+                                name="Code" placeholder="Code" type="text">
+                        </div>
+                        <div class="col-md-2 pl0 pr0"><label class="pl0 pr0 control-label">Facility Name:</label></div>
+                        <div class="col-md-4 pl0 pr0">
+                            <input class="form-control" readonly [(ngModel)]="practiceFacility.Facility_Name"
+                                name="Code" placeholder="Code" type="text">
+                        </div>
+                    </div>
+                    <div class="col-md-6 pl0 pr0">
+                        <div class="col-md-2 pl0 pr0"><label class="pl0 pr0 control-label">Zip:</label></div>
+                        <div class="col-md-3 pl0 pr0">
+                            <input class="form-control" (blur)="onBlurMethod()" readonly
+                                [(ngModel)]="practiceFacility.Facility_ZIP" name="Zip" placeholder="Zip" type="text">
+                        </div>
+
+                        <div class="col-md-1 pl0 pr0"><label class="pl0 pr0 control-label">City:</label></div>
+                        <div class="col-md-3 pl0 pr0">
+                            <input class="form-control" readonly [(ngModel)]="practiceFacility.Facility_City"
+                                name="City" placeholder="City" type="text">
+                        </div>
+                        <div class="col-md-1 pl0 pr0"><label class="pl0 pr0 control-label">State:</label></div>
+                        <div class="col-md-2 pl0 pr0">
+                            <input class="form-control" readonly [(ngModel)]="practiceFacility.Facility_State"
+                                name="State" placeholder="State" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt10">
+                    <div class="col-md-6 pl0 pr0">
+                        <div class="col-md-2 pl0 pr0"><label class="pl0 pr0 control-label">Address:</label></div>
+                        <div class="col-md-10 pl0 pr0">
+                            <input class="form-control" readonly [(ngModel)]="practiceFacility.Facility_Address"
+                                name="Address" placeholder="Address" type="text">
+                        </div>
+                    </div>
+                    <div class="col-md-6 pl0 pr0">
+                        <div class="col-md-2 pl0 pr0">
+                            <label class="pl0 pr0 control-label">Phone:</label>
+                        </div>
+                        <div class="col-md-3 pl0 pr0">
+                            <input class="form-control" readonly [(ngModel)]="practiceFacility.Facility_Phone"
+                                name="Phone" placeholder="(___) ___-____" mask="(000) 000-0000" type="text">
+                        </div>
+                        <div class="col-md-1 pl0 pr0"><label class="pl0 pr0 control-label">Type:</label></div>
+                        <div class="col-md-6 pl0 pr0">
+                            <input class="form-control" readonly [(ngModel)]="practiceFacility.Facility_Type"
+                                name="Facility_Type" placeholder="Facility Type" type="text">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row mt10">
+                    <div class="col-md-4 pl0 pr0">
+                        <div class="col-md-3 pl0 pr0"><label class="pl0 pr0 control-label">NPI:</label></div>
+                        <div class="col-md-4 pl0 pr0">
+                            <input class="form-control" readonly [(ngModel)]="practiceFacility.NPI" name="NPI"
+                                placeholder="NPI" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-12  right-full row">
+                    <div class="col-smd-12 text-right m-t-md pl0" pr0>
+                        <button class="btn btn-white" type="button" id="btnCancelAddEditFacility"
+                            (click)="resetFields()">Cancel</button>
+                        <button class="btn btn-primary" type="button" id="btnSaveAddEditFacility"
+                            (click)="AddUpdateFacility()">Save
+                        </button>
+                    </div>
+                </div>
+                <div class="hr-line-solid left-full"></div>
+            </div>
+            <!-- <button id="Facilities" [hidden]="true" data-toggle="modal" data-target="#Facility">Open Modal</button>
+            <div class="modal fade modal-primary" id="Facility" tabindex="-1" role="dialog" aria-labelledby=""
+            data-backdrop="static">
+            <div class="modal-dialog" style="width: max-content;" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" id="facilityClose" data-dismiss="modal" class="close" aria-label="Close">Close<i
+                                class="app-icon-IconSet-1-12"></i></button>
+                        <h4 class="modal-title">Facilities</h4>
+                    </div>
+                    <div class="modal-body">
+                        <app-facilities (notifyParent)="getNotificationFacility($event)"></app-facilities>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+
+            <button id="Facilities" [hidden]="true" data-toggle="modal" data-target="#Facility">Open Modal</button>
+            <!-- Search Subscriber Model -->
+            <div class="modal fade modal-primary" id="Facility" tabindex="-1" role="dialog" aria-labelledby=""
+                data-backdrop="static">
+                <div class="modal-dialog modal-xlg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" id="facilityClose" data-dismiss="modal" class="close"
+                                aria-label="Close">Close<i class="app-icon-IconSet-1-12"></i></button>
+                            <h4 class="modal-title">Facilities</h4>
+                        </div>
+                        <div class="modal-body">
+                            <app-facilities [facilityName]="'PracticeSetup'" (notifyParent)="getNotificationFacility($event)"></app-facilities>
+
+                            <!-- <app-facilities [facilityName]="" (notifyParent)="getNotificationFacility($event)"  [isFromAnotherComponent]="practice-setup"></app-facilities> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+</div>

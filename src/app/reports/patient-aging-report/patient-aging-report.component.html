@@ -1,0 +1,272 @@
+<h3 *ngIf="!isRouted">Patient Aging Report</h3>
+<div class="row" *ngIf="!isRouted">
+  <div class="col-lg-3">
+    <label class="control-label">Practices</label>
+    <div style="display: flex; align-items: center;">
+      <ngx-select style="flex-grow: 1; margin-right: 0px;" [(ngModel)]="ddlPracticeCode"
+        (ngModelChange)="onchangePractice($event)" [items]="listPracticesList" optionTextField="PracticeLabel"
+        placeholder="Select Practice" [allowClear]="false">
+      </ngx-select>
+      <span class="input-group-btn">
+        <button class="btn btn-primary btn-sm lh-1_2" type="button" [disabled]="ddlPracticeCode==0"
+          (click)="onchangePractice(0)"><i class="fa fa-refresh"></i></button>
+      </span>
+    </div>
+  </div>
+</div>
+<div class="row justify-content-center">
+  <div class="col-lg-12">
+    <h3 *ngIf="isRouted" [ngClass]="isRouted == true ? 'center-heading' : null">Patient Aging Report</h3>
+  </div>
+  <div *ngIf="patientAgingReportList.length > 0 || ddlPracticeCode != 0" class="col-lg-2 d-flex my-4"
+    style="display: flex; align-items: center; margin-top: 20px;">
+    <label style="font-weight: normal">Show</label>
+    <select (change)="countValueChanged($event)" class="form-control input-sm mx-2"
+      style="width: 3rem; margin-left: 5px; margin-right: 5px; max-width: 37% !important;">
+      <option [value]="10" [selected]="count === 10">10</option>
+      <option [value]="25" [selected]="count === 25">25</option>
+      <option [value]="50" [selected]="count === 50">50</option>
+      <option [value]="100" [selected]="count === 100">100</option>
+    </select>
+    <label style="font-weight: normal">entries</label>
+  </div>
+  <div class="col-lg-4  my-4" style="display: flex; align-items: center; margin-top: 20px;padding-left: 30%;"
+    *ngIf=" ddlPracticeCode != 0">
+    <button class="btn btn-default btn-sm" [disabled]="patientAgingReportList.length==0" (click)="exportExcel()"><i
+        class="fa fa-file-excel-o"></i>&nbsp;Excel</button>
+
+  </div>
+
+  <div class="col-sm-6 d-flex my-4" style="display: flex; align-items: center; margin-top: 23px;padding-left: 33%;"
+    *ngIf="patientAgingReportList.length > 0 || ddlPracticeCode != 0">
+    <span>Search:&nbsp;</span><input class="form-control" type="text" [(ngModel)]="searchText">
+  </div>
+
+
+</div>
+
+
+<div class="col-lg-12 pt-20  table-horizontal-scroll">
+  <div class="row d-flex justify-content-between" *ngIf="patientAgingReportList.length > 0 || ddlPracticeCode != 0">
+
+    <table id="example" class="table table-striped table-hover table-bordered dataTableASR" width="100%"
+      *ngIf="(patientAgingReportList | filter: searchText).length>0 || ddlPracticeCode!=0">
+      <thead>
+        <tr>
+          <th (click)="toggleSorting('PRACTICE_CODE')">Practice Code#
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'PRACTICE_CODE' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('PRAC_NAME')">Practice Name
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'PRAC_NAME' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+
+          <th (click)="toggleSorting('PATIENT_ACCOUNT')">Patient AC#
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'PATIENT_ACCOUNT' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+
+          <th (click)="toggleSorting('PATIENT_NAME')">Patient Name
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'PATIENT_NAME' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('CLAIM_NO')">Claim#
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'CLAIM_NO' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('DOS')">DOS
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'DOS' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('MONTH')">Month
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'MONTH' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('YEAR')">Year
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'YEAR' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('BILL_DATE')">Bill Date
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'BILL_DATE' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('CLAIM_ENTRY_DATE')">Claim Entry Date
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'CLAIM_ENTRY_DATE' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('ATTENDING_PHYSICIAN')">Attending Physician
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'ATTENDING_PHYSICIAN' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('BILLING_PHYSICIAN')">Billing Physician
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'BILLING_PHYSICIAN' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('RESOURCE_PHYSICIAN')">Resource Physician
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'RESOURCE_PHYSICIAN' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('LOCATION_NAME')">Location Name
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'LOCATION_NAME' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('FACILITY_NAME')">Facility Name
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'FACILITY_NAME' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('FACILITY_TYPE')">Facility Type
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'FACILITY_TYPE' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('CLAIM_TOTAL')">Claim Total
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'CLAIM_TOTAL' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('AMT_PAID')">Amt Paid
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'AMT_PAID' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('ADJUSTMENT')">Adjustment
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'ADJUSTMENT' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('AMT_DUE')">Amt Due
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'AMT_DUE' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('PRI_INS_PAYMENT')">Pri Ins Payment
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'PRI_INS_PAYMENT' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('SEC_INS_PAYMENT')">Sec Ins Payment
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'SEC_INS_PAYMENT' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('OTH_INS_PAYMENT')">Oth Ins Payment
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'OTH_INS_PAYMENT' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('PATIENT_PAYMENT')">Patient Payment
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'PATIENT_PAYMENT' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('PRI_STATUS')">Pri Status
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'PRI_STATUS' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('PRI_PAYER')">Pri Payer
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'PRI_PAYER' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('PRI_POLICY_NUMBER')">Pri Policy Number
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'PRI_POLICY_NUMBER' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('SEC_STATUS')">Sec Status
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'SEC_STATUS' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+
+          <th (click)="toggleSorting('SEC_PAYER')">Sec Payer
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'SEC_PAYER' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('SEC_POLICY_NUMBER')">Sec Policy Number
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'SEC_POLICY_NUMBER' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('OTH_STATUS')">Oth Status
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'OTH_STATUS' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('OTH_PAYER')">Oth Payer
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'OTH_PAYER' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('OTH_POLICY_NUMBER')">Oth Policy Number
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'OTH_POLICY_NUMBER' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('PAT_STATUS')">Pat Status
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'PAT_STATUS' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('SLOT')">Slot
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'SLOT' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Aging')">Aging
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Aging' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="patientAgingReportList.length === 0 && ddlPracticeCode !== 0">
+          <tr>
+            <td colspan="24" style="padding-left: 70vh ;">No data available</td>
+          </tr>
+        </ng-container>
+
+
+
+        <tr *ngFor="let p of patientAgingReportList | filter: searchText;">
+          <td>{{p.PRACTICE_CODE}}</td>
+          <td>{{p.PRAC_NAME}}</td>
+          <td>{{p.PATIENT_ACCOUNT}}</td>
+          <td>{{p.PATIENT_NAME}}</td>
+          <td>{{p.CLAIM_NO}}</td>
+          <td>{{p.DOS | date:'MM/dd/yyyy'}}</td>
+          <td>{{p.MONTH}}</td>
+          <td>{{p.YEAR}}</td>
+          <td>{{p.BILL_DATE | date:'MM/dd/yyyy'}}</td>
+          <td>{{p.CLAIM_ENTRY_DATE | date:'MM/dd/yyyy'}}</td>
+          <td>{{p.ATTENDING_PHYSICIAN}}</td>
+          <td>{{p.BILLING_PHYSICIAN}}</td>
+          <td>{{p.RESOURCE_PHYSICIAN}}</td>
+          <td>{{p.LOCATION_NAME}}</td>
+          <td>{{p.FACILITY_NAME}}</td>
+          <td>{{p.FACILITY_TYPE}}</td>
+          <td>{{p.CLAIM_TOTAL | currency}}</td>
+          <td>{{p.AMT_PAID | currency}}</td>
+          <td>{{p.ADJUSTMENT | currency}}</td>
+          <td>{{p.AMT_DUE | currency}}</td>
+          <td>{{p.PRI_INS_PAYMENT | currency}}</td>
+          <td>{{p.SEC_INS_PAYMENT | currency}}</td>
+          <td>{{p.OTH_INS_PAYMENT | currency}}</td>
+          <td>{{p.PATIENT_PAYMENT | currency}}</td>
+          <td>{{p.PRI_STATUS}}</td>
+          <td>{{p.PRI_PAYER}}</td>
+          <td>{{p.PRI_POLICY_NUMBER}}</td>
+          <td>{{p.SEC_STATUS}}</td>
+          <td>{{p.SEC_PAYER}}</td>
+          <td>{{p.SEC_POLICY_NUMBER}}</td>
+          <td>{{p.OTH_STATUS}}</td>
+          <td>{{p.OTH_PAYER}}</td>
+          <td>{{p.OTH_POLICY_NUMBER}}</td>
+          <td>{{p.PAT_STATUS}}</td>
+          <td>{{p.SLOT}}</td>
+          <td>{{p.Aging}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+
+<div *ngIf="patientAgingReportList.length > 0 || ddlPracticeCode != 0" class="row d-flex"
+  style="margin-left: 5px; margin-right: 5px; margin-top: 15px">
+  <span>Showing {{ (filteredRecords) }} of {{ totalResults }} entries</span>
+  <div style="float: right;margin-top: 0.5%;">
+    <button (click)="loadPreviousPage()" [disabled]="currentPage === 1">
+      Previous
+    </button>
+    {{ currentPage }}/{{ totalPages }}
+    <button (click)="loadNextPage()" [disabled]="currentPage === totalPages">
+      Next
+    </button>
+  </div>
+</div>

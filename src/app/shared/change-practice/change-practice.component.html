@@ -1,0 +1,29 @@
+<div class="modal inmodal animated bounce" id="pracSelection" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated fadeIn">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <i class="fa fa-clinic-medical modal-icon"></i>
+                <h5 class="modal-title">My Practices</h5>
+                <small>You can change practice anytime.</small>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-lg-12">
+                        <label>Select Practice</label>
+                        <ngx-select [(ngModel)]="PracticeCode" [items]="loggedInUser.Practices"
+                            optionValueField="PracticeCode" optionTextField="PracticeLabel" [allowClear]="false">
+                        </ngx-select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-12 text-center">
+                    <button type="button" class="btn btn-w-m btn-primary btn-md" data-dismiss="modal"
+                        (click)="onChangePractice()">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

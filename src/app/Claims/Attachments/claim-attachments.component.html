@@ -1,0 +1,279 @@
+              <!-- <div class="pull-left margin-b15">
+                  <span class="d-inline-block margin-r5 fs-14">Account#: <b>{{PatientAccount}}</b>,</span>
+                  <span class="d-inline-block margin-r5 fs-14">Claim #: <b>{{claimID}}</b></span>
+              </div>
+              <div class="clearfix"></div>
+              <div class="row">
+                  <div class="col-md-5">
+                      <div class="table-panel margin-b15">
+                          <div class="table-panel-head margin-b1">
+                              <h5 class="table-heading">Claim Insurance</h5>
+                          </div>
+                          <div class="table-panel-body">
+                              <div class="row">
+                                  <div class="col-md-6">
+                                      <div class="radio radio-primary margin-t5">
+                                          <input type="radio" id="P" name="InsuranceSelect" [disabled]="DisPrimaryIns" [(ngModel)]="SelectedInsurances" value="P" (click)="ChangeInsurance('P')">
+                                          <label for="P">Primary Insurance</label>
+                                      </div>
+                                      <div class="radio radio-primary margin-t15">
+                                          <input type="radio" id="S" name="InsuranceSelect" [disabled]="DisSecondryIns" [(ngModel)]="SelectedInsurances" value="S" (click)="ChangeInsurance('S')">
+                                          <label for="S">Secondary Insurance</label>
+                                      </div>
+                                      <div class="radio radio-primary margin-t15">
+                                          <input type="radio" id="O" name="InsuranceSelect" [disabled]="DisOtherIns" [(ngModel)]="SelectedInsurances" value="O" (click)="ChangeInsurance('O')">
+                                          <label for="O">Other Insurance</label>
+                                      </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                      <div class="form-group">
+                                          <input type="text" disabled="disabled" class="form-control" [(ngModel)]="PrimaryIns">
+                                      </div>
+                                      <div class="form-group">
+                                          <input type="text" disabled="disabled" class="form-control" [(ngModel)]="SecondryIns">
+                                      </div>
+                                      <div class="form-group">
+                                          <input type="text" disabled="disabled" class="form-control" [(ngModel)]="OtherIns">
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="table-panel margin-b15">
+                          <div class="table-panel-head margin-b1">
+                              <h5 class="table-heading">Files</h5>
+                          </div>
+                          <div class="table-panel-body padding-0">
+                              <div class="table-horizontal-scroll" id="ImageDiv">
+                                  <table class="table table-theme table-hover margin-b10" id="ImageTbl">
+                                      <thead>
+                                          <tr>
+                                              <th>
+                                                  <div class="checkbox checkbox-primary checkbox-inline">
+                                                      <input type="checkbox" title="Select All" [(ngModel)]="chkSelectAll" (change)="checkAll()" id="chk-files-list-123">
+                                                      <label for="chk-files-list-123">&nbsp;</label>
+                                                  </div>
+                                              </th>
+                                              <th>Action</th>
+                                              <th>Attach Image</th>
+                                              <th>
+                                                  <select class="form-control" (change)="SelectAllTypes()" id="ImageID" [(ngModel)]="globelAattachmentID">
+
+                                                      <option value="0"   disabled selected style="display:none">Attach Type</option>
+                                                      <option value="5343">Appeal</option>
+                                                      <option value="5210">Complete Appeal</option>
+                                                      <option value="5341">EOB</option>
+                                                      <option value="5345">HCFA</option>
+                                                      <option value="5342">Medical Notes</option>
+                                                      <option value="5344">Other</option>
+                                                  </select>
+
+                                              </th>
+                                          </tr>
+                                      </thead>
+                                      <tbody class="row-selected">
+                                          <tr *ngFor="let p of ImageFilesArry let ndx=index;" [class.selected]="ndx === selectedImg" (click)="SelectRowImg(ndx)">
+                                              <td align="center">
+                                                  <div class="checkbox checkbox-primary checkbox-inline">
+                                                      <input type="checkbox" [(ngModel)]="p.Checkflag" (change)="p.Checkflag = !p.Checkflag" (ngModelChange)="updateCheckBox()" [attr.id]="p.Image_Name">
+                                                      <label [attr.for]="p.Image_Name" >&nbsp;</label>
+                                                  </div>
+                                              </td>
+                                              <td align="center">
+                                                  <span class="cursor-pointer" title="Delete" (click)="DeleteImage(p,ndx)"><i aria-hidden="true" class="app-icon-IconSet-1-33 text-danger"></i></span>
+                                              </td>
+                                              <td id="ImageName" (click)="PreviewFile(p.Image_Name)">{{p.Image_Name}}</td>
+                                              <td>
+                                                  <select [(ngModel)]="p.Att_Type_Id" class="form-control">
+                                                      <option value="5343">Appeal</option>
+                                                      <option value="5210">Complete Appeal</option>
+                                                      <option value="5341">EOB</option>
+                                                      <option value="5345">HCFA</option>
+                                                      <option value="5342">Medical Notes</option>                                                        
+                                                      <option value="5344">Other</option>
+                                                      
+                                                  </select>
+                                              </td>
+                                          </tr>
+
+                                      </tbody>
+                                  </table>
+                              </div>
+                              <div class="legend-footer margin-l0 margin-r0 margin-b0">
+                                  <div class="pull-right">
+                                      <span class="btn btn-sm btn-default btn-file margin-r5">
+                                          Choose File
+                                          <input type="file" [disabled]="NullInsurance" id="fileAttached" title="Attach" (change)="uploadPatientFile($event)" accept=".jpg,.jpeg" multiple>
+                                      </span>
+                                      <label>No file chosen</label>
+                                  </div>
+                                  <div class="clearfix"></div>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="table-panel margin-b15">
+                          <div class="table-panel-head margin-b1">
+                              <h5 class="table-heading">Insurance Movement</h5>
+                          </div>
+                          <div class="table-panel-body">
+                              <div class="row margin-b10">
+                                  <div class="col-md-12 form-group">
+                                      <label class="control-label">Move Images To</label>
+                                      <select class="form-control" [(ngModel)]="MoveToIns" id="MoveImageDDL" [disabled]="(DisPrimaryIns||DisSecondryIns)&&DisOtherIns">
+                                          <option value="P" [hidden]="DisPrimaryIns || SelectedInsurances=='P' ">Primary</option>
+                                          <option value="S" [hidden]="DisSecondryIns || SelectedInsurances=='S'">Secondary</option>
+                                          <option value="O" [hidden]="DisOtherIns || SelectedInsurances=='O'">Other</option>
+                                      </select>
+                                  </div>
+                              </div>
+                              <div class="legend-footer">
+                                  <div class="pull-right">
+                                      <button class="btn btn-sm btn-ws-default" [disabled]="(DisPrimaryIns||DisSecondryIns)&&DisOtherIns" (click)="SaveImageAttachment('Move')">Move</button>
+                                  </div>
+                                  <div class="clearfix"></div>
+                              </div>
+                          </div>
+                      </div>
+
+                  </div>
+                  <div class="col-md-7">
+                      <ul class="tab-list-menu">
+                          <li class="d-inline-block margin-r5" (click)="RefreshImage()"><a data-toggle="tooltip" data-placement="auto" title="Refresh"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
+                          <li class="d-inline-block margin-r5" (click)="openInNewTab()"><a data-toggle="tooltip" data-placement="auto" title="Open in new window"><i class="fa fa-window-restore" aria-hidden="true"></i></a></li>
+                          <li class="d-inline-block margin-r5" (click)="RotateImage()"><a data-toggle="tooltip" data-placement="auto" title="Rotate"><i class="fa fa-repeat" aria-hidden="true"></i></a></li>
+                          <li class="d-inline-block margin-r5" (click)="ZoomInImage()"><a data-toggle="tooltip" data-placement="auto" title="Zoom In"><i class="fa fa-search-plus" aria-hidden="true"></i></a></li>
+                          <li class="d-inline-block" (click)="ZoomOutImage()"><a data-toggle="tooltip" data-placement="auto" title="Zoom Out"><i class="fa fa-search-minus" aria-hidden="true"></i></a></li>
+                      </ul>
+                      <div class="wb-image-box">
+                          <iframe id="FileAttachment" style="border: solid 1px;"></iframe>
+                      </div>
+                  </div>
+              </div>
+        
+          <div class="modal-footer">
+              <button class="btn btn-ws-default" type="button" data-target="#attachment-history-modal" data-toggle="modal" (click)="ShowHistory()">History</button>
+              <button data-dismiss="modal" (click)="getClaimInsurances()" class="btn btn-ws-default" type="button">Cancel</button>
+              <button (click)="SaveImageAttachment()" class="btn btn-blue" title="Ctrl+S" type="button">Save</button>
+          </div>
+   
+
+
+
+
+<div class="modal fade modal-primary" id="errorPopup_CI" tabindex="-1" role="dialog" aria-labelledby="" data-backdrop="static" style="z-index:1055;">
+  <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+              <h4 class="modal-title" id="ErrorHead_CI">Claim</h4>
+          </div>
+          <div class="modal-body">
+              <div class="row">
+                  <div class="col-md-2 text-center">
+                      <i class="app-icon-IconSet-1-99 text-red fs-32"></i>
+                  </div>
+                  <div class="col-md-10">
+                      <h4 class="margin-0 padding-t10" id="ErrorMsg_CI">Error Occured</h4>
+                  </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-blue" (click)="setFocus()" id="btnErrorOkCI" data-dismiss="modal">OK</button>
+          </div>
+      </div>
+  </div>
+</div> -->
+
+<!-- Cnnfirm Modal For Image Delete -->
+<!-- <div class="modal fade modal-primary" id="websoft-confirm-modal-2" tabindex="-1" role="dialog" aria-labelledby="" data-backdrop="static" style="z-index:1051;">
+  <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+              <h4 class="modal-title">Websoft</h4>
+          </div>
+          <div class="modal-body">
+              <div class="row">
+                  <div class="col-md-2 text-center">
+                      <i class="app-icon-IconSet-1-99 text-red fs-32"></i>
+                  </div>
+                  <div class="col-md-10">
+                      <h4 class="margin-0 padding-t10">Are you sure you want to delete the selected record(s)?</h4>
+                  </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-ws-default" data-dismiss="modal" data-target="#image-delete-modal" data-toggle="modal">Yes</button>
+              <button type="button" class="btn btn-ws-default" data-dismiss="modal">No</button>
+          </div>
+
+      </div>
+  </div>
+</div> -->
+
+<!-- Image Delete Reason -->
+<!-- <div class="modal fade modal-primary" id="image-delete-modal" tabindex="-1" role="dialog" aria-labelledby="" data-backdrop="static" style="z-index:1051;">
+  <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+              <h4 class="modal-title">Image Delete Reason</h4>
+          </div>
+          <div class="modal-body">
+              <textarea id="FileReasion" class="form-control text-control"></textarea>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-ws-default" data-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-blue" title="Ctrl+S" (click)="confirmDelete()">Save</button>
+          </div>
+      </div>
+  </div>
+</div> -->
+
+<!-- Claim Attachment Modal -->
+<!-- <div class="modal fade modal-primary" id="attachment-history-modal" tabindex="-1" role="dialog" aria-labelledby="" data-backdrop="static" style="z-index:1051;">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="app-icon-IconSet-1-12"></i></button>
+              <h4 class="modal-title">Attachment History</h4>
+          </div>
+          <div class="modal-body">
+              <div class="table-horizontal-scroll" id="historyDiv">
+                  <table class="table table-theme table-hover" id="historyTbl">
+                      <thead>
+                          <tr>
+                              <th>Image Name</th>
+                              <th>Attach/Detach</th>
+                              <th>Attachment Type</th>
+                              <th>Reason</th>
+                              <th>Date</th>
+                              <th>User ID</th>
+                          </tr>
+                      </thead>
+                      <tbody class="row-selected" id="tbodypateint-table"> -->
+                          <!--<tr *ngIf="patientlist.length === 0">
+                              <td colspan="10" style="color:red; text-align:center;">No Record Found</td>
+                          </tr>-->
+                          <!-- <tr *ngFor="let p of ImageHistoryResponseLst; let ndx=index;" [class.selected]="ndx === selected" style="cursor:pointer;">
+                              <td>{{p.Image_Name}}</td>
+                              <td *ngIf="p.Type=='Attached'">Attached</td>
+                              <td *ngIf="p.Type=='Detached'"> Detached</td>
+                              <td *ngIf="p.Type==null">  </td>
+                              <td>{{p.Att_Type_Desc}}</td>
+                              <td>{{p.Reason_Details}}</td>
+                              <td>{{p.Date}}</td>
+                              <td>{{UserId}}</td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-ws-default" data-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+</div> -->

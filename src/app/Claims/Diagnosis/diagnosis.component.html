@@ -1,0 +1,156 @@
+<div class="table-horizontal-scrolls" id="insTable">
+    <div cdkDropList #diagnosisList="cdkDropList" [cdkDropListData]="Diag" class="" (cdkDropListDropped)="drop($event)">
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th width="5%">Actions</th>
+                    <th width="8%">Sr. #</th>
+                    <th width="20%">Code</th>
+                    <th width="60%">Description</th>
+                    <th width="7%">Search</th>
+                </tr>
+            </thead>
+            <tbody class="row-selected">
+                <tr *ngFor="let p of Diag; let ndx=index" [hidden]="p.Diagnosis.Deleted">
+                    <td align="center">
+                        <button class="btn btn-xs btn-default" (mousedown)="DeleteDiag(ndx)" title="Delete"
+                            [attr.disabled]="isViewMode?true:null" >
+                            <i class="fa fa-remove text-danger" id="delbtn" title="Delete"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <input (click)="ShowDiagnosisPopup(ndx)" type="text" class="form-control" value="DX-{{ndx+1}}"
+                                [attr.disabled]="isViewMode?true:null">
+                            <!-- <span class="add-on input-group-addon">DX-{{ndx+1}}</span> -->
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <input  class="form-control" id="policynum" placeholder="" [(ngModel)]="p.Diagnosis.Code"
+                                type="text" (click)="ShowDiagnosisPopup(ndx)"  autocomplete="off"
+                                [attr.disabled]="isViewMode?true:null" >
+                        </div>
+
+                        <!-- (blur)="diagOnBlur($event, p.Diagnosis.Code, ndx, false)" -->
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <input (click)="ShowDiagnosisPopup(ndx)" class="form-control" style="width:500px!important;" placeholder=""
+                                [(ngModel)]="p.Diagnosis.Description" type="text"
+                                [attr.disabled]="isViewMode?true:null" readonly>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <button (click)="ShowDiagnosisPopup(ndx)" class="btn btn-white add-on"
+                                [attr.disabled]="isViewMode?true:null"> <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </td></tr>
+                <tr>
+                    <td colspan="44">
+                        <button  (click)="AddNewDiagnosis()" class="btn-white" style="border: none;"
+                            title="Add New Diagnosis" [attr.disabled]="isViewMode?true:null"
+                            [attr.disabled]="isViewMode?true:null">
+                            Add New Diagnosis
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+</div>
+<button id="openSearchModalButton" [hidden]="true" data-toggle="modal" data-target="#Diagnosistsearch">Open
+    Modal</button>
+<div class="modal fade modal-primary" data-keyboard="false" id="Diagnosistsearch" tabindex="-1" role="dialog" aria-labelledby=""
+    data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button"   id="closeModel" data-dismiss="modal" class="close" aria-label="Close"
+                    (click)="closeDiagnosis()">Close<i class="app-icon-IconSet-1-12"></i></button>
+                <h4 class="modal-title">Search Diagnosis (ICD/DX)</h4>
+            </div>
+            <div class="modal-body">
+                <fieldset class="margin-b20">
+                    <legend>Search Criteria</legend>
+                    <div class="row">
+                        <div class="col-md-2 form-group">
+                            <label class="control-label">Diagnosis Code</label>
+                            <input autocomplete="off" type="text" placeholder="ICD 10 Code" class="form-control"
+                                (keydown)="diagnosisKeyPressEvent($event)" (keypress)="API.Gv.checkSpcialChar($event)"
+                                [(ngModel)]="diagSearchRequest.DiagnoseCode" id="txt_icd_code"
+                                style="text-transform:uppercase;">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="control-label">Diagnosis Description</label>
+                            <input autocomplete="off" type="text" class="form-control" placeholder="ICD 10 Description"
+                                [(ngModel)]="diagSearchRequest.Description" (keypress)="API.Gv.checkSpcialChar($event)"
+                                (keydown)="diagnosisKeyPressEvent($event)" id="txt_icd_desc">
+                        </div>
+                        <div class="col-lg-3 col-md-12 text-right pull-right">
+                            <div class="margin-t17">
+                                <button class="btn btn-sm btn-white margin-r5" (click)="ClearDiagnosis()"
+                                    type="button">Clear</button>
+                                <button class="btn btn-sm btn-primary" type="button"
+                                    (click)="SearchDiagnosis()">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="table-panel">
+                    <div class="table-panel-head margin-b1">
+                        <h5 class="table-heading pull-left">Diagnosis (ICD/DX)</h5>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="table-panel-body">
+                        <div id="divDiagnosisResult" style="max-height:300px; overflow:auto; white-space:nowrap;">
+                            <table class="table table-hover table-striped table-bordered dataTable"
+                                id="DiagnosisSearchTbl">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:center; width:10%">Sr. #</th>
+                                        <th style="text-align:center; width:40%">Diagnosis Code</th>
+                                        <th style="text-align:center; width:10%">Description</th>
+                                        <th style="text-align:center; width:10%">ICD Version</th>
+                                        <th style="text-align:center; width:20%">Found for Provider</th>
+                                        <th style="text-align:center; width:10%">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="row-selected">
+                                    <tr *ngIf="diagnosisResponse?.length==0">
+                                        <td colspan="6" style="text-align: center" class="text-red">No Record Found</td>
+                                    </tr>
+                                    <tr *ngFor="let p of diagnosisResponse  let ndx=index;"
+                                        (dblclick)="selectDiagnosisEvent(p.Diag_Code, p.Diag_Description,p.Diag_Effective_Date,p.Diag_Expiry_Date, p.Isfound)">
+                                        <td style="text-align:center;">{{ndx+1}}</td>
+                                        <td style="text-align:center;">{{p.Diag_Code}}</td>
+                                        <td style="text-align:left;">{{p.Diag_Description}}</td>
+                                        <td style="text-align:center;">{{p.ICD_version}}</td>
+                                        <td style="text-align:center;">{{p.Isfound==0? 'No': 'Yes'}}</td>
+                                        <td style="text-align:center;">
+                                            <div *ngIf="p.Isfound == 0">
+                                            <button class="btn btn-success btn-sm"
+                                                (click)="addDxToProvider(p.Diag_Code)"
+                                                [attr.disabled]="p.Isfound == 1 ? true : null" style="width:55px; height:40px;"> Add
+                                            </button>
+                                        </div>
+                                        <div *ngIf="p.Isfound == 1">
+                                            <button class="btn btn-success btn-sm"
+                                                (click)="selectDiagnosisEvent(p.Diag_Code, p.Diag_Description,p.Diag_Effective_Date ,p.Diag_Expiry_Date, p.Isfound)"  style="width:55px; height:40px;">Select
+                                            </button>
+                                        </div>
+                                    </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

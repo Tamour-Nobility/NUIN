@@ -1,0 +1,162 @@
+.dateCell {
+  max-height: 5px;
+  width: 175px;
+  margin: 2mm;
+  padding: 2mm;
+  white-space: nowrap;
+  border: 1px;
+}
+
+.newRow {
+  margin-top: 25px;
+}
+
+/* Modal's Style 
+==========================================*/
+.modal-dialog {
+  border-radius: 3px;
+}
+
+.modal-header .close {
+  font-size: 13px;
+  color: #fff;
+  opacity: 1;
+  margin-top: 0;
+  line-height: 25px;
+}
+
+.modal-content {
+  border-radius: 0px;
+  border: none;
+  box-shadow: none;
+}
+
+.modal-footer {
+  background: #eff3f6;
+  /* border-top: 1px solid #8d8e90; */
+  padding: 10px 15px;
+}
+
+.modal-headern {
+  background: #eff3f6;
+  /* border-top: 1px solid #8d8e90; */
+  padding: 10px 15px;
+}
+
+/*Modal Primary Css*/
+.modal.modal-primary .modal-header {
+  background: #104d8c;
+}
+
+.modal.modal-primary .modal-dialog {
+  border: 3px solid #fff;
+}
+
+/*Modal Extral large Style*/
+.modal .modal-dialog.modal-xlg {
+  width: 1170px;
+}
+
+/*Modal Double Extral large Style*/
+.modal .modal-dialog.modal-xxlg {
+  width: 95%;
+}
+
+.modal {
+  text-align: center;
+  padding: 0 !important;
+}
+
+.modal::before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -4px;
+}
+
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.green-border {
+  border: 2px solid green;
+  /* Change the border color to green */
+  border-radius: 5px;
+  height: auto;
+  /* Optional: add some rounding to the corners */
+}
+
+
+
+/* DataTable Style is below
+==========================================*/
+table.dataTable.nowrap th,
+table.dataTable.nowrap td {
+    white-space: unset
+}
+
+
+.dataTables-example {
+    min-height: 100px;
+    white-space: nowrap;
+}
+
+@media only screen and (max-width: 500px) {
+
+    table,
+    head,
+    tbody,
+    th,
+    td,
+    tr {
+        display: block;
+    }
+
+    thead tr {
+        display: none;
+    }
+
+    tr {
+        border: 1px solid #ccc;
+    }
+
+    td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+        white-space: normal;
+        text-align: left;
+        min-height: 30px;
+        overflow: hidden;
+        word-break: break-all;
+    }
+
+    td:before {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        text-align: left;
+        font-weight: bold;
+    }
+
+    td:before {
+        content: attr(data-title);
+    }
+}
+
+textarea {
+    resize: vertical;
+  }
+  .disabled {
+    color: grey;
+    pointer-events: none; /* Prevents mouse clicks */
+    cursor: not-allowed;
+}
+
+    

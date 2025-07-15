@@ -1,0 +1,19 @@
+.overflow-auto {
+    max-height: 200px; /* Adjust the desired height */
+    overflow-y: auto;
+  }
+
+  .anyClass {
+    height:150px;
+    overflow-y: scroll;
+   }
+
+   textarea {
+    resize: vertical;
+  }
+  
+  
+  
+  .is-invalid input {
+    border: 1px solid red;
+}

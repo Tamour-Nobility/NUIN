@@ -1,0 +1,1 @@
+{"ast":null,"code":"export class InsurancePayerModelVM {\n  /**\r\n   *\r\n   */\n  constructor() {\n    this.InsuranceGroups = [];\n    this.InsuranceNames = [];\n  }\n}\nexport class InsPayerSearchModel {}\nexport class InsurancePayerViewModel {}","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

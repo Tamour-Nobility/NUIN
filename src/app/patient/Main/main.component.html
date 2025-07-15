@@ -1,0 +1,51 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5><i class="fa fa-list-alt"></i>&nbsp;Patient</h5>
+      </div>
+      <div class="ibox-content">
+        <div class="tabs-container">
+          <ul class="nav nav-tabs">
+            <li [class.active]="activeTab=='demographics'">
+              <a class="nav-link" [routerLink]="['/Patient/Demographics',encodedPatientInfo]" routerLinkActive="active"
+                (click)="activeTab='demographics'">Demographics</a>
+            </li>
+            <li [class.active]="activeTab=='appointments'" *ngIf="!isNewPatient()">
+              <a data-toggle="tab" [routerLink]="['/Patient/Demographics/Appoinments',encodedPatientInfo]"
+                routerLinkActive="active" (click)="activeTab='appointments'">
+                Appointments
+              </a>
+            </li>
+            <li [class.active]="activeTab=='claimsSummary'" *ngIf="!isNewPatient()">
+              <a data-toggle="tab" [routerLink]="['/Patient/Demographics/ClaimSummary',encodedPatientInfo]"
+                routerLinkActive="active" (click)="activeTab='claimsSummary'">
+                Claims Summary
+              </a>
+            </li>
+            <li [class.active]="activeTab=='claims'" *ngIf="isClaimTabVisible()" style="pointer-events: none;">
+              <a data-toggle="tab" href="javascript:void(0)" (click)="activeTab='claims'">
+                Claim
+              </a>
+            </li>
+            <li *ngIf="isNewPatient()" class="disabled">
+              <a>Appointments</a>
+            </li>
+            <li *ngIf="isNewPatient()" class="disabled"><a>Claim
+                Summary</a>
+            </li>
+            <!-- <li *ngIf="isClaimTabVisible()" class="disabled"><a>Claim</a>
+            </li> -->
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active">
+              <div class="panel-body">
+                <router-outlet></router-outlet>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,888 @@
+<div class="modal fade" bsModal #modalWindow="bs-modal" tabindex="-1" role="dialog"
+  aria-labelledby="dialog-nested-name">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div style="display: flex; justify-content: space-between;padding: 10px;">
+        <h2 style="font-weight: bold;">Alert</h2>
+        <button type="button" class="close" (click)="hide()">
+          <span aria-hidden="true">X</span>
+        </button>
+      </div>
+
+      <div class="modal-body" style="padding: 0px 10px 20px 10px;">
+        <div style="display: flex; justify-content: space-between;">
+          <div>
+            <label>Priority:</label>
+            <span *ngIf="firstAlert?.Priority === 'L'"> Low</span>
+            <span *ngIf="firstAlert?.Priority === 'M'"> Medium</span>
+            <span *ngIf="firstAlert?.Priority === 'H'"> High</span>
+          </div>
+
+
+          <div>
+            <LABEL>Created by:</LABEL>
+
+            {{ firstAlert?.Created_User | uppercase }}
+
+          </div>
+        </div>
+
+        <hr style="border-top: 1px solid#676a6c; font-weight: bold; margin-top: 10px;
+        margin-bottom: 10px;">
+
+        <div style="font-size: 18px;">
+          <p style="margin-bottom: 0; font-weight: bold;">Message</p>
+
+          <div style="overflow-wrap: break-word; font-size: 14px;
+          color: #000000;
+          margin-top: 3px;">{{ firstAlert?.AlertMessage }}</div>
+        </div>
+
+        <br>
+        <div style="text-align: center;">
+          <button type="button" class="btn btn-primary" style="width: 12%;" (click)="hide()">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Form -->
+<form [formGroup]="PatientForm" class="form-horizontal">
+  <!-- Profile Picture -->
+  <div class="col-lg-2 pt-20">
+    <div class="picture-container">
+      <div class="picture" formGroupName="image">
+        <img [src]="url" class="picture-src" id="wizardPicturePreview" title="Click to upload">
+        <input type="file" (change)="readUrl($event);
+         onChangeProfilePhoto($event)" id="wizard-picture" class="" alt="Patient Photo" accept=".jpg,.jpeg,.gif,.png"
+          formControlName="profilePic" [ngStyle]="{'cursor':disableForm?'not-allowed':'pointer'}">
+      </div>
+      <h5 class="">Choose Picture</h5>
+      <p> You can upload JPG, PNG or GIF, Maximum file size is 2 MB.</p>
+    </div>
+    <div class="text-center"><a (click)="showNotes()"><i class="fa fa-pencil-square"></i>&nbsp;Notes</a></div>
+    <div class="text-center mt10">
+      <a (click)="patientAttachments.show()" [class.disabled-link]="isDisabled">
+        <i class="fa fa-paperclip"></i>&nbsp;Attachments</a>
+    </div>
+  </div>
+  <!-- Other Information -->
+  <div class="col-lg-5 col-md-6">
+    <!-- General Information -->
+    <div formGroupName="general">
+      <label for="lastName">
+        <h4><i class="fa fa-user" aria-hidden="true"></i>&nbsp;
+          <u>General Information</u>
+        </h4>
+      </label>
+      <!-- readonly -->
+      <div class="form-group">
+        <label class="col-lg-4 control-label">Account #</label>
+        <div class="col-lg-8">
+          <span class="form-control">{{patient.Patient_Account}}</span>
+        </div>
+      </div>
+      <!-- hidden -->
+      <div class="form-group" style="display: none !important;">
+        <label for="chartId" class="col-lg-4 control-label">Chart Id</label>
+        <div class="col-lg-8">
+          <input type="text" id="chartId" [(ngModel)]="patient.Chart_Id" class="form-control"
+            placeholder="Enter Chart Id" formControlName="chartId">
+        </div>
+      </div>
+      <!-- maxlength=18, onlyNumbers -->
+      <!-- <div class="form-group">
+        <label for="alternateAccount" class="col-lg-4 control-label">Alternate Account</label>
+        <div class="col-lg-8">
+          <input type="text" id="alternateAccount" class="form-control" maxlength="18" onlyNumbers="true"
+            formControlName="alternateAccount" placeholder="Enter Alternate Account" [(ngModel)]="patient.alternate_id"
+            autocomplete="off">
+        </div>
+      </div> -->
+      <!-- maxlength=25, onlyNumbers //..this is updated by hamza akhlaq -->
+      <div class="form-group">
+        <label for="alternateAccount" class="col-lg-4 control-label">Alternate Account</label>
+        <div class="col-lg-8">
+          <input type="text" id="alternateAccount" class="form-control" maxlength="25"
+            formControlName="alternateAccount" placeholder="Enter Alternate Account" [(ngModel)]="patient.alternate_id"
+            autocomplete="off">
+        </div>
+      </div>
+      <!-- maxlength=50, alphabetsWithSpace, noSpace, required -->
+      <div class="form-group">
+        <label for="lastName" class="col-lg-4 control-label">Last Name<span class="text-danger">*</span></label>
+        <div class="col-lg-8">
+          <input type="text" id="lastName" class="form-control" maxlength="50" formControlName="lastName"
+            alphabetsWithSpace="true" noSpace [(ngModel)]="patient.Last_Name"
+            (ngModelChange)="patient.Last_Name = patient.Last_Name.toUpperCase()" placeholder="Enter Last Name"
+            autocomplete="off" autoFocus="true">
+          <span class="help-block m-b-none"></span>
+        </div>
+      </div>
+      <!-- maxlength=1, onlyAlphabets, noSpace -->
+      <div class="form-group">
+        <label for="mi" class="col-lg-4 control-label">Middle Initial</label>
+        <div class="col-lg-2">
+          <input type="text" id="mi" class="form-control text-uppercase" [(ngModel)]="patient.MI" maxlength="1"
+            onlyAlphabets="true"  (ngModelChange)="patient.MI = patient.MI.toUpperCase()" noSpace formControlName="mi" placeholder="MI" autocomplete="off">
+        </div>
+      </div>
+      <!-- maxlength=50, alphabetsWithSpace, noSpace, required -->
+      <div class="form-group">
+        <label for="firstName" class="col-lg-4 control-label">First Name<span class="text-danger">*</span></label>
+        <div class="col-lg-8">
+          <input type="text" id="firstName" [(ngModel)]="patient.First_Name"  (ngModelChange)="patient.First_Name = patient.First_Name.toUpperCase()" class="form-control" maxlength="50"
+            alphabetsWithSpace="true" noSpace formControlName="firstName" placeholder="Enter First Name"
+            autocomplete="off">
+        </div>
+      </div>
+      <!-- Required -->
+      <div class="form-group">
+        <label for="patDOB" class="col-lg-4 control-label">Date of Birth<span class="text-danger">*</span></label>
+        <div class="col-lg-8">
+          <my-date-picker id="patDOB" [options]="myDatePickerOptionForDOBAndDeath" (keyup)="dateMask($event)"
+            [placeholder]="'MM/DD/YYYY'" (dateChanged)="onDateChangedDOB($event)" formControlName="dob"
+            [selDate]="selDateDOB">
+          </my-date-picker>
+        </div>
+      </div>
+      <!-- onlyNumbers, maxlength=9 (11 with mask) -->
+      <div class="form-group">
+        <label for="txtSSN" class="col-lg-4 control-label">SSN</label>
+        <div class="col-lg-4">
+          <input type="text" id="txtSSN" [(ngModel)]="patient.SSN" class="form-control" placeholder="___-__-____"
+            maxlength="11" mask="000-00-0000" nullValue formControlName="ssn" autocomplete="off">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="gender" class="col-lg-4 control-label">Gender<span class="text-danger">*</span></label>
+        <div class="col-lg-4">
+          <select id="gender" class="form-control" name="Gender" formControlName="gender" [(ngModel)]="patient.Gender">
+            <option [value]="null" disabled>Select Gender</option>
+            <option *ngFor="let gender of patient.GenderList" [value]="gender.GenderId">
+              {{gender.Name | titlecase}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="mstatus" class="col-lg-4 control-label">Marital Status<span class="text-danger">*</span></label>
+        <div class="col-lg-4">
+          <select id="mstatus" class="form-control" name="MStatus" formControlName="maritalStatus"
+            [(ngModel)]="patient.Marital_Status">
+            <option value="null" disabled>Select Marital Status</option>
+            <option *ngFor="let msl of patient.MaritalStatusList" value={{msl.MaritalStatusId}}>
+              {{msl.Name | titlecase}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="race" class="col-lg-4 control-label">Race</label>
+        <div class="col-lg-8">
+          <select class="form-control" name="account" [(ngModel)]="patient.Race" name="race" id="race"
+            formControlName="race">
+            <option value="null" disabled>Select Race</option>
+            <option *ngFor="let race of patient.RaceList" value="{{race.RaceId}}">
+              {{race.Name | titlecase}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="ethnicity" class="col-lg-4 control-label">Ethnicity</label>
+        <div class="col-lg-8">
+          <select id="ethnicity" class="form-control" [(ngModel)]="patient.Ethnicities" name="Ethinicity"
+            formControlName="ethnicity">
+            <option value="null" disabled>Select Ethnicity</option>
+            <option *ngFor="let lang of patient.EthiniciesList" value={{lang.ethnicity_id}}>
+              {{lang.ethnicity_description | titlecase}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="preffLang" class="col-lg-4 control-label">Preferred Lang</label>
+        <div class="col-lg-8">
+          <select id="preffLang" class="form-control" [(ngModel)]="patient.Languages" name="Prefered"
+            formControlName="prefLanguage">
+            <option value="null" disabled>Select Preferred Language</option>
+            <option *ngFor="let lang of patient.LanguageList" value={{lang.LanguageId}}>
+              {{lang.Name |titlecase}}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <!-- Guarantor -->
+    <div formGroupName="guarantor">
+      <label for="btnAddGur">
+        <h4><i class="fa fa-user-secret" aria-hidden="true"></i>&nbsp;
+          <u>Financial Guarantor</u>
+        </h4>
+      </label>
+      <div class="form-group">
+        <label for="relationWithGuaran" class="col-lg-4 control-label">Relationship<span class="text-danger">*</span>
+        </label>
+        <div class="col-lg-8">
+          <select id="relationWithGuaran" class="form-control" [(ngModel)]="patient.Gurantor_Relation"
+            formControlName="relationship">
+            <option [ngValue]="null" disabled>Select Guarantor Relationship</option>
+            <option *ngFor="let ralation of patient.RelationshipList" value={{ralation.RelationshipId}}>
+              {{ralation.Name | titlecase}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="btnAddGur" class="col-lg-4 control-label">Name<span *ngIf="!isGuarantorRelationshipSelf()"
+            class="text-danger">*</span></label>
+        <div class="col-lg-8">
+          <div class="input-group">
+            <input type="text" class="form-control" [(ngModel)]="patient.Financial_Guarantor_Name"
+              formControlName="name" autocomplete="off" disabled readonly>
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-primary btn-sm lh-1_2" (click)="showGuarantor()"
+                [disabled]="disableForm || isGuarantorRelationshipSelf()">
+                {{(this.patient.Financial_Guarantor!=="" && this.patient.Financial_Guarantor!==null &&
+                this.patient.Financial_Guarantor!==undefined)?'Change':'Select'}}</button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Additional -->
+    <div formGroupName="additional">
+      <label for="provider">
+        <h4><i class="fa fa-user-md" aria-hidden="true"></i>&nbsp;
+          <u>Provider Details</u>
+        </h4>
+      </label>
+      <div class="form-group">
+        <label for="provider" class="col-lg-4 control-label">Select PCP<span class="text-danger">*</span></label>
+        <div class="col-lg-8">
+          <select id="provider" class="form-control" name="account" [(ngModel)]="patient.Provider_Code"
+            name="ddlProvider" formControlName="provider">
+            <option value="null" disabled>Select Provider</option>
+            <option *ngFor="let lang of patient.ProviderList" value={{lang.Provider_Code}} [hidden]="shouldHide(lang)">
+              {{lang.Provid_FName | titlecase}} {{lang.Provid_LName | titlecase}}
+            </option>
+
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="location" class="col-lg-4 control-label">Select Location<span class="text-danger">*</span></label>
+        <div class="col-lg-8">
+          <select id="location" class="form-control" name="account" [(ngModel)]="patient.Location_Code"
+            formControlName="location">
+            <option value="null" disabled>Select Location</option>
+            <option *ngFor="let lang of patient.PracticeLocationsList" value={{lang.Location_Code}}>
+              {{lang.Location_Name | titlecase}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="refPhy" class="col-lg-4 control-label">Ref/Phy</label>
+        <div class="col-lg-8">
+          <!-- <input type="text" id="refPhy" class="form-control" formControlName="refPhy"> -->
+          <!-- <select class="form-control" [(ngModel)]="patient.Referring_Physician" formControlName="refPhy">
+            <option [ngValue]="null">Select Referring Physician</option>
+            <option *ngFor="let r of patient.Referral_Physicians" value={{r.Referral_Code}}>
+              {{r.Referral_Lname | titlecase}}, {{r.Referral_Fname | titlecase}}
+            </option>
+          </select> -->
+
+          <select class="form-control" [(ngModel)]="patient.Referring_Physician" formControlName="refPhy">
+            <option [ngValue]="null">Select Referring Physician</option>
+            <option *ngFor="let r of patient.Referral_Physicians" value={{r.Referral_Code}}
+              [disabled]="r.In_Active == true"
+              [ngStyle]="{'background-color':r.In_Active === true ? 'yellow' : 'none' }">
+              <span [ngStyle]="{'color':r.In_Active == true ? 'red' : 'white' }"> {{r.Referral_Lname | titlecase}},
+                {{r.Referral_Fname | titlecase}} </span> <span *ngIf="r.In_Active == true"> &nbsp; inactive</span>
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Contact -->
+  <div class="col-lg-5 col-md-6">
+    <div formGroupName="contact">
+      <label for="zip">
+        <div style="display: flex; align-items: center; justify-content: center;">
+          <div>
+            <h4>
+              <i class="fa fa-address-book-o" aria-hidden="true"></i>&nbsp;
+              <u>Contact Details</u>
+            </h4>
+          </div>
+          <div style="float: right; margin-left: 20px;">
+            <h4 style="float: right;">
+              <a data-toggle="modal" data-target="#accountassignment" [class.disabled-link]="isDisabled"><i
+                  class="fa fa-pencil-square"></i>&nbsp;Account Assignment</a>
+            </h4>
+          </div>
+          <div *ngIf="patient.Patient_Account != 0" style="float: right; margin-left: 20px;">
+            <h4 style="float: right;">
+              <a [ngClass]="{'disabled-link': dataLoading ||isDisabled}" data-toggle="modal" data-target="#alerts">
+                <i class="fa fa-pencil-square"></i>&nbsp;Alert
+              </a>
+
+            </h4>
+          </div>
+        </div>
+      </label>
+      <div class="form-group">
+        <label for="zip" class="col-lg-4 control-label">ZIP<span class="text-danger">*</span></label>
+        <div class="col-lg-4">
+          <input type="text" id="zip" [(ngModel)]="patient.ZIP" class="form-control" maxlength="10"
+            formControlName="zip" mask="00000-0000" autocomplete="off" (input)="getZipCityState($event)" nullValue>
+        </div>
+        <!-- <div class="col-lg-4">
+        <a class="pull-right" (click)="onValidateAddress()">Validate this address</a>
+      </div> -->
+      </div>
+      <div class="form-group">
+        <label for="city" class="col-lg-4 control-label">City<span class="text-danger">*</span></label>
+        <div class="col-lg-4">
+          <select id="city" class="form-control" name="city" formControlName="city" [(ngModel)]="patient.City">
+            <option [value]="null" disabled selected>Select City</option>
+            <option *ngFor="let city of zipData" [value]="city.CityName"
+            [selected]="patient.City ? city.CityName.toLowerCase() === patient.City.toLowerCase() : false">
+              {{city.CityName | titlecase}}
+            </option>
+          </select>
+        </div>
+        <label for="state" class="col-lg-1 control-label">State<span class="text-danger">*</span></label>
+        <div class="col-lg-3">
+          <input type="text" id="state" [(ngModel)]="patient.State" formControlName="state"
+            class="form-control text-uppercase" disabled readonly>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="txtAddress" class="col-lg-4 control-label">Address<span class="text-danger">*</span></label>
+        <div class="col-lg-8">
+          <textarea rows="3" id="txtAddress" class="form-control" [(ngModel)]="patient.Address"(ngModelChange)="patient.Address = patient.Address.toUpperCase()" name="Address"
+            formControlName="address" style="height: auto !important;" autocomplete="off"></textarea>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="addressType" class="col-lg-4 control-label">Address Type<span class="text-danger">*</span></label>
+        <div class="col-lg-6">
+          <select id="addressType" class="form-control" name="account" formControlName="addressType"
+            [(ngModel)]="patient.Address_Type">
+            <option value="null" disabled>Select Address Type</option>
+            <option *ngFor="let addr of patient.AddressTypeList" value={{addr.AddressType1}}>
+              {{addr.Name | titlecase}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="homePhone" class="col-lg-4 control-label">Home Phone
+          <!-- <span class="text-danger">*</span> -->
+        </label>
+        <div class="col-lg-4">
+          <input id="homePhone" type="text" placeholder="(___) ___-____" mask="(000) 000 0000"
+            formControlName="homePhone" [(ngModel)]="patient.Home_Phone" class="form-control" maxlength="14" nullValue>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="cellPhone" class="col-lg-4 control-label">Cell Phone
+          <!-- <span class="text-danger">*</span> -->
+        </label>
+        <div class="col-lg-4">
+          <input id="cellPhone" type="text" placeholder="(___) ___-____" mask="(000) 000 0000"
+            formControlName="cellPhone" [(ngModel)]="patient.Cell_Phone" class="form-control" maxlength="14" nullValue>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="workPhone" class="col-lg-4 control-label">Work Phone</label>
+        <div class="col-lg-4">
+          <input type="text" id="workPhone" placeholder="(___) ___-____" mask="(000) 000 0000"
+            formControlName="workPhone" [(ngModel)]="patient.Business_Phone" class="form-control" maxlength="14"
+            nullValue>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-lg-4 control-label">Email Address<span class="text-danger"
+            *ngIf="!patient.emailnotonfile">*</span></label>
+        <div class="col-lg-8">
+          <input type="text" [(ngModel)]="patient.Email_Address" formControlName="email" class="form-control">
+          <div class="checkbox checkbox-success">
+            <input class="form-check-input" type="checkbox" [(ngModel)]="patient.emailnotonfile"
+              formControlName="emailNotAvailable" id="chkEmailvalid" (change)="onChangeEmailCheckbox($event.target)">
+            <label data-placement="bottom" for="chkEmailvalid">
+              Email Address Not Available
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-12" hidden>
+        <div class="col-lg-4">
+          <label class=" control-label">CCP</label>
+        </div>
+        <div class="col-lg-8">
+          <input type="text" class="form-control" formControlName="ccp">
+        </div>
+      </div>
+    </div>
+    <div formGroupName="emergency">
+      <label for="name">
+        <h4><i class="fa fa-ambulance" aria-hidden="true"></i>&nbsp;
+          <u>Emergency Contact</u>
+        </h4>
+      </label>
+      <div class="form-group">
+        <label class="col-lg-4 control-label">Name<span class="text-danger"
+            *ngIf="emergencyGroupRequired">*</span></label>
+        <div class="col-lg-8">
+          <input id="name" type="text" class="form-control" [(ngModel)]="patient.Family_Name" formControlName="name"
+            alphabetsWithSpace="true" nullValue [attr.disabled]="isFamilyIdSelf()?'':null" />
+        </div>
+      </div>
+      <div class="form-group"
+        [ngClass]="{'has-error':((formControls['emergency'].get('relationship').touched || formControls['emergency'].get('relationship').dirty) 
+      && (formControls['emergency'].get('relationship').invalid || formControls['emergency'].get('relationship').value=='null'))}">
+        <label for="emergContRela" class="col-lg-4 control-label">Relationship<span class="text-danger"
+            *ngIf="emergencyGroupRequired">*</span></label>
+        <div class="col-lg-8">
+          <select id="emergContRela" class="form-control" name="Relation" [(ngModel)]="patient.Family_Id"
+            formControlName="relationship">
+            <option [ngValue]="null">Select Emergency Person Relationship</option>
+            <option *ngFor="let ralation of patient.RelationshipList" value={{ralation.RelationshipId}}>
+              {{ralation.Name}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="emergPhone" class="col-lg-4 control-label">Phone<span class="text-danger"
+            *ngIf="emergencyGroupRequired">*</span></label>
+        <div class="col-lg-4">
+          <input id="emergPhone" type="text" placeholder="(___) ___-____" mask="(000) 000 0000" class="form-control"
+            [(ngModel)]="patient.Father_Cell" maxlength="15" formControlName="phone" nullValue
+            [attr.disabled]="isFamilyIdSelf()?'':null" />
+        </div>
+      </div>
+    </div>
+    <div formGroupName="death">
+      <label for="chkDeceased">
+        <h4><img src="assets/Images/Healthcare-Death-icon.ico" alt="" width="15" height="16">&nbsp;
+          <u>Death</u>
+        </h4>
+      </label>
+      <div class="form-group">
+        <label class="col-lg-4"></label>
+        <div class="col-lg-8 ">
+          <div class="checkbox checkbox-danger">
+            <input type="checkbox" formControlName="deceased" id="chkDeceased" [(ngModel)]="patient.IsDeceased"
+              (change)="onChangeDeceasedCheck($event.target)">
+            <label data-placement="bottom" for="chkDeceased">
+              Deceased
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" id="Divdeathdate" *ngIf="patient.IsDeceased">
+        <label class="col-lg-4 control-label">Deceased Date <span class="text-danger">*</span></label>
+        <div class="col-lg-8">
+          <my-date-picker name="mydate" [options]="myDatePickerOptionForDOBAndDeath" [selDate]="patient.DeathDate"
+            (dateChanged)="onDateChangedDecessed($event)" [placeholder]="'MM/DD/YYYY'" fromControlName="deceasedDate"
+            [disabled]="disableForm">
+          </my-date-picker>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- Added By Hamza Akhlaq For Hold Patient Statment change -->
+    <div formGroupName="patientbilling">
+      <label for="chkDeceased">
+        <h4><img src="assets/Images/money-icon.png" alt="" width="15" height="16">&nbsp;
+          <u>Patient Billing</u>
+        </h4>
+      </label>
+      <div class="form-group">
+        <label class="col-lg-4"></label>
+        <div class="col-lg-8 ">
+          <div class="checkbox checkbox-danger">
+            <input type="checkbox" formControlName="patientbilling" id="chkpatientbilling"
+              [(ngModel)]="patient.Hold_Pt_Billing" (change)="onChangePatientBillingCheck($event.target)">
+            <label data-placement="bottom" for="chkpatientbilling">
+              Hold
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" id="Divdeathdate" *ngIf="patient.Hold_Pt_Billing">
+        <label class="col-lg-4 control-label">Hold Until <span class="text-danger"></span></label>
+        <div class="col-lg-8">
+          <my-date-picker name="mydate" [options]="myDatePickerOptionForHoldBilling" [selDate]="patient.Hold_pt_until"
+            (dateChanged)="onDateChangedPatientBilling($event)" [placeholder]="'MM/DD/YYYY'"
+            fromControlName="patientbillingDate" [disabled]="disableForm">
+          </my-date-picker>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Patient Insurances -->
+  <div class="col-lg-12">
+    <label>
+      <h4>
+        <i class="fa fa-universal-access" aria-hidden="true"></i>&nbsp;
+        <u>Insurances</u>
+      </h4>
+    </label>
+  </div>
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="table-horizontal-scroll">
+          <table class="table table-hover table-striped ">
+            <thead>
+              <tr>
+                <th title="Eligiblity" class="text-center" *ngIf="!newRowInsurances">Eligiblity</th>
+                <th title="Delete" width="25" class="text-center" *ngIf="!disableForm">DEL</th>
+                <th title="Inactive" width="25" class="text-center" >Inactive</th>
+                <th title="Payer Description" width="150" class="text-center">Payer Description<span
+                    class="text-danger">*</span></th>
+                <th title="Insurance Mode" Width="70" class="text-center">Mode<span class="text-danger">*</span></th>
+                <th title="Policy No" width="80" class="text-center">Policy #<span class="text-danger">*</span></th>
+                <th title="Copay $" width="70" class="text-center">Copay $</th>
+                <th title="Deductible" width="70" class="text-center">Deduc.</th>
+                <th title="Co-Insurance %" width="70" class="text-center">Co-Ins. %</th>
+                <th title="CCN" width="100" class="text-center">CCN</th>
+                <th title="Group No" width="80" class="text-center">Group #</th>
+                <th title="Group Name" width="100" class="text-center">Group Name</th>
+                <th title="Effective" width="150" class="text-center">Effective</th>
+                <th title="Termination" width="150" class="text-center">Termination</th>
+                <th title="Subscriber" width="150" class="text-center">Subscriber</th>
+                <th title="Relationship" width="100" class="text-center">Relationship
+                </th>
+                <th title="Access Carolina" width="100" class="text-center">Access Carolina</th>
+                <th title="Capitated" width="25" class="text-center">Cap</th>
+              </tr>
+            </thead>
+            <tbody class="row-selected" formArrayName="patientInsurance">
+              <tr *ngFor="let i of PatientForm.get('patientInsurance')['controls']; let ndx=index;"
+                [formGroupName]="ndx">
+                <!-- Serial Number -->
+                <!-- Actions -->
+                <td align="center" *ngIf="!newRowInsurances">
+                  <!-- <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#exampleModal">E</button> -->
+                  <!-- <button (click)="checkEligibility(i.controls.insurance_id.value)" class="btn btn-default btn-xs"
+                    data-toggle="modal" data-target="#exampleModal"
+                    [ngStyle]="{'background-color': eligiblityBtnColor}">E</button> -->
+
+                  <button (click)="checkEligibility(i.controls.insurance_id.value,ndx,i)" class="btn btn-default btn-xs"
+                    data-toggle="modal" data-target="#exampleModal"
+                    [ngStyle]="{'background-color': getRowGreen(ndx) ? 'green':  getRowRed(ndx)  ? 'red' : 'gray' }">E</button>
+                  <!-- [style.backgroundColor] -->
+                </td>
+                <td align="center" *ngIf="!disableForm">
+                  <div class="btn-group">
+                    <!-- <button (click)="togglePatientInsuranceRowEdit(ndx)" class="btn btn-default btn-xs"><i
+                        class="fa fa-pencil"></i></button>
+                    <button (click)="savePatientInsurance(ndx)" class="btn btn-primary btn-xs"><i
+                        class="fa fa-save"></i></button> -->
+                    <button (click)="onDeletePatientInsuranceRow(ndx)" class="btn btn-default btn-xs"><i
+                        class="fa fa-remove text-danger" id="delbtn" title="Delete"></i></button>
+                    <button *ngIf="i.INSURANCE_NAME!=0 && i.INSURANCE_NAME!=undefined" class="btn btn-default btn-xs"
+                      data-toggle="modal" data-target="#payer-information-modal"><i aria-hidden="true"
+                        class="fa fa-eye"></i></button>
+                  </div>
+                </td>
+                <!-- Inactive -->
+                <td align="center">
+                  <div class="checkbox checkbox-primary">
+                    <input type="checkbox"  value="IS_Active" formControlName="IS_Active" (change)="checkForDuplicateInsuranceRecords($event)" 
+                      [checked]="i.controls.IS_Active.value == 1">
+                    <label></label>
+                  </div>
+                </td>
+                <!-- Payer Description -->
+                <td align="center" title="{{i.controls.payerDescription.value}}">
+                  <div class="form-group">
+                    <div class="has-feedback custom-search" (click)="ShowInsuranceNamePopup(ndx)">
+                      <input type="search" readonly placeholder="Search" class="form-control min-w-150px"
+                        formControlName="payerDescription">
+                      <span class="form-control-feedback w-10"><i
+                          class="help-block help-feedback glyphicon glyphicon-search"></i></span>
+                    </div>
+                  </div>
+                </td>
+                <!-- Insurance mode -->
+                <td align="center" title="{{i.controls.insuranceMode.value}}">
+                  <div class="form-group">
+                    <select id="InsGrpddl_{{ndx+1}}" (change)="checkForDuplicateInsuranceRecords($event)" class="form-control min-w-70px" formControlName="insuranceMode">
+                      <!-- <option value="null"></option> -->
+                      <option title="Primary" value="P">P</option>
+                      <option title="Secondary" value="S">S</option>
+                      <option title="Other" value="O">O</option>
+                    </select>
+                  </div>
+                </td>
+                <!-- Policy Number -->
+                <td align="center" title="{{i.controls.policyNumber.value}}">
+                  <div class="form-group">
+                    <input class="form-control min-w-150px" maxlength="24" placeholder="Enter Policy Number"
+                      formControlName="policyNumber" type="text">
+                  </div>
+                </td>
+                <!-- CoPay -->
+                <td align="center" title="{{i.controls.coPay.value}}">
+                  <input class="form-control min-w-100px" onlyNumbers="true" enablePeriod="true"
+                    placeholder="Enter Copay" maxlength="8" type="text" formControlName="coPay">
+                </td>
+                <!-- Deductible -->
+                <td align="center" title="{{i.controls.deDuctible.value}}">
+                  <input class="form-control min-w-100px" onlyNumbers="true" enablePeriod="true" placeholder=""
+                    type="text" maxlength="8" formControlName="deDuctible">
+                </td>
+                <!-- Co Insurance -->
+                <td align="center" title="{{i.controls.coPaymentPer.value}}">
+                  <input class="form-control min-w-100px" placeholder="" maxlength="4" type="text"
+                    formControlName="coPaymentPer" (keyup)="CheckPercentage(ndx,i.CO_PAYMENT_PER)" onlyNumbers="true"
+                    enablePeriod="true" />
+                </td>
+                <!-- ccn -->
+                <td align="center" title="{{i.controls.ccn.value}}">
+                  <input class="form-control min-w-100px" maxlength="24" type="text" formControlName="ccn">
+                </td>
+                <!-- Group number -->
+                <td align="center" title="{{i.controls.groupNumber.value}}">
+                  <input class="form-control min-w-100px" maxlength="24" type="text" formControlName="groupNumber" />
+                </td>
+                <!-- Group name -->
+                <td align="center" title="{{i.controls.groupName.value}}">
+                  <input class="form-control min-w-150px" type="text" maxlength="59" formControlName="groupName" />
+                </td>
+                <!-- Effective_Date -->
+                <td class="min-w-150px" align="center" title="{{patient.PatientInsuranceList[ndx]?.Effective_Date}}">
+                  <my-date-picker [options]="myDatePickerOptionForStartAndTerm" (keyup)="dateMask($event)"
+                    [placeholder]="'MM/DD/YYYY'" (dateChanged)="onDateChangedEffectiveDate($event,ndx)"
+                    formControlName="effectiveDate" class="fixed-selector"
+                    [selDate]="patient.PatientInsuranceList[ndx]?.Effective_Date">
+                  </my-date-picker>
+                </td>
+                <!-- Termination_Date -->
+                <td class="min-w-150px" align="center" title="{{patient.PatientInsuranceList[ndx].Termination_Date}}">
+                  <my-date-picker [options]="myDatePickerOptionForStartAndTerm" (keyup)="dateMask($event)"
+                    [placeholder]="'MM/DD/YYYY'" (dateChanged)="onDateChangedTerminationDate($event,ndx)"
+                    formControlName="terminationDate" class="fixed-selector"
+                    [selDate]="patient.PatientInsuranceList[ndx].Termination_Date">
+                  </my-date-picker>
+                </td>
+                <!-- subscriber -->
+                <!-- <td style="display:none"><input type="text" [(ngModel)]="i.Subscriber" /></td> -->
+                <td class="min-w-150px" align="center" title="{{i.controls.subscriberName.value}}">
+                  <div class="has-feedback custom-search">
+                    <input type="search" readonly [disabled]="i.controls.relation.value == '7' || disableForm"
+                      title="{{i.SubscriberName}}" formControlName="subscriberName" placeholder="Search"
+                      class="form-control" (click)="showSubscriber(ndx)">
+                    <span id="subscriber" [style.pointer-events]="i.controls.relation.value == '7'?'no-drop':''"
+                      class="form-control-feedback w-10">
+                      <i class="help-block help-feedback glyphicon glyphicon-search"></i>
+                    </span>
+                  </div>
+                </td>
+                <!-- Relation -->
+                <td align="center" title="{{i.controls.relation.value}}">
+                  <div class="form-group">
+                    <select id="ddlRelationship-{{ndx}}" class="form-control min-w-100px" formControlName="relation"
+                      (change)="onSubscriberRelationChange(i.controls.relation.value,ndx)">
+                      <option *ngFor="let ralation of patient.RelationshipList;" value={{ralation.RelationshipId}}>
+                        {{ralation.Name}}
+                      </option>
+                    </select>
+                  </div>
+                </td>
+                <!-- Access carolina number -->
+                <td align="center" title="{{i.controls.accCarolinaNumber.value}}">
+                  <input class="form-control" onlyNumbers="true" maxlength="34" formControlName="accCarolinaNumber"
+                    type="text">
+                </td>
+                <!-- Is Capitated -->
+                <td align="center">
+                  <div class="checkbox checkbox-primary checkbox-inline">
+                    <input type="checkbox" id="chk-insur-15-{{ndx}}" value="option1" formControlName="isCapitated"
+                      [attr.checked]="i.Is_Capitated_Patient ? true : null">
+                    <label for="chk-insur-15-{{ndx}}">&nbsp;</label>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="patient.PatientInsuranceList?.length<3" title="Add New Insurance" class="new-row"
+                (click)="onAddNewPatientInsurance()">
+                <td colspan="50" class="text-center">Add New Insurance</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Eligblity  Model  -->
+          <div class="modal  fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h3 class="modal-title text-dark" id="exampleModalLabel"><b>Eligibility Summary</b>
+                    <button type="button" (click)="eligiblityModel=false" class="close" data-dismiss="modal"
+                      aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </h3>
+
+                </div>
+                <div class="modal-body">
+                  <div *ngIf="eligiblityModel">
+
+                    <div class="row">
+                      <div class="col-lg-7">
+                        <div><b class="text-success">Patient</b></div>
+                        <div><b>Name:</b>{{patientFirstName}}
+                          {{patientMiddleName}} {{patientLastName}}
+                        </div>
+                        <div><b>Sex:</b> {{patientSex}}</div>
+                        <div><b>DOB:</b> {{patientDateofBirth}}</div>
+                        <div><b>Address:</b>
+                          {{patientAddress}}
+                          {{patientCity}}
+                          {{patientState}}
+                          {{patientZip}}</div>
+                      </div>
+                      <div class="col-lg-5">
+                        <div class="text-success"><b>Response</b></div>
+                        <div>
+                          <b>Status: </b>
+                          <span class="text-primary"
+                            *ngIf="showEligiblityDetails!='Inactive' && showEligiblityDetails!=''"> Active</span>
+                          <span class="text-danger" *ngIf="showEligiblityDetails=='Inactive'"> InActive</span>
+                        </div>
+                        <div *ngFor="let item of date">
+                          <div><b>{{item.datequalifier}}: </b> {{item['date-of-service']}}</div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div class="row">
+                      <div class="col-lg-7">
+                        <div class="text-success" style="margin-top:10px"><b>Provider</b></div>
+                        <div><b>Name:</b> {{providerFirstName}} {{providerLastName}}
+                        </div>
+                        <!-- <div><b>NPI:</b> {{eligbilityDetails[0].eligibilityresponse.inforeceiver.npi}}</div> -->
+                         <div><b>NPI:</b> {{eligbilityDetails[0]?.eligibilityresponse?.inforeceiver.npi}}</div>
+                      </div>
+                      <div class="col-lg-5">
+
+
+                        <div class="text-success" style="margin-top:10px"><b>Payer</b></div>
+                        <!-- <div><b>Name:</b> {{eligbilityDetails[0].eligibilityresponse.infosource.payername}}</div>
+                        <div><b>Payer Id:</b> {{eligbilityDetails[0].eligibilityresponse.infosource.payerid}}</div> -->
+
+                        <div><b>Name:</b> {{eligbilityDetails[0]?.eligibilityresponse?.infosource.payername}}</div>
+                        <div><b>Payer Id:</b> {{eligbilityDetails[0]?.eligibilityresponse?.infosource.payerid}}</div>
+                      </div>
+
+                    </div>
+
+
+                  </div>
+                  <div *ngIf="eligiblityError !=''">
+                    <div><b class="text-success">Response:</b></div>
+                    <div>
+                      <p>{{eligiblityError}}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" data-dismiss="modal"
+                    (click)="data(eligbilityDetails[0])"
+                    *ngIf="showEligiblityDetails!='Inactive' && showEligiblityDetails!=''" routerLink="/eligblity">Show
+                    Details
+
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Patient Insurances -->
+
+  <!-- Form Actions -->
+  <div class="row pull-right">
+    <div class="col-lg-12">
+      <div class="btn-group">
+        <button class="btn btn-danger btn-sm" (click)="goBack()">Cancel</button>
+        <button class="btn btn-primary btn-sm" [disabled]="!disableForm ||isDisabled"
+          (click)="toggleEdit()">Edit</button>
+        <button class="btn btn-primary btn-sm"
+          [disabled]="!PatientForm.valid || this.PatientAlreadyExist || disableForm||isDisabled"
+          (click)="AddPatient('save')" tabindex="23">Save</button>
+        <button class="btn btn-primary btn-sm"
+          [disabled]="PatientForm.valid || this.PatientAlreadyExist || ValidToSaveAsDraft()||isDisabled"
+          (click)="AddPatient('draft');">Save As
+          Draft</button>
+      </div>
+    </div>
+  </div>
+  <!-- Form Actions -->
+</form>
+<!-- Form -->
+
+
+<!-- Modals -->
+<!-- alert modal details popup -->
+<!-- <div class="modal fade" id="alertNotificationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true"> -->
+
+<!-- Modal Insurance Information Search -->
+<modal-window [title]="'Insurance Search'" [description]="'Find and select insurance.'" #insuranceSearch>
+  <ng-container body>
+    <insurance-search [practiceCode]="practiceCode" (onSelectInsurance)=onSelectInsurance($event)></insurance-search>
+  </ng-container>
+</modal-window>
+<!-- Modal Insurance Information Search -->
+
+<!-- Guarantor Window -->
+<modal-window [title]="guarantorModalWindowProp?.title" [description]="guarantorModalWindowProp?.description"
+  #guarantorModalWindow (onHidden)="onGuarantorHidden($event)">
+  <ng-container header-right-link>
+    <a class="pull-right" (click)="addGuarantor=!addGuarantor">
+      <i class="fa"
+        [ngClass]="{'fa-search':addGuarantor, 'fa-plus':!addGuarantor}"></i>&nbsp;{{addGuarantor?'Search':'Add New'}}
+    </a>
+  </ng-container>
+  <ng-container body>
+    <app-list-guarantors-shared [caller]="guarantorModalWindowProp?.caller"
+      (onSelectGuarantor)="onSelectGuarantor($event)" *ngIf="!addGuarantor">
+    </app-list-guarantors-shared>
+    <app-add-edit-guarantor-shared [caller]="guarantorModalWindowProp?.caller" mode="modal" *ngIf="addGuarantor"
+      (onAddGuarantor)="onSelectGuarantor($event)" (onCancelEvent)="addGuarantor=!addGuarantor">
+    </app-add-edit-guarantor-shared>
+  </ng-container>
+</modal-window>
+<!-- Guarantor Window-->
+
+
+<!-- Patient Notes Window-->
+<patient-notes [patientAccount]="patient.Patient_Account" [viewOnly]="disableForm"></patient-notes>
+<!-- PatientNotes Window-->
+
+<!-- Patient Attachment -->
+<patient-attachments [PatientAccount]="patient.Patient_Account" (onHidden)="onHidePatientAttachments($event)">
+</patient-attachments>
+<!-- Patient Attachment -->
+
+
+<app-accountassignment></app-accountassignment>
+<app-alertassignment [disableForm]="this.patientInfo.disableForm"></app-alertassignment>

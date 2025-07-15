@@ -1,0 +1,289 @@
+<div *ngIf="data.era!==null">
+    <div class="col-lg-12">
+        <button class="btn btn-success pull-right btn-sm mb-10" type="button" printSectionId="Report" ngxPrint><i
+                class="fa fa-print">
+            </i>&nbsp;&nbsp;<span>Print</span></button>
+    </div>
+    <div class="clearfix"></div>
+    <div id="Report" name="Report">
+        <div id="RemitDataTbl" class="OuterTable">
+            
+            <table class="CheckTable" width="100%">
+                <tbody>
+                    <tr>
+                        <th colspan="5">
+                            <span style="float:left;">Check Information</span>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            <h2>{{data.era[0].PAYERNAME}}</h2>
+                            <p>{{data.era[0].PAYERADDRESS}}</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <h3>{{data.era[0].PAYEENAME}}</h3>
+                            <p>{{data.era[0].PAYEEADDRRESS}}</p>
+                        </td>
+                        <td colspan="3">
+                            <br><span class="label">Provider #:</span> {{data.era[0].Provider_}}<br><span
+                                class="label">Provider Tax ID
+                                #:</span> {{data.era[0].ProviderTaxID_}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><span class="label">EFT #:</span> {{data.era[0].CHECKNUMBER}}</td>
+                        <td colspan="2"><span class="label">NPI / Group Provider Number:</span>{{data.era[0].GRPNPI}} </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><span class="label">Check Date:</span>
+                            {{data.era[0].CHECKDATE | date:'MM/dd/yyyy'}}</td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="5"><span class="label">Check Amount:</span> {{data.era[0].CHECKAMOUNT | currency}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5"><span class="label">Provider Adj Amt:</span> {{data.era[0].ProviderAdjAmt |
+                            currency}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="ProviderADJ" width="100%">
+                <thead>
+                    <th colspan="5">
+                        <span style="float:left;">Provider Adj Detail</span>
+                    </th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="ProviderADJ_B">Reason Code</td>
+                        <td class="ProviderADJ_B">Payer Claim Control # / ICN# </td>
+                        <td class="ProviderADJ_B">Claim No</td>
+                        <td class="ProviderADJ_B">Amount</td>
+                    </tr>
+                    <tr *ngFor="let Provider of data.ProviderAdjDetail">
+                        <ng-container *ngIf="Provider.PLB_CODE !=null">
+                        <td >{{Provider.PLB_CODE}}</td>
+                        <td >{{Provider.PLBCODE_DESCRIPTION}}</td>
+                        <td >{{Provider.plbClm}}</td>
+                        <td >{{Provider.PLB_AMOUNT}}</td>
+                        <!-- <td *ngIf="Provider.plbAmt >0 && Provider.plbCode=='WO'">{{Provider.plbAmt}}</td>
+                        <td *ngIf="Provider.plbAmt <0 && Provider.plbCode=='L6'">{{Provider.plbAmt}}</td> -->
+                        </ng-container>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div *ngFor="let eraClaim of data.eraClaims">
+                <div *ngIf="eraClaim.claims.length>1 || eraClaim.claims[0].LOOPID !=0">
+                    <table class="ClaimTable" width="100%">
+                        <tbody>
+                            <tr>
+                                <th colspan="2">
+                                    <span style="float:left;">Claim Information</span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td><span class="label">Patient Name:</span> {{eraClaim.claims[0].PATIENTNAME}}</td>
+                                <td><span class="label">Member Identification #:</span>
+                                    {{eraClaim.claims[0].MEMBERIDENTIFICATION_}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="label">Insured Name:</span> {{eraClaim.claims[0].INSUREDNAME}}</td>
+                                <td><span class="label">Insured Member Identification:</span>
+                                    {{eraClaim.claims[0].INSUREDMEMBERIDENTIFICATION_}}</td>
+                            </tr>
+                            <tr>
+                                <!-- <td><span class="label">Claim ID:</span> 2012182568107</td> -->
+                                <td><span class="label">Patient Account Number:</span>
+                                    {{eraClaim.claims[0].PATIENTACCOUNTNUMBER}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="label">Claim Status:</span> {{eraClaim.claims[0].CLAIMSTATUS}}</td>
+                                <td><span class="label">Rendering Provider:</span> {{eraClaim.claims[0].RENNDERINGPROVIDER}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="label">Claim Payment Amount:</span>
+                                    {{eraClaim.claims[0].CLAIMPAYMENTAMOUNT | currency}}
+                                </td>
+                                <td><span class="label">Rendering NPI:</span> {{eraClaim.claims[0].RENDERINGNPI}}</td>
+                            </tr>
+                            <tr>
+                                <td><span class="label">Claim Adj Amt:</span> {{eraClaim.claims[0].CLAIMADJAMT}}</td>
+                                <td><span class="label">Payer Claim Control # / ICN#:</span>
+                                    {{eraClaim.claims[0].PAYERCLAIMCONTROLNUMBERICN_}}</td>
+                            </tr>
+                            <tr>
+                                <td><span class="label">Claim Adj Codes:</span>{{eraClaim.claims[0].CLAIMADJCODES}}</td>
+                                <td><span class="label">Patient
+                                        Responsibility:</span>{{eraClaim.claims[0].PATIENTRESPONSIBILITY | currency}}
+                                        <span *ngIf="eraClaim.claims[0].PRESAMT1 !=null">
+                                            <span>,{{eraClaim.claims[0].PRESAMT1 | currency}}</span>
+                                        </span>
+                                        <span *ngIf="eraClaim.claims[0].PRESAMT2 !=null">
+                                            <span>,{{eraClaim.claims[0].PRESAMT2 | currency}}</span>
+                                        </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="label">Claim Remark Codes:</span>{{eraClaim.claims[0].Claim_RMK_code}}
+                                </td>
+                                <td><span class="label">Patient Responsibility Reason Code:</span>
+                                    {{eraClaim.claims[0].PATIENTRESPONSIBILITYREASONCODE}}
+                                    <span *ngIf="eraClaim.claims[0].PRTYPE1 !=null">
+                                        <span>PR-{{eraClaim.claims[0].PRTYPE1}}</span>
+                                    </span>
+
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td><span class="label">Patient Group#:</span>{{eraClaim.claims[0].PATIENTGROUP_}}</td>
+                            </tr>
+                            <tr *ngFor="let Provider of data.ProviderAdjDetail">
+                                <td *ngIf="eraClaim.claims[0].PATIENTACCOUNTNUMBER == Provider.plbClm && Provider.PLB_CODE == 'L6'"><span class="label" >Interest:</span>{{ -Provider.PLB_AMOUNT }}</td>
+                            </tr>
+                            <br>
+                        </tbody>
+                    </table>
+                    <table class="ServiceTable" width="100%">
+                        <tbody>
+                            <tr>
+                                <th class="title" colspan="15">Service Line Information</th>
+                            </tr>
+                            <tr>
+                                <th>Begin Service Date</th>
+                                <th>End Service Date</th>
+                                <th>Rendering NPI</th>
+                                <th>Paid Units</th>
+                                <th>Proc/Rev Code, Mods</th>
+                                <th>Billed Amount</th>
+                                <th>Allowed Amount</th>
+                                <th>Deduct Amount</th>
+                                <th>CoIns Amount</th>
+                                <th>CoPay Amount</th>
+                                <th>Other Adjusts</th>
+                                <th>Adjust Codes</th>
+                                <th>Provider Paid</th>
+                                <th>Remark Codes</th>
+                            </tr>
+                            <ng-container *ngFor="let claim of eraClaim.claims">
+                                
+                                <tr *ngIf="claim.LOOPID != 0">
+                                    <td>{{claim.BEGINSERVICEDATE | date:'MM/dd/yyyy'}}</td>
+                                    <td>{{claim.ENDSERVICEDATE | date:'MM/dd/yyyy'}}</td>
+                                    <td>{{claim.RENDERINGNPI}}</td>
+                                    <td>{{claim.PAIDUNITS}}</td>
+                                    <td>
+                                        {{claim.PROCCODE}}
+                                        <span *ngIf="claim.ODI && claim.MODI.trim().length > 0">{{',' + claim.MODI}}</span>
+                                    </td>
+                                    <td>{{claim.BILLEDAMOUNT | currency}}</td>
+                                    <td>{{claim.ALLOWEDAMOUNT | currency}}</td>
+                                    <td>{{claim.DEDUCTAMOUNT | currency}}</td>
+                                    <td>{{claim.COINSAMOUNT | currency}}</td>
+                                    <td>{{claim.COPAYAMOUNT | currency}}</td>
+                                    <td>
+                                        <span>{{claim.OTHERADJUSTMENT}}</span>
+                                        <span *ngIf="claim.ADJAMT3 !=null">,{{claim.ADJAMT3}}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{claim.ADJCODE1 == '-' ? '' : claim.ADJCODE1}}</span>
+                                        <span *ngIf="claim.ADJCODE4 !=null">,{{claim.adjfirst}}-{{claim.ADJCODE4}}</span>
+                                        <span *ngIf="claim.ADJCODE5 !=null">,{{claim.ADJCODE5}}-{{claim.ADJCODE6}}</span>
+                                    </td>
+                                    <td>{{claim.PROVIDERPAID | currency}}</td>
+                                    <td>{{claim.Procedure_RMK_code}}</td>
+                                </tr>
+                            </ng-container>
+                            <tr>
+                                <td colspan="5" style="border-top:1px dotted black"><span class="label">SERVICE LINE
+                                        TOTALS:</span>
+                                </td>
+                                <td style="border-top:1px dotted black">{{eraClaim.claimsTotal.BILLEDAMOUNT | currency}}
+                                </td>
+                                <td style="border-top:1px dotted black">{{eraClaim.claimsTotal.ALLOWEDAMOUNT | currency}}
+                                </td>
+                                <td style="border-top:1px dotted black">{{eraClaim.claimsTotal.DEDUCTAMOUNT | currency}}
+                                </td>
+                                <td style="border-top:1px dotted black">{{eraClaim.claimsTotal.COINSAMOUNT | currency}}</td>
+                                <td style="border-top:1px dotted black">{{eraClaim.claimsTotal.COPAYAMOUNT | currency}}</td>
+                                <td style="border-top:1px dotted black">{{eraClaim.claimsTotal.OTHERADJUSTMENT | currency}}
+                                </td>
+                                <td style="border-top:1px dotted black">&nbsp;</td>
+                                <td style="border-top:1px dotted black">{{eraClaim.claimsTotal.PROVIDERPAID | currency}}
+                                </td>
+                                <td style="border-top:1px dotted black">&nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <table class="TotalsTable" width="100%">
+                <tbody>
+                    <tr>
+                        <th class="title" colspan="13">Check Totals</th>
+                    </tr>
+                    <tr>
+                        <td class="label">&nbsp;</td>
+                        <td class="label">&nbsp;</td>
+                        <td class="label">Claim Adjustments</td>
+                        <td class="label">Billed Amount</td>
+                        <td class="label">Allowed Amount</td>
+                        <td class="label">Deduct Amount</td>
+                        <td class="label">CoIns Amount</td>
+                        <td class="label">CoPay Amount</td>
+                        <td class="label">Other Adjustments</td>
+                        <td class="label">&nbsp;</td>
+                        <td class="label">Total Paid</td>
+                        <td class="label">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="border-top:1px dotted black"><span class="label">TOTALS:</span></td>
+                        <td style="border-top:1px dotted black">$0.00</td>
+                        <td style="border-top:1px dotted black">{{data.checkTotal.BILLEDAMOUNT | currency}}</td>
+                        <td style="border-top:1px dotted black">{{data.checkTotal.ALLOWEDAMOUNT | currency}}</td>
+                        <td style="border-top:1px dotted black">{{data.checkTotal.DEDUCTAMOUNT | currency}}</td>
+                        <td style="border-top:1px dotted black">{{data.checkTotal.COINSAMOUNT | currency}}</td>
+                        <td style="border-top:1px dotted black">{{data.checkTotal.COPAYAMOUNT | currency}}</td>
+                        <!-- <td style="border-top:1px dotted black">{{data.checkTotal.BILLEDAMOUNT | currency}}/td> -->
+                        <td style="border-top:1px dotted black">{{data.checkTotal.OTHERADJUSTMENT | currency}}</td>
+                        <td style="border-top:1px dotted black">&nbsp;</td>
+                        <td style="border-top:1px dotted black">{{data.checkTotal.PROVIDERPAID | currency}}</td>
+                        <td style="border-top:1px dotted black">&nbsp;</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="CodesTable" width="100%">
+                <tbody>
+                    <tr>
+                        <th class="title" colspan="12">Adjustment Codes Glossary</th>
+                    </tr>
+                    <tr>
+                        <td colspan="12">
+                            <p>
+                                <strong>
+                                    Additional Information Required – Missing/Invalid/Incomplete Data from Submitted
+                                    Claim
+                                </strong>
+                            </p>
+                            <span *ngFor="let item of data.glossary">
+                                <p>
+                                    <span>{{item.ADJCODE1}}</span> : <span>{{item.DESCRIPTION}}</span>
+                                </p>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

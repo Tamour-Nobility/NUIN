@@ -1,0 +1,30 @@
+.btn-primary {
+    background-color: white ;
+    border-color: black ;
+    color: black ;
+}
+
+/* .btn-primary:active{
+    background-color: #12A451 !important;
+    border-color: #12A451 !important;
+    color: White !important;
+} */
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary, .btn-primary:active:focus, .btn-primary:active:hover, .btn-primary.active:hover, .btn-primary.active:focus {
+    background-color: #109449;
+    border-color: #109449;
+    color: #FFFFFF;
+}
+
+.red-button {
+    background-color: red;
+    color: white; /* Text color */
+    /* Add any other styles you want */
+  }
+
+  
+  .error-message-cell {
+    max-width: 200px; /* Set the maximum width for the cell */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Display ellipsis (...) for overflowed content */
+    white-space: nowrap; /* Prevent line breaks */
+}

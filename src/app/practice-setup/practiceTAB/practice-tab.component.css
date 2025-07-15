@@ -1,0 +1,92 @@
+table.dataTable.nowrap th,
+table.dataTable.nowrap td {
+    white-space: unset
+}
+
+.dataTables-example {
+    min-height: 100px;
+    white-space: nowrap;
+}
+.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+@media only screen and (max-width: 500px) {
+
+    table,
+    head,
+    tbody,
+    th,
+    td,
+    tr {
+        display: block;
+    }
+
+    thead tr {
+        display: none;
+    }
+
+    tr {
+        border: 1px solid #ccc;
+    }
+
+    td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+        white-space: normal;
+        text-align: left;
+        min-height: 30px;
+        overflow: hidden;
+        word-break: break-all;
+    }
+
+    td:before {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        text-align: left;
+        font-weight: bold;
+    }
+
+    td:before {
+        content: attr(data-title);
+    }
+}
+
+/* .modal-dialog {
+    width: 100%;
+    max-width: none;
+}
+.modal-content {
+    width: 100%;
+} */
+
+
+.custom-modal-width {
+    max-width: 100%; /* Adjust width as needed */
+    width: auto;
+}
+
+.modal-contentP {
+    height: 85vh; /* Set modal height to 80% of viewport */
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-bodyP {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 70vh; /* Set a fixed height for scrolling */
+    padding: 15px;
+}
+
+/* Optional: Ensure table responsiveness */
+.table-responsiveP {
+    max-height: 70vh; /* Adjust as needed */
+    overflow-y: auto;
+}

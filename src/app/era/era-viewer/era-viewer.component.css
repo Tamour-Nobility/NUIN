@@ -1,0 +1,2585 @@
+.OuterTable {
+    width: 99%;
+    border: solid 1px #666666;
+    -webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+    padding: 6px;
+}
+
+th {
+    text-align: left;
+}
+
+hr {
+    width: 90%;
+    border-top: solid 1px #999999;
+    border-bottom: 0;
+    border-left: 0;
+    border-right: 0;
+}
+
+#printheader {
+    display: none;
+}
+
+.label {
+    font-weight: bold;
+}
+
+.CheckTable,
+.TotalsTable {
+    font-size: 0.9em !important;
+    line-height: 1.3em !important;
+    page-break-inside: avoid;
+}
+
+.CheckTable th,
+.TotalsTable th {
+    border: solid 1px #999999;
+    padding: 3px;
+    background-color: #CCCCCC;
+}
+
+.ProviderADJ_B{
+    font-weight: bold;
+}
+.ProviderADJ {
+    font-size: 0.9em !important;
+    line-height: 1.3em !important;
+    page-break-inside: avoid;
+}
+
+.ProviderADJ th {
+    border: solid 1px #BBBBBB;
+    padding: 3px;
+    background-color: #EEEEEE;
+}
+
+.ClaimTable {
+    font-size: 0.9em !important;
+    line-height: 1.3em !important;
+    page-break-inside: avoid;
+}
+
+.ClaimTable th {
+    border: solid 1px #BBBBBB;
+    padding: 3px;
+    background-color: #EEEEEE;
+}
+
+.ServiceTable,
+.CodesTable {
+    font-size: 0.9em !important;
+    line-height: 1.3em !important;
+    page-break-inside: avoid;
+}
+
+.ServiceTable .title,
+.CodesTable .title {
+    border: solid 1px #BBBBBB;
+    padding: 3px;
+    background-color: #EEEEEE;
+}
+
+.PageBreakAfter {
+    page-break-after: always;
+}
+
+.printInstr {
+    text-align: right;
+    margin-bottom: 6px;
+}
+
+.CodesTable p {
+    width: 100%;
+}
+
+.printChkBox {
+    float: right;
+}
+
+.BackToTop {
+    opacity: 0.6;
+    filter: alpha(opacity=60);
+}
+
+/* Reporting Part */
+/* CSS Document */
+
+#Report {
+    background-color: #FFFFFF;
+    margin: 0px 8px 0px 8px;
+}
+
+#Report h2 span,
+#Reports h3 span {
+    display: none;
+}
+
+#Report h2 {
+    margin: 0px 0px 4px 0px;
+    padding: 0px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#Report h3 {
+    font-weight: bold;
+    font-size: 17px;
+    padding: 0px;
+    margin: 10px 2px 5px 0px;
+    color: #000000;
+    display: block;
+}
+
+#Report h4 {
+    font-weight: bold;
+    font-size: 13px;
+    padding: 0px;
+    margin: 15px 0px 0px 0px;
+    color: #000000;
+}
+
+#Report p {
+    margin: 3px 0px 3px 0px;
+    padding: 0px;
+}
+
+#Report ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+#Report li {
+    list-style: none;
+    padding: 2px 0px 2px 0px;
+}
+
+#Report ul#AltSends {
+    margin: 0px;
+    padding: 0px;
+}
+
+#Report ul#AltSends li {
+    padding: 0px;
+    margin: 8px 20px 2px 0px;
+    float: left;
+}
+
+#Bulletlist li {
+    list-style-type: disc;
+    margin-left: 3em;
+}
+
+#NextBulletList li {
+    list-style-type: disc;
+    margin-left: 3em;
+}
+
+#SubBulletList li {
+    list-style-type: circle;
+    margin-left: 2em;
+}
+
+#Report .link,
+#Report .toggleLink,
+#PageContent .toggleLink,
+#Report .altToggleLink,
+#Report .claimFileToggleLink,
+#Report .searchToggle,
+.newLink {
+    cursor: pointer;
+    display: inline;
+    color: #2152AD;
+    text-decoration: none;
+    padding: 5px 0px 5px 0px;
+    font-weight: bold;
+    clear: both;
+    margin: 0px
+}
+
+#Report .link,
+#Report #linkB,
+#Report .altToggleLink,
+claimFileToggleLink {
+    font-weight: normal;
+}
+
+.newLink {
+    color: #2152ad !important;
+}
+
+.myButtonLink {
+    display: block;
+    width: 103px;
+    height: 27px;
+    cursor: pointer;
+    /* background: url(../Images/buttons/gencsiinqbutton.png) bottom; */
+    text-indent: -99999px;
+}
+
+.myButtonLink:hover {
+    background-position: 0 0;
+}
+
+#Report .link:hover,
+#Report .toggleLink:hover,
+#Report .altToggleLink:hover,
+#Report .searchToggle:hover,
+#Report .claimFileToggleLink:hover,
+#Report .active,
+#Report .linkhover,
+.newLink:hover {
+    text-decoration: underline;
+}
+
+.hidetggleLink {
+    cursor: pointer;
+    /* background-image: url(../Images/apDown.gif); */
+    background-repeat: no-repeat;
+    background-position: left;
+    display: inline;
+    color: #2152AD;
+    text-decoration: none;
+    padding: 5px 0px 5px 10px;
+    font-weight: bold;
+    clear: both;
+    margin: 0px
+}
+
+.hidetggleLink:hover {
+    text-decoration: underline;
+}
+
+.showtggleLink {
+    cursor: pointer;
+    /* background-image: url(../Images/apRight.gif); */
+    background-repeat: no-repeat;
+    background-position: left;
+    display: inline;
+    color: #2152AD;
+    text-decoration: none;
+    padding: 5px 0px 5px 10px;
+    font-weight: bold;
+    clear: both;
+    margin: 0px
+}
+
+.showtggleLink {
+    color: #2152ad !important;
+}
+
+.showtggleLink:hover {
+    text-decoration: underline;
+}
+
+.showDivision {
+    display: block;
+}
+
+.hideDivision {
+    display: none;
+}
+
+#Report #Criteria #SearchResults {
+    margin: 0px;
+    padding: 0px 15px 4px 5px;
+    display: none;
+}
+
+#Report #Criteria #SearchResults h4,
+#Report #Criteria #SearchResults p {
+    margin: 1px 0px 2px 0px;
+}
+
+#Report #Criteria #SearchResults .searchToggle {
+    margin: 0px 0px 4px 0px;
+}
+
+#Report #Criteria .searchToggle {
+    margin: 0px 0px 4px 5px;
+}
+
+#Report .featurebox {
+    background-color: #E9F5F7;
+    border-bottom: 1px solid #333333;
+    padding: 10px 5px 19px 5px;
+    margin: 0px 0px 5px 0px;
+}
+
+#Report .box {
+    border-bottom: 1px solid #333333;
+    padding: 7px 0px 1px 0px;
+    margin: 3px 0px 3px 0px;
+    clear: both;
+}
+
+#Report .dropbox {
+    padding: 5px 0px 5px 20px;
+    background-color: #E9F5F7;
+    margin: 0px;
+    clear: both;
+    display: none;
+}
+
+#Report .float {
+    float: left;
+    margin: 0px 13px 3px 0px;
+    padding: 0px;
+}
+
+#Report .dropboxClaimsOverview {
+    padding: 5px 0px 5px 20px;
+    background-color: #E9F5F7;
+    margin: 0px;
+    clear: both;
+}
+
+#Report .SendReceive {
+    position: absolute;
+    top: 280px;
+    bottom: 0px;
+    left: 150px;
+    right: 0px;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    z-index: 1000;
+}
+
+#Report .box h3,
+#Report .box p {
+    margin: 2px 0px 2px 5px;
+}
+
+#Report .box .toggleLink,
+#Report .box .claimFileToggleLink,
+#Report .box #frmAltSearch p {
+    margin: 2px 0px 2px 15px;
+}
+
+#Report .dropbox p {
+    margin: 0px;
+}
+
+#Report .dropboxClaimsOverview p {
+    margin: 0px;
+}
+
+#Report .ActivityBar {
+    background-color: #E9F5F9;
+    margin: 2px 0px 2px -5px;
+    padding: 2px 0px 2px 0px;
+    /*width: 100%;*/
+}
+
+#Report .ActivityBar table,
+#Report .dropbox table {
+    margin: 0px;
+}
+
+#Report .ActivityBar table td,
+#Report .dropbox table td {
+    padding: 2px 0px 2px 0px;
+}
+
+#Report form {
+    margin: 0px;
+    padding: 0px;
+}
+
+#Report form select {
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0px 7px 0px 3px;
+    padding: 0px;
+    text-align: left;
+}
+
+#Report form select.SearchDropDown {
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0px 7px 0px 3px;
+    padding: 0px;
+    text-align: left;
+    height: 200px;
+    width: 293px;
+}
+
+#Report form input {
+    font-size: 0.8em;
+    margin: 0px 3px 0px 3px;
+    padding: 1px;
+    text-align: left;
+}
+
+#Report form input.SearchBox {
+    float: left;
+    font-size: 12px;
+    line-height: 20px;
+    height: 20px;
+    margin: 0px 0px 0px 0px !important;
+    -ms-border-radius: 0 5px 5px 0;
+    border-radius: 0 5px 5px 0;
+    border: solid 1px black;
+    padding-bottom: 0px !important;
+    padding-top: 0px !important;
+    padding-right: 0px !important;
+    padding-left: 5px;
+    width: 250px;
+}
+
+#Report form img {
+    margin: 0px 10px 0px 0px;
+    padding: 0px;
+}
+
+#Report form p {
+    margin: 3px 0px 3px 0px;
+    padding: 0px;
+    float: left;
+}
+
+#Report .highlight {
+    background-color: #FFFFCC;
+}
+
+#Report .frmUpload {
+    margin: 0px 0px 0px -5px;
+    padding: 4px 0px 4px 0px;
+}
+
+#Report .formButtons {
+    width: 180px;
+    padding: 10px 0px 0px 0px;
+    margin: auto;
+}
+
+#Report form#frmAltSend,
+#Report form#frmAltSearch,
+#Report form.frmPaging {
+    display: inline;
+    margin: 0px;
+    padding: 0px;
+    clear: both;
+}
+
+#Report form#frmAltSend select,
+#Report form#frmAltSearch select {
+    font-size: 11px;
+}
+
+#Report form select#selectRange {
+    width: 125px;
+    text-align: left;
+}
+
+#Report #Create {
+    /*width: 100%;*/
+    padding: 0px 0px 5px 5px;
+    margin: 0px 0px 5px 0px;
+    /*position: relative;*/
+}
+
+#Report #Criteria {
+    background-color: #E9F5F9;
+    min-width: 280px;
+    vertical-align: top;
+}
+
+#Report #Criteria table td h5 {
+    margin-left: 0px;
+}
+
+#Report #Criteria h4,
+#Report #Criteria h5,
+#Report #Criteria p,
+#Report #Criteria a,
+#Report .ActivityBar form {
+    margin: 2px 0px 2px 5px;
+}
+
+/* to counteract -5px margin on ActivityBar*/
+
+#Report #Criteria #validationResults em {
+    position: relative;
+    top: -9px;
+}
+
+#Report #Results {
+    padding: 5px 0px 20px 5px;
+    margin: 0px 0px 5px 0px;
+    width: 99%;
+    clear: both;
+    display: none;
+}
+
+#Report #ResultsAlwaysShow {
+    padding: 5px 0px 20px 5px;
+    margin: 0px 0px 5px 0px;
+    width: 99%;
+    clear: both;
+}
+
+#Report table.records {
+    width: 100%;
+    border: 1px #000033 solid;
+    padding: 4px;
+    margin: 3px 0px 3px 0px;
+}
+
+#Report table.records td {
+    padding: 0px;
+    border: none;
+    border-top: 1px solid #A4A4A4;
+    padding: 1px 4px 1px 4px;
+}
+
+#Report table.records th {
+    font-size: 12px;
+    margin-right: 1px;
+    background-color: #CCCCCC;
+    padding: 3px;
+    color: #000066;
+    border-right: #FFFFFF 1px solid;
+    text-align: center;
+}
+
+#Report table.records th.sortable {
+    text-decoration: underline;
+}
+
+#Report table.records tr {
+    border-top: #666666 5px solid;
+}
+
+.highlightRows {
+    background-color: #EEEEEE
+}
+
+#csiSummary tr.highlightRows:hover {
+    background-color: #C4DBDB;
+    cursor: pointer
+}
+
+.rowshade {
+    background-color: #EEEEEE
+}
+
+#Report table.records tr.parent,
+#Report table.records tr.shaded {
+    background-color: #DDDDDD;
+}
+
+#Report table.records tr.parent:hover,
+#Report table.records tr.shaded:hover,
+#Report table.records tr.hover {
+    background-color: #C4DBDB;
+    cursor: pointer
+}
+
+#Report table.records tr.child {
+    background-color: #FFFFFF;
+}
+
+#csiresponsetable td,
+#csisummarytablehtml td,
+#Report #Results table td {
+    padding: 0px;
+    border: none;
+}
+
+#csisummarytablehtml,
+#Report #Results table#Data {
+    width: 100%;
+    border: 1px #000033 solid;
+    padding: 4px;
+    margin: 3px 0px 3px 0px;
+    font-size: 11px;
+    line-height: 1.6em;
+}
+
+#csisummarytablehtml td,
+#Report #Results table#Data td {
+    border-top: 1px solid #A4A4A4;
+    padding: 1px 4px 1px 4px;
+    vertical-align: top
+}
+
+#Report #Results table#Data td.PaymentAmount {
+    text-align: right
+}
+
+#Report #Results table#Data td.tdPaper {
+    text-align: center
+}
+
+#Report #Results table#Data tr.NoBorder td {
+    border: none;
+}
+
+#csisummarytablehtml th,
+#Report #Results table#Data th {
+    margin-right: 1px;
+    background-color: #CCCCCC;
+    padding: 3px;
+    color: #000066;
+    border-right: #FFFFFF 1px solid;
+    text-align: center;
+}
+
+#claimservdetail tr,
+#csisummarytablehtml tr,
+#Report #Results table#Data tr {
+    border-top: #666666 5px solid;
+}
+
+#csisummarytablehtml tr.parent,
+#Report #Results table#Data tr.parent,
+#Report #Results table#Data tr.child2,
+#Report #Results #Data tr.shaded {
+    background-color: #DDDDDD;
+}
+
+#Report #Results table#Data tr.parentNoClick {
+    background-color: #DDDDDD;
+}
+
+#Report #Results table#Data tr.parentNoClick:hover {
+    background-color: #C4DBDB;
+}
+
+#Report #Results table#Data tr.parentAltRow {
+    background-color: #FFFFFF;
+}
+
+#csisummarytablehtml tr,
+#Report #Results #Data tr.shaded1 {
+    background-color: #EEEEEE;
+}
+
+#Report #Results #Data tr.shaded2 {
+    background-color: #DDDDDD;
+}
+
+#Report #Results #Data tr.shaded3 {
+    background-color: #CCCCCC;
+}
+
+#csisummarytablehtml tr.parent:hover,
+#Report #Results table#Data tr.parent:hover,
+#Report #Results table#Data tr.shaded:hover,
+#Report #Results table#Data tr.hover {
+    background-color: #C4DBDB;
+    cursor: pointer
+}
+
+#Report #Results table#Data tr.parentAltRow:hover {
+    background-color: #C4DBDB;
+    cursor: pointer
+}
+
+#Report #Results table#Data tr.child,
+#Report #Results table#Data tr.child1 {
+    background-color: #FFFFFF;
+}
+
+#Report #Results table#Data tr.child2:hover,
+#Report #Results table#Data tr.child1:hover {
+    background-color: #C4DBDB
+}
+
+/*Demodata*/
+#Report #Results table#DemoData td.PaymentAmount {
+    text-align: right
+}
+
+#Report #Results table#DemoData td.tdPaper {
+    text-align: center
+}
+
+#Report #Results table#DemoData tr.NoBorder td {
+    border: none;
+}
+
+#Report #Results table#DemoData tr.parentNoClick {
+    background-color: #DDDDDD;
+}
+
+#Report #Results table#DemoData tr.parentNoClick:hover {
+    background-color: #C4DBDB;
+}
+
+#Report #Results table#DemoData tr.parentAltRow {
+    background-color: #FFFFFF;
+}
+
+#Report #Results #DemoData tr.shaded2 {
+    background-color: #DDDDDD;
+}
+
+#Report #Results #DemoData tr.shaded3 {
+    background-color: #CCCCCC;
+}
+
+#csisummarytablehtml tr.parent:hover,
+#Report #Results table#Data tr.parent:hover,
+#Report #Results table#Data tr.shaded:hover,
+#Report #Results table#Data tr.hover {
+    background-color: #C4DBDB;
+    cursor: pointer
+}
+
+#Report #Results table#DemoData tr.parentAltRow:hover {
+    background-color: #C4DBDB;
+    cursor: pointer
+}
+
+#Report #Results table#DemoData tr.child,
+#Report #Results table#Data tr.child1 {
+    background-color: #FFFFFF;
+}
+
+/*Demodata*/
+/*****Paging Controls*****/
+#Report #Results .ActivityBar {
+    margin: 1px 0px 1px 0px;
+    padding: 0px;
+}
+
+#Report #Results .ActivityBar .paging {
+    margin: 0px auto 0px auto;
+    width: 700px;
+    height: 45px;
+}
+
+#Report #Results .ActivityBar .paging2 {
+    margin: 0px auto 0px auto;
+    width: 660px;
+    height: 45px;
+}
+
+#Report #Results .ActivityBar .paging div,
+#Report #Results .ActivityBar .paging2 div {
+    float: left;
+    margin: 0px;
+    padding: 0px;
+}
+
+#Report #Results .ActivityBar .paging .controls,
+#Report #Results .ActivityBar .paging2 .controls {
+    padding: 5px 0px 5px 0px;
+    height: 20px;
+    margin: 7px 0px 7px 0px;
+}
+
+#Report #Results .ActivityBar .paging .divider,
+#Report #Results .ActivityBar .paging2 .divider {
+    /* background: url(../Images/Controls/toolbar_divider.gif) no-repeat right center; */
+    padding: 5px 15px 5px 0px;
+    height: 20px;
+    margin: 7px 15px 7px 15px;
+}
+
+#Report #Results .ActivityBar .arrow {
+    margin: 3px 0px 0px 0px;
+    padding: 0px;
+}
+
+#Report #Results .ClaimInfo {
+    margin: 0px;
+    padding: 0px 0px 5px 0px;
+}
+
+#Report #Results .ClaimInfo h4 {
+    background-color: #E9F5F7;
+    display: block;
+    padding: 5px;
+    margin: 0px 0px 3px 0px;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+#Report #Results .ClaimInfo h5 {
+    font-weight: bold;
+    font-size: 12px;
+    margin: 4px 0px 0px 0px;
+    padding: 0px 0px 0px 5px;
+}
+
+#Report #Results .ClaimInfo p {
+    font-weight: normal;
+    margin: 0px;
+    padding: 0px 0px 0px 4px;
+}
+
+#Report #Results .ClaimInfo ol ul {
+    padding: 0px 0px 0px 10px;
+    margin: 0px;
+}
+
+/******Web Permissions and Eligibility*******/
+#Report p.sub {
+    margin-left: 15px;
+}
+
+#Report #PageTopper {
+    height: 55px;
+    border-bottom: solid 1px #8B9298;
+    padding-bottom: 5px;
+    margin: 0px 10px 0px 5px;
+    background: #FFFFFF;
+}
+
+#Report #PageTopper form {
+    float: right;
+    display: block;
+    height: 25px;
+    padding-top: 5px;
+    margin: 5px 5px 0 0;
+    border-right: solid 1px #8B9298;
+}
+
+#Report #PageTopper #PageHeader {
+    width: 49%;
+    float: left;
+}
+
+#Report #PageTopper #Tools {
+    float: right;
+    height: 45px;
+    padding-top: 10px;
+    width: 49%;
+}
+
+#Report #EditPayerList {
+    width: 420px;
+    margin: 0px auto 0 auto;
+    line-height: 15px;
+}
+
+#Report #EditPayerList p.super {
+    font-size: 10px;
+}
+
+#Report #InsurerAccordian {
+    width: 90%;
+    clear: both;
+    float: left;
+    padding: 5px;
+}
+
+#Report #InsurerAccordian.edit {
+    width: 420px;
+    float: none;
+    margin-top: 5px;
+    padding: 0px;
+}
+
+#Report #InsurerAccordian ul#Insurers {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#Report #InsurerAccordian ul#Insurers.edit {
+    width: 420px;
+}
+
+#Report #InsurerAccordian ul#Insurers li {
+    padding: 0;
+    margin-bottom: 2px;
+}
+
+#Report #InsurerAccordian ul#Insurers li a {
+    display: block;
+    padding: 5px 0px 0px 15px;
+    /* background-image: url(../Images/buttons/insurer_bg.gif); */
+    background-position: 0px -2px;
+    background-repeat: no-repeat;
+    color: #000000;
+    text-decoration: none;
+}
+
+#Report #InsurerAccordian ul#Insurers li a.active {
+    background-position: 0px -32px;
+}
+
+#Report #InsurerAccordian ul#Insurers li a.inactive {
+    background-position: 0px 0px;
+}
+
+#Report #InsurerAccordian ul#Insurers li.highlighted {
+    background: #e7f1d2;
+}
+
+#Report #InsurerAccordian #Insurers ul.insurersDetail {
+    background: #EAF6F7;
+    padding: 2px 0px 2px 15px;
+    margin: 1px auto 0 auto;
+}
+
+#Report #InsurerAccordian #Insurers ul.insurersDetail li {
+    line-height: 110%;
+    padding: 4px 0px 4px 0px;
+}
+
+#Report #InsurerAccordian #Insurers ul.insurersDetail li a {
+    background: none;
+    margin: 0px;
+    padding: 0px;
+    color: #000000;
+    text-decoration: none;
+}
+
+#Report #InsurerAccordian #Insurers ul.insurersDetail li a:hover {
+    text-decoration: underline;
+}
+
+#Report #SelfPayInsurerAccordian {
+    width: 90%;
+    clear: both;
+    float: left;
+    padding: 5px;
+}
+
+#Report #SelfPayInsurerAccordian.edit {
+    width: 420px;
+    float: none;
+    margin-top: 5px;
+    padding: 0px;
+}
+
+#Report #SelfPayInsurerAccordian ul#SelfPayInsurers {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#Report #SelfPayInsurerAccordian ul#SelfPayInsurers.edit {
+    width: 420px;
+}
+
+#Report #SelfPayInsurerAccordian ul#SelfPayInsurers li {
+    padding: 0;
+    margin-bottom: 2px;
+}
+
+#Report #SelfPayInsurerAccordian ul#SelfPayInsurers li a {
+    display: block;
+    padding: 5px 0px 0px 15px;
+    /* background-image: url(../Images/buttons/insurer_bg.gif); */
+    background-position: 0px -2px;
+    background-repeat: no-repeat;
+    color: #000000;
+    text-decoration: none;
+}
+
+#Report #SelfPayInsurerAccordian ul#SelfPayInsurers li a.active {
+    background-position: 0px -32px;
+}
+
+#Report #SelfPayInsurerAccordian ul#SelfPayInsurers li a.inactive {
+    background-position: 0px 0px;
+}
+
+#Report #SelfPayInsurerAccordian ul#SelfPayInsurers li.highlighted {
+    background: #e7f1d2;
+}
+
+#Report #SelfPayInsurerAccordian #SelfPayInsurers ul.insurersDetail {
+    background: #EAF6F7;
+    padding: 2px 0px 2px 15px;
+    margin: 1px auto 0 auto;
+}
+
+#Report #SelfPayInsurerAccordian #SelfPayInsurers ul.insurersDetail li {
+    line-height: 110%;
+    padding: 4px 0px 4px 0px;
+}
+
+#Report #SelfPayInsurerAccordian #SelfPayInsurers ul.insurersDetail li a {
+    background: none;
+    margin: 0px;
+    padding: 0px;
+    color: #000000;
+    text-decoration: none;
+}
+
+#Report #SelfPayInsurerAccordian #SelfPayInsurers ul.insurersDetail li a:hover {
+    text-decoration: underline;
+}
+
+#Report #PayerStateFilter {
+    position: relative;
+    top: 20px;
+    min-width: 205px;
+    z-index: 1000;
+}
+
+#Report #PayerStateFilter div {
+    display: block;
+    padding: 5px 0px 0px 15px;
+    /* background-image: url(../Images/buttons/insurer_bg.gif); */
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    color: #000000;
+    text-decoration: none;
+}
+
+#Report #PayerStateFilter ul {
+    height: 300px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    background: #EAF6F7;
+    padding: 2px 0px 2px 0px;
+    margin: 1px auto 0 auto;
+}
+
+#Report #PayerStateFilter ul li {
+    line-height: 110%;
+    padding: 4px 0px 4px 15px;
+}
+
+#Report #UserScreen {
+    float: left;
+    width: auto;
+    display: block;
+    height: 50px;
+}
+
+#Report #PatientInfo {
+    float: left;
+    width: 100%;
+}
+
+#Report #Request #BasicProfile {
+    padding: 20px 10px 10px 10px;
+}
+
+#Report #Request #BasicProfile h3 {
+    margin: 0px 0px 15px 0px;
+}
+
+#Report #Request #BasicProfile dl {
+    display: block;
+    width: 100%;
+}
+
+#Report #Request #BasicProfile dl dt {
+    float: left;
+    margin-right: 30px;
+    clear: both;
+    width: 25%;
+}
+
+#Report #Request #BasicProfile dl dt#PatientName {
+    font-size: 16px;
+    font-weight: bold;
+    color: #CB713F;
+    float: none;
+    width: auto;
+}
+
+#Report #Request #BasicProfile dl dd h4 {
+    margin: 0px 0px 20px 0px;
+    padding: 0px;
+    font-size: 14px;
+    float: none;
+}
+
+/*Tabs*/
+#Report #Request #PatientTabs {
+    position: relative;
+    padding-top: 46px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#Report #Request #PatientTabs table {
+    font-size: 10px;
+    line-height: normal;
+}
+
+#Report #Request #PatientTabs table tr.parent {
+    background: #bcbbbb;
+}
+
+#Report #Request #PatientTabs table tr.parent th {
+    padding: 3px;
+    border-right: solid 1px #FFFFFF;
+    border-bottom: solid 1px #9ea0a2;
+}
+
+#Report #Request #PatientTabs table tr.parent a {
+    color: #1A1650;
+}
+
+#Report #Request #PatientTabs table tr.child {
+    background: #d8d6d6;
+    font-size: 9px;
+}
+
+#Report #Request #PatientTabs table tr.child td {
+    padding: 3px;
+}
+
+/*Expand All*/
+#Report #Request #PatientTabs ul#ExpandInfo {
+    display: block;
+}
+
+#Report #Request #PatientTabs ul#ExpandInfo .sections {
+    display: block;
+    padding: 3px 12px 8px 20px;
+    margin: -34px 0px 3px 290px;
+    /* background-image: url(../Images/apRight.gif); */
+    background-position: 7px 8px;
+    background-repeat: no-repeat;
+    color: black
+}
+
+#Report #Request #PatientTabs ul#ExpandInfo li {
+    display: inline;
+    background-color: transparent
+}
+
+#Report #Request #PatientTabs ul#ExpandInfo li a:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#Report #Request #PatientTabs ul#ExpandInfo li a.tab {
+    margin: 0px;
+    display: block;
+    position: absolute;
+    top: 12px;
+    left: 315px;
+    padding: 1px 1px 0px 1px;
+    background: #000000;
+    z-index: 2;
+    color: #000000;
+    text-decoration: none;
+}
+
+#Report #Request #PatientTabs ul#ExpandInfo li strong.childtab {
+    background: #E6E6E6;
+    padding: 10px;
+    display: block;
+}
+
+/*Expand All*/
+/*Collapse All*/
+#Report #Request #PatientTabs ul#CollapaseInfo {
+    display: block;
+}
+
+#Report #Request #PatientTabs ul#CollapaseInfo .sections {
+    display: block;
+    padding: 6px 12px 9px 20px;
+    margin: -38px -3px 3px 385px;
+    /* background-image: url(../Images/apDown.gif); */
+    background-position: 7px 13px;
+    background-repeat: no-repeat;
+    color: black
+}
+
+#Report #Request #PatientTabs ul#CollapaseInfo .collapsecss {
+    display: block;
+    padding: 3px 12px 8px 20px;
+    margin: -34px 0px 3px 290px;
+    /* background-image: url(../Images/apDown.gif); */
+    background-position: 7px 8px;
+    background-repeat: no-repeat;
+    color: black
+}
+
+#Report #Request #PatientTabs ul#CollapaseInfo li {
+    display: inline;
+    background-color: transparent
+}
+
+#Report #Request #PatientTabs ul#CollapaseInfo li a:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#Report #Request #PatientTabs ul#CollapaseInfo li a.tab {
+    margin: 0px;
+    display: block;
+    position: absolute;
+    top: 12px;
+    left: 315px;
+    padding: 1px 1px 0px 1px;
+    background: #000000;
+    z-index: 2;
+    color: #000000;
+    text-decoration: none;
+}
+
+#Report #Request #PatientTabs ul#CollapaseInfo li strong.childtab {
+    background: #E6E6E6;
+    padding: 10px;
+    display: block;
+}
+
+/*Collapse All*/
+
+/*Expand All selfp*/
+#Report #Request .PatientTabs ul#ExpandInfo {
+    display: block;
+}
+
+#Report #Request .PatientTabs ul#ExpandInfo .sections {
+    display: block;
+    padding: 2px 12px 8px 20px;
+    margin: -34px 0px 3px 290px;
+    /* background-image: url(../Images/apRight.gif); */
+    background-position: 7px 7px;
+    background-repeat: no-repeat;
+    color: black
+}
+
+#Report #Request .PatientTabs ul#ExpandInfo li {
+    display: inline;
+    background-color: transparent
+}
+
+#Report #Request .PatientTabs ul#ExpandInfo li a:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#Report #Request .PatientTabs ul#ExpandInfo li a.tab {
+    margin: 0px;
+    display: block;
+    position: absolute;
+    top: 12px;
+    left: 315px;
+    padding: 1px 1px 0px 1px;
+    background: #000000;
+    z-index: 2;
+    color: #000000;
+    text-decoration: none;
+}
+
+#Report #Request .PatientTabs ul#ExpandInfo li strong.childtab {
+    background: #E6E6E6;
+    padding: 10px;
+    display: block;
+}
+
+/*Expand All*/
+/*Collapse All selfp*/
+#Report #Request .PatientTabs ul#CollapaseInfo {
+    display: block;
+}
+
+#Report #Request .PatientTabs ul#CollapaseInfo .sections {
+    display: block;
+    padding: 6px 12px 9px 20px;
+    margin: -38px -3px 3px 385px;
+    /* background-image: url(../Images/apDown.gif); */
+    background-position: 7px 13px;
+    background-repeat: no-repeat;
+    color: black
+}
+
+#Report #Request .PatientTabs ul#CollapaseInfo .collapsecss {
+    display: block;
+    padding: 2px 12px 8px 20px;
+    margin: -34px 0px 3px 290px;
+    /* background-image: url(../Images/apDown.gif); */
+    background-position: 7px 10px;
+    background-repeat: no-repeat;
+    color: black
+}
+
+#Report #Request .PatientTabs ul#CollapaseInfo li {
+    display: inline;
+    background-color: transparent
+}
+
+#Report #Request .PatientTabs ul#CollapaseInfo li a:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#Report #Request .PatientTabs ul#CollapaseInfo li a.tab {
+    margin: 0px;
+    display: block;
+    position: absolute;
+    top: 12px;
+    left: 315px;
+    padding: 1px 1px 0px 1px;
+    background: #000000;
+    z-index: 2;
+    color: #000000;
+    text-decoration: none;
+}
+
+#Report #Request .PatientTabs ul#CollapaseInfo li strong.childtab {
+    background: #E6E6E6;
+    padding: 10px;
+    display: block;
+}
+
+/*Collapse All*/
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo {
+    display: block;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo .sections {
+    display: block;
+    padding: 8px 10px 8px 20px;
+    margin: 5px 0px 5px 0px;
+    background-color: #F3E7BC;
+    /* background-image: url(../Images/buttons/benefit_bg.png); */
+    background-position: 0px 0px;
+    background-repeat: no-repeat;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo .active {
+    background-position: 0px -37px;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo li {
+    display: inline;
+    background-color: transparent
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo li a.sections,
+#Report #Request #PatientTabs ul#PatientBenefitInfo li a.tab {
+    color: #000000;
+    text-decoration: none;
+    clear: both;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo li a:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo li a.tab {
+    margin: 0px;
+    display: block;
+    position: absolute;
+    top: 4px;
+    padding: 1px 1px 0px 1px;
+    background: #000000;
+    z-index: 2;
+    color: #000000;
+    text-decoration: none;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo li strong.childtab {
+    background: #E6E6E6;
+    padding: 10px;
+    display: block;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo li a#tab_patientinfo {
+    left: 10px;
+    width: 130px;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo li a#tab_benefitinformation {
+    left: 144px;
+    width: 130px;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo li a#tab_patientinfo.selected strong,
+#Report #Request #PatientTabs ul#PatientBenefitInfo li a#tab_benefitinformation.selected strong {
+    padding-bottom: 11px;
+    background: #FFFFFF;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo li div.panel {
+    background: #FFFFFF;
+    position: relative;
+    z-index: 1;
+    margin: 0px 10px 10px 10px;
+    padding: 10px;
+    border: solid 1px #000000;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo li div.panel div {
+    padding-left: 10px;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo li div.panel dl {
+    width: 599px;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo li div.panel dl dt {
+    display: block;
+    float: left;
+    width: 215px;
+    font-weight: bold;
+    color: black;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo li div.panel dl dd {
+    display: block;
+    color: black;
+}
+
+/*End Tabs*/
+
+/* Demo Tab2 */
+#Report #Request #PatientTabs table {
+    font-size: 10px;
+    line-height: normal;
+}
+
+#Report #Request #PatientTabs table tr.parent {
+    background: #bcbbbb;
+}
+
+#Report #Request #PatientTabs table tr.parent th {
+    padding: 3px;
+    border-right: solid 1px #FFFFFF;
+    border-bottom: solid 1px #9ea0a2;
+}
+
+#Report #Request #PatientTabs table tr.parent a {
+    color: #1A1650;
+}
+
+#Report #Request #PatientTabs table tr.child {
+    background: #d8d6d6;
+    font-size: 9px;
+}
+
+#Report #Request #PatientTabs table tr.child td {
+    padding: 3px;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo2 {
+    display: block;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo2 .sections {
+    display: block;
+    padding: 8px 10px 8px 20px;
+    margin: 5px 0px 5px 0px;
+    background-color: #F3E7BC;
+    /* background-image: url(../Images/buttons/benefit_bg.png); */
+    background-position: 0px 0px;
+    background-repeat: no-repeat;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo2 .active {
+    background-position: 0px -37px;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo2 li {
+    display: inline;
+    background-color: transparent
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo2 li a.sections,
+#Report #Request #PatientTabs ul#PatientBenefitInfo li a.tab {
+    color: #000000;
+    text-decoration: none;
+    clear: both;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo2 li a:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo2 li a.tab {
+    margin: 0px;
+    display: block;
+    position: absolute;
+    top: 4px;
+    padding: 1px 1px 0px 1px;
+    background: #000000;
+    z-index: 2;
+    color: #000000;
+    text-decoration: none;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo2 li strong.childtab {
+    background: #E6E6E6;
+    padding: 10px;
+    display: block;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo2 li a#tab_patientinfo2 {
+    left: 10px;
+    width: 130px;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo2 li a#tab_benefitinformation2 {
+    left: 144px;
+    width: 130px;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo2 li a#tab_patientinfo2.selected strong,
+#Report #Request #PatientTabs ul#PatientBenefitInfo2 li a#tab_benefitinformation2.selected strong {
+    padding-bottom: 11px;
+    background: #FFFFFF;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo2 li div.panel {
+    background: #FFFFFF;
+    position: relative;
+    z-index: 1;
+    margin: 0px 10px 10px 10px;
+    padding: 10px;
+    border: solid 1px #000000;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo2 li div.panel div {
+    padding-left: 10px;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo2 li div.panel dl {
+    width: 599px;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo2 li div.panel dl dt {
+    display: block;
+    float: left;
+    width: 215px;
+    font-weight: bold;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo2 li div.panel dl dd {
+    display: block;
+}
+
+/* End Demo Tab2 */
+
+/* Demo Tab3 */
+#Report #Request #PatientTabs table {
+    font-size: 10px;
+    line-height: normal;
+    color: black;
+}
+
+#Report #Request #PatientTabs table tr.parent {
+    background: #bcbbbb;
+}
+
+#Report #Request #PatientTabs table tr.parent th {
+    padding: 3px;
+    border-right: solid 1px #FFFFFF;
+    border-bottom: solid 1px #9ea0a2;
+    color: black;
+}
+
+#Report #Request #PatientTabs table tr.parent a {
+    color: #1A1650;
+}
+
+#Report #Request #PatientTabs table tr.child {
+    background: #d8d6d6;
+    font-size: 9px;
+}
+
+#Report #Request #PatientTabs table tr.child td {
+    padding: 3px;
+    color: black;
+}
+
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo3 {
+    display: block;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo3 .sections {
+    display: block;
+    padding: 8px 10px 8px 20px;
+    margin: 5px 0px 5px 0px;
+    background-color: #F3E7BC;
+    /* background-image: url(../Images/buttons/benefit_bg.png); */
+    background-position: 0px 0px;
+    background-repeat: no-repeat;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo3 .active {
+    background-position: 0px -37px;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo3 li {
+    display: inline;
+    background-color: transparent
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo3 li a.sections,
+#Report #Request #PatientTabs ul#PatientBenefitInfo li a.tab {
+    color: #000000;
+    text-decoration: none;
+    clear: both;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo3 li a:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo3 li a.tab {
+    margin: 0px;
+    display: block;
+    position: absolute;
+    top: 4px;
+    padding: 1px 1px 0px 1px;
+    background: #000000;
+    z-index: 2;
+    color: #000000;
+    text-decoration: none;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo3 li strong.childtab {
+    background: #E6E6E6;
+    padding: 10px;
+    display: block;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo3 li a#tab_patientinfo3 {
+    left: 10px;
+    width: 130px;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo3 li a#tab_benefitinformation3 {
+    left: 144px;
+    width: 130px;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo3 li a#tab_patientinfo3.selected strong,
+#Report #Request #PatientTabs ul#PatientBenefitInfo3 li a#tab_benefitinformation3.selected strong {
+    padding-bottom: 11px;
+    background: #FFFFFF;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo3 li div.panel {
+    background: #FFFFFF;
+    position: relative;
+    z-index: 1;
+    margin: 0px 10px 10px 10px;
+    padding: 10px;
+    border: solid 1px #000000;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo3 li div.panel div {
+    padding-left: 10px;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo3 li div.panel dl {
+    width: 599px;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo3 li div.panel dl dt {
+    display: block;
+    float: left;
+    width: 215px;
+    font-weight: bold;
+}
+
+#Report #Request #PatientTabs ul#PatientBenefitInfo3 li div.panel dl dd {
+    display: block;
+}
+
+/* End Demo Tab3 */
+/*Web Permissions*/
+#Report #AdminProfile {
+    background: #ebf7fa;
+    padding: 15px;
+    width: auto;
+    margin: 10px 10px 0px 10px;
+}
+
+#Report #AdminProfile h4 {
+    font-size: 23px;
+    display: block;
+    float: left;
+    margin: 5px 0px 5px 0px;
+}
+
+#Report #AdminProfile p {
+    font-size: 12px;
+}
+
+#Report #AdminProfile a.blue {
+    color: #1B75BC;
+    text-decoration: none;
+}
+
+#Report #AdminProfile a.red {
+    color: #ED1B52;
+    text-decoration: none;
+    display: block;
+    float: left;
+    height: 20px;
+    padding: 8px 0px 0px 15px;
+}
+
+#Report .AddManage {
+    border-bottom: 1px solid #CCCCCC;
+    margin: 10px 10px 0px 10px;
+}
+
+#Report .AddManage a {
+    display: block;
+    width: 151px;
+    height: 40px;
+    float: left;
+}
+
+#Report .AddManage a.manageUsers {
+    /* background-image: url(../Images/buttons/manage_Users.gif); */
+}
+
+#Report .AddManage a.addUser {
+    /* background-image: url(../Images/buttons/add_user.gif); */
+}
+
+#Report .AddManage a.manageSets {
+    /* background-image: url(../Images/buttons/manage_sets.gif); */
+}
+
+#Report .AddManage a.addSet {
+    /* background-image: url(../Images/buttons/add_set.gif); */
+}
+
+#Report .AddManage a.manageBundles {
+    /* background-image: url(../Images/buttons/manage_bundles.gif); */
+}
+
+#Report #UserList {
+    background: #F3E7BC;
+    padding: 15px 15px 15px 30px;
+    margin: 10px 10px 0px 10px;
+}
+
+#Report #UserList table {
+    margin-bottom: 10px;
+}
+
+#Report #UserList td {
+    padding: 5px 35px 5px 0px;
+    font-size: 14px;
+}
+
+#Report #UserList tr.inactiveUsers {
+    color: #FF0000;
+    font-size: 14px;
+}
+
+#Report #UserList tr.inactiveUsers td {
+    padding: 5px 35px 5px 0px;
+}
+
+#Report #UserList a {
+    color: #1B75BC;
+    text-decoration: none;
+}
+
+#Report #SetList {
+    background: #f5f8d5;
+    padding: 15px 15px 15px 30px;
+    margin: 10px 10px 0px 10px;
+}
+
+#Report #SetList td {
+    padding: 5px 35px 5px 0px;
+    font-size: 14px;
+}
+
+#Report #SetList a {
+    color: #1B75BC;
+    text-decoration: none;
+}
+
+#Report #Steps {
+    clear: both;
+    padding: 15px 15px 10px 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+#Report #Steps h3 {
+    float: left;
+    display: block;
+    /* background: url(../Images/buttons/green_plus.gif) no-repeat; */
+    margin: 0px;
+    padding: 0px 0px 0px 30px;
+}
+
+#Report #Steps p {
+    float: right;
+    display: block;
+    color: #999999;
+    font-size: 18px;
+    font-weight: bold;
+    clear: none;
+    margin: 0px 10px 0px 0px;
+}
+
+#Report #Steps input {
+    margin: 0px 0px 0px 100px;
+}
+
+#Report #Editee {
+    height: 30px;
+    border-bottom: solid 1px #000000;
+    margin: 15px 10px 0px 10px;
+}
+
+#Report #Editee h3 {
+    display: block;
+    float: left;
+    padding: 0px;
+    margin: 0px 15px 0px 0px;
+}
+
+#Report #Editee p {
+    display: block;
+    float: left;
+    clear: none;
+    color: #FF0000;
+    margin: 0px 15px 0px 0px;
+}
+
+#Report #Editee input {
+    display: block;
+    float: left;
+    margin: 3px 5px 0px 0px;
+}
+
+/*Tabs */
+#Report #PermissionsEdit {
+    position: relative;
+    padding-top: 67px;
+}
+
+#Report #PermissionsEdit ul#Permissions li {
+    display: inline;
+}
+
+#Report #PermissionsEdit ul#Permissions li a {
+    color: #000000;
+    text-decoration: none;
+}
+
+#Report #PermissionsEdit ul#Permissions li a:hover {
+    cursor: pointer;
+}
+
+#Report #PermissionsEdit ul#Permissions li a.tab {
+    margin: 0px;
+    display: block;
+    position: absolute;
+    top: 4px;
+    padding: 1px 1px 0px 1px;
+    background: #000000;
+    z-index: 2;
+}
+
+#Report #PermissionsEdit ul#Permissions li strong.childtab {
+    background: #E6E6E6;
+    padding: 10px 10px 11px 10px;
+    display: block;
+}
+
+#Report #PermissionsEdit ul#Permissions li a#tab_toolpermissions {
+    left: 10px;
+    width: 130px;
+    display: block;
+    text-align: center;
+}
+
+#Report #PermissionsEdit ul#Permissions li a#tab_providerpermissions {
+    left: 300px;
+    width: 150px;
+    display: block;
+    text-align: center;
+}
+
+#Report #PermissionsEdit ul#Permissions li a#tab_tools_bundle {
+    left: 145px;
+    width: 150px;
+    display: block;
+    text-align: center;
+}
+
+/* MUltiSiteDropdown */
+#Report #PermissionsEdit ul#Permissions li a#tab_bundle {
+    left: 455px;
+    width: 150px;
+    display: block;
+    text-align: center;
+}
+
+/* MUltiSiteDropdown */
+#Report #PermissionsEdit ul#Permissions li a#tab_payerpermissions {
+    left: 300px;
+    width: 135px;
+    display: block;
+    text-align: center;
+}
+
+#Report #PermissionsEdit ul#Permissions li a#tab_toolpermissions.selected strong,
+#Report #PermissionsEdit ul#Permissions li a#tab_tools_bundle.selected strong,
+#Report #PermissionsEdit ul#Permissions li a#tab_bundle.selected strong,
+#Report #PermissionsEdit ul#Permissions li a#tab_providerpermissions.selected strong,
+#Report #PermissionsEdit ul#Permissions li a#tab_payerpermissions.selected strong {
+    padding: 10px 10px 12px 10px;
+    background: #FFFFFF;
+}
+
+#Report #PermissionsEdit ul#Permissions li div.panel {
+    background: #FFFFFF;
+    position: relative;
+    z-index: 1;
+    margin: 0px 50px 0px 10px;
+    padding: 20px;
+    border: solid 1px #000000;
+}
+
+#Report #PermissionsEdit ul#Permissions li div.panel select {
+    margin: 0px 0px 10px 45px;
+}
+
+#Report #PermissionsEdit ul#Permissions li div.panel input {
+    float: right;
+}
+
+#Report #PermissionsEdit ul#Permissions li div.panel li {
+    display: block;
+}
+
+#Report #PermissionsEdit ul#Permissions li div.panel ul input {
+    float: none;
+}
+
+#Report #PermissionsEdit ul#Permissions li div.panel li.indent {
+    padding: 0px 0px 0px 35px;
+}
+
+#Report #PermissionsEdit ul#Permissions li div.panel p {
+    display: block;
+    border-bottom: solid 1px #CCCCCC;
+    width: 495px;
+    padding: 0px 0px 10px 0px;
+    margin: 0px 0px 10px 0px;
+}
+
+/*End Tabs */
+
+#Report #AddUser {
+    background: #EAF6F7;
+    margin: 5px 10px 0px 10px;
+    padding: 20px;
+    clear: both;
+}
+
+#Report #AddUser hr {
+    display: block;
+    background-color: #CCCCCC;
+    color: #CCCCCC;
+    height: 1px;
+    border: none;
+}
+
+#Report #AddUser table {
+    margin: 0px auto 0px auto;
+}
+
+#Report #AddUser table td {
+    padding: 3px 50px 3px 50px;
+}
+
+#Report #AddUser button {
+    float: right;
+}
+
+#Report #AddUser p {
+    color: #ED1B52;
+}
+
+#Report #AddToolPermissions {
+    background: #D6E8B5;
+    margin: 5px 10px 0px 10px;
+    padding: 20px;
+}
+
+#Report #AddToolPermissions ul {
+    border-top: solid 1px #999999;
+    border-bottom: solid 1px #999999;
+    width: auto;
+    padding: 10px 0px 10px 45px;
+    margin: 0px 0px 5px 0px;
+}
+
+#Report #AddToolPermissions li {
+    margin: 0px auto 0px auto;
+    display: block;
+}
+
+#Report #AddToolPermissions li.indent {
+    padding: 0px 0px 0px 35px;
+}
+
+#Report #AddToolPermissions hr {
+    display: block;
+    background-color: #000000;
+    color: #000000;
+    height: 1px;
+    margin: 20px 0px 20px 0px;
+    border: none;
+}
+
+#Report #AddToolPermissions select {
+    margin-top: 20px;
+}
+
+#Report #AddToolPermissions span {
+    margin-top: 15px;
+}
+
+#Report #AddToolPermissions span span,
+#Report #AddToolPermissions span span span {
+    margin: 0px;
+}
+
+#Report #AddProviderPermissions {
+    background: #F3E7BC;
+    margin: 5px 10px 0px 10px;
+    padding: 20px;
+    clear: both;
+}
+
+#Report #AddProviderPermissions h4 {
+    font-weight: normal;
+    padding-left: 4px;
+}
+
+#Report #AddProviderPermissions a {
+    color: #ED1B52;
+    text-decoration: none;
+}
+
+#Report #AddProviderPermissions p.grey {
+    color: #4D4D4D;
+}
+
+#Report #AddProviderPermissions td {
+    padding: 4px;
+}
+
+#Report #AddProviderPermissions hr {
+    display: block;
+    height: 1px;
+    border: none;
+    width: 400px;
+    color: #c8c2a8;
+    background-color: #c8c2a8;
+    clear: both;
+}
+
+#Report #AddProviderPermissions table tr.title {
+    background-color: #cdcccc;
+}
+
+#Report #AddProviderPermissions table tr.title a {
+    color: #21205f;
+    text-decoration: underline;
+}
+
+#Report #AddProviderPermissions table tr.parent {
+    background-color: #ebebeb;
+}
+
+#Report #AddProviderPermissions table tr.child {
+    background-color: #ffffff;
+}
+
+#Report #AddProviderPermissions span {
+    margin-top: 15px;
+}
+
+#Report #AddProviderPermissions span span,
+#Report #AddProviderPermissions span span span {
+    margin: 0px;
+}
+
+#Report #AddPayerPermissions {
+    background: #F2E467;
+    margin: 5px 10px 0px 10px;
+    padding: 20px;
+}
+
+#Report #AddComplete {
+    background: #EAF6F7;
+    margin: 5px 10px 0px 10px;
+    padding: 20px;
+}
+
+#Report #AddComplete #UserComplete {
+    margin: 25px 0px 0px 150px;
+    width: 250px;
+}
+
+#Report #AddComplete #UserComplete img {
+    float: right;
+    margin: 40px 0px 0px 0px;
+}
+
+#Report #AddComplete span {
+    margin-top: 15px;
+}
+
+#Report #AddComplete span span,
+#Report #AddComplete span span span {
+    margin: 0px;
+}
+
+/*End Web Permissions*/
+
+/*****************************************/
+
+/**Color codes for rejected claims**/
+.Rejected {
+    color: #ff1919;
+}
+
+.PayerReject {
+    color: #8c198c;
+}
+
+.Forwarded {
+    color: #0033FF;
+}
+
+/** changed from FFA500 for task 34530 **/
+.Suspended {
+    color: #F78B29;
+}
+
+.Pending {
+    color: #F78B29;
+}
+
+.Accepted {
+    color: #0033FF;
+}
+
+.PaperClaims {
+    color: #009900;
+}
+
+.PayerReceived {
+    color: #0033FF;
+}
+
+.Secondary {
+    color: #000000;
+}
+
+#frmCriteria p {
+    margin-left: 0px;
+    padding-left: 0px;
+}
+
+#InsuredGender,
+#DependentGender {
+    width: 7.5em;
+}
+
+/*****************************************/
+/* For Provider List */
+#txtFilter {
+    margin: 4px;
+    border: #999999 1px solid;
+    /* -moz-border-radius: 4px; */
+    background-repeat: no-repeat;
+    background-position: 1px 1px;
+}
+
+a.iconBtn {
+    font-size: 12px;
+    font-weight: normal;
+    padding: 10px 0px 15px 32px;
+    margin-right: 5px;
+}
+
+a.iconBtn:link,
+a.iconBtn:active,
+a.iconBtn:visited {
+    text-decoration: none;
+    color: #000000;
+}
+
+a.iconBtn:hover {
+    text-decoration: none;
+    color: #990000;
+}
+
+a.cEditSign {
+    /* background: transparent url(/Images/ControlPanel/EditSign.gif) no-repeat; */
+}
+
+a.cPlusSign {
+    /* background: transparent url(/Images/ControlPanel/PlusSign.gif) no-repeat; */
+}
+
+a.cMinusSign {
+    /* background: transparent url(/Images/ControlPanel/MinusSign.gif) no-repeat; */
+}
+
+a.cXSign {
+    /* background: transparent url(/Images/ControlPanel/XSign.gif) no-repeat; */
+}
+
+a.cCheckSign {
+    /* background: transparent url(/Images/ControlPanel/CheckSign.gif) no-repeat; */
+}
+
+/* Claim Status Colors */
+.claimRejected {
+    color: red;
+}
+
+.claimPayerReject {
+    color: purple;
+}
+
+.claimPaper {
+    color: green;
+}
+
+.claimPayerStatus,
+.claimPayerRcvd {
+    color: blue;
+}
+
+.claimSecondary {
+    color: black;
+}
+
+.claimPayerSusp {
+    color: #ef8621;
+}
+
+/* font-weight:bold}  */
+.claimPendingStatus {
+    color: #ef8621;
+}
+
+.printOnly {
+    display: none;
+}
+
+.csiReportCell {
+    padding-right: 30px !important;
+    text-align: right;
+}
+
+.ErrDetails {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #385D8A;
+    font-size: 13px;
+    border-radius: 15px;
+    padding: 5px 20px 5px 15px;
+}
+
+.ErrDetails p {
+    margin: auto !important;
+    text-indent: 0in !important;
+    padding: 5px 0 !important;
+    float: none !important;
+    line-height: 12px !important;
+}
+
+.ErrDetails a span {
+    display: block;
+    color: #0033FF !important;
+}
+
+.ErrDetails ul,
+.ErrDetails ol {
+    margin: 10px !important;
+}
+
+.ErrDetails ul>li,
+.ErrDetails ol>li {
+    list-style: inherit !important;
+    padding-left: 0 !important;
+    margin-left: 30px !important;
+    line-height: 12px !important;
+}
+
+.tdPayErrCss {
+    border-style: none !important;
+    width: 50%;
+}
+
+.claimMessagesTd {
+    border-style: none;
+}
+
+.tdPayErrtable {
+    width: 100%;
+}
+
+.ErrDetailsText {
+    color: #73849E !important;
+}
+
+.ErrDetailsImg {
+    margin: 0px !important;
+}
+
+.NameAndDOB {
+    font-weight: bold;
+    padding-left: 10px;
+}
+
+.nadName {
+    font-size: 15px;
+    color: #cc6633;
+}
+
+.nadDOB {
+    color: #000000;
+}
+
+/*Tabs*/
+#Report #Request .PatientTabs {
+    position: relative;
+    padding-top: 46px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#Report #Request .PatientTabs table {
+    font-size: 10px;
+    line-height: normal;
+    color: black;
+}
+
+#Report #Request .PatientTabs table tr.parent {
+    background: #bcbbbb;
+}
+
+#Report #Request .PatientTabs table tr.parent th {
+    padding: 3px;
+    border-right: solid 1px #FFFFFF;
+    border-bottom: solid 1px #9ea0a2;
+    color: black;
+}
+
+#Report #Request .PatientTabs table tr.parent a {
+    color: #1A1650;
+}
+
+#Report #Request .PatientTabs table tr.child {
+    background: #d8d6d6;
+    font-size: 9px;
+}
+
+#Report #Request .PatientTabs table tr.child td {
+    padding: 3px;
+    color: black;
+}
+
+#Report #Request .PatientTabs ul.PatientBenefitInfo {
+    display: block;
+}
+
+#Report #Request .PatientTabs ul.PatientBenefitInfo .sections {
+    display: block;
+    padding: 8px 10px 8px 20px;
+    margin: 5px 0px 5px 0px;
+    background-color: #F3E7BC;
+    /* background-image: url(../Images/buttons/benefit_bg.png); */
+    background-position: 0px 0px;
+    background-repeat: no-repeat;
+}
+
+#Report #Request .PatientTabs ul.PatientBenefitInfo .active {
+    background-position: 0px -37px;
+}
+
+#Report #Request .PatientTabs ul.PatientBenefitInfo li {
+    display: inline;
+    background-color: transparent
+}
+
+#Report #Request .PatientTabs ul.PatientBenefitInfo li a.sections,
+#Report #Request .PatientTabs ul.PatientBenefitInfo li a.tab {
+    color: #000000;
+    text-decoration: none;
+    clear: both;
+}
+
+#Report #Request .PatientTabs ul.PatientBenefitInfo li a:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#Report #Request .PatientTabs ul.PatientBenefitInfo li a.tab {
+    margin: 0px;
+    display: block;
+    position: absolute;
+    top: 4px;
+    padding: 1px 1px 0px 1px;
+    background: #000000;
+    z-index: 2;
+    color: #000000;
+    text-decoration: none;
+}
+
+#Report #Request .PatientTabs ul.PatientBenefitInfo li strong.childtab {
+    background: #E6E6E6;
+    padding: 10px;
+    display: block;
+}
+
+#Report #Request .PatientTabs ul.PatientBenefitInfo li a.tab_patientinfo {
+    left: 10px;
+    width: 130px;
+}
+
+#Report #Request .PatientTabs ul.PatientBenefitInfo li a.tab_benefitinformation {
+    left: 144px;
+    width: 130px;
+}
+
+#Report #Request .PatientTabs ul.PatientBenefitInfo li a.tab_patientinfo.selected strong,
+#Report #Request .PatientTabs ul.PatientBenefitInfo li a.tab_benefitinformation.selected strong {
+    padding-bottom: 11px;
+    background: #FFFFFF;
+}
+
+#Report #Request .PatientTabs ul.PatientBenefitInfo li div.panel {
+    background: #FFFFFF;
+    position: relative;
+    z-index: 1;
+    margin: 0px 10px 10px 10px;
+    padding: 10px;
+    border: solid 1px #000000;
+}
+
+#Report #Request .PatientTabs ul.PatientBenefitInfo li div.panel div {
+    padding-left: 10px;
+}
+
+#Report #Request .PatientTabs ul.PatientBenefitInfo li div.panel dl {
+    width: 599px;
+}
+
+#Report #Request .PatientTabs ul.PatientBenefitInfo li div.panel dl dt {
+    display: block;
+    float: left;
+    width: 215px;
+    font-weight: bold;
+    color: black;
+}
+
+#Report #Request .PatientTabs ul.PatientBenefitInfo li div.panel dl dd {
+    display: block;
+    color: black;
+}
+
+/*End Tabs*/
+
+#Report .PatientInfo {
+    float: left;
+    width: 100%;
+}
+
+#Report #Request .BasicProfile {
+    padding: 20px 10px 10px 10px;
+}
+
+#Report #Request .BasicProfile h3 {
+    margin: 0px 0px 15px 0px;
+}
+
+#Report #Request .BasicProfile dl {
+    display: block;
+    width: 100%;
+}
+
+#Report #Request .BasicProfile dl dt {
+    float: left;
+    margin-right: 30px;
+    clear: both;
+    width: 25%;
+}
+
+#Report #Request .BasicProfile dl dt#PatientName {
+    font-size: 16px;
+    font-weight: bold;
+    color: #CB713F;
+    float: none;
+    width: auto;
+}
+
+#Report #Request .BasicProfile dl dd h4 {
+    margin: 0px 0px 20px 0px;
+    padding: 0px;
+    font-size: 14px;
+    float: none;
+}
+
+#Report .label {
+    background-color: white;
+    font-weight: bold;
+    color: #000;
+}
+
+#Report th {
+    margin: 0;
+    padding: 0;
+}
+
+#Report label {
+    margin: 0;
+    padding: 0;
+}
+
+#Report {
+    color: #000;
+}
+
+#Report p {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: #000;
+    clear: both;
+}
+
+span.label {
+    font-size: 0.9em;
+    line-height: 1.3em;
+    margin: 0;
+    padding: 0;
+}
+
+#Report {
+    font: 100.01%/130% Arial, Helvetica, sans-serif;
+    color: #000;
+}
+
+td {
+    display: table-cell !important;
+    vertical-align: inherit !important;
+}
+
+.TotalsTable td {
+    text-align: center;
+}
+
+.TotalsTable td.label {
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.9em;
+}

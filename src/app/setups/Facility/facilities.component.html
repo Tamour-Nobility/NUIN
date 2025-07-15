@@ -1,0 +1,333 @@
+<div class="ibox-title">
+    <h5><i class="fa fa-university"></i>&nbsp;Facilities</h5>
+    <div class="ibox-tools">
+        <a class="link" (click)="EnableDisableFacilityElements('New')" [hidden]="showHideFacilityElements">
+            <i class="fa fa-plus"></i>&nbsp;Add New Facility
+        </a>
+    </div>
+</div>
+<div class="ibox-content">
+    <!-- Facility Search -->
+    <div *ngIf="!showHideFacilityElements">
+        <div class="row">
+            <!-- Practice Field -->
+            <div class="col-md-3 mb-3 form-group">
+                <label class="control-label">Practice</label>
+                <ngx-select [disabled]="facilityName !== 'Self'" [(ngModel)]="searchCriteria.Response.PracticeCode"
+                    (blur)="onPracticeChange()" [items]="loggedInUser.Practices" optionTextField="PracticeLabel"
+                    placeholder="Select Practice" [allowClear]="false">
+                </ngx-select>
+
+                <!-- Display a placeholder when facilityName !== 'Claim' -->
+                <!-- <option value=0 disabled selected>Select Practice</option> -->
+
+                <!-- Dynamically populate practices -->
+                <!-- <option *ngFor="let p of loggedInUser.Practices" [value]="p.PracticeCode">
+                        {{ p.PracticeCode }} | {{ p.PracticeName }}
+                    </option> -->
+
+
+                <!-- <select disabled="facilityName !== 'Claim'" class="form-control" formControlName="practice" (change)="onPracticeChange($event)">
+          <option value=""  disabled selected>Select Practice</option>
+          <option *ngFor="let p of loggedInUser.Practices" [value]="p.PracticeCode">
+            {{p.PracticeCode}}|{{p.PracticeName}}</option>
+                </select>  -->
+            </div>
+            <div class="col-md-3 mb-3 form-group">
+                <label class="control-label">Code</label>
+                <input type="text" placeholder="Enter Code" class="form-control" id="Code"
+                    [(ngModel)]="searchCriteria.Response.FacilityCode" maxlength="50"
+                    onkeypress="return(event.charCode >= 48 && event.charCode <= 57) || (event.keyCode == 8) || (event.keyCode == 9) || (event.keyCode == 16) || (event.keyCode == 37) || (event.keyCode == 39) || (event.keyCode == 46)"
+                    (keydown)="searchFacility($event)">
+            </div>
+            <div class="col-md-3 mb-3 form-group">
+                <label class="control-label">Name</label>
+                <input type="text" placeholder="Enter Name" class="form-control"
+                    [(ngModel)]="searchCriteria.Response.FacilityName" maxlength="50" id="Facility_Name"
+                    (keydown)="searchFacility($event)">
+            </div>
+            <div class="col-md-3 mb-3 form-group">
+                <label class="control-label">Type</label>
+                <select class="form-control" [(ngModel)]="searchCriteria.Response.FacilityType" id="Faci_Type">
+                    <option value=0 disabled>Select Type</option>
+                    <option value="Adult day care facility">Adult day care facility</option>
+                    <option value="AL Alternative case facility">AL Alternative case facility</option>
+                    <option value="Ambulance/Air Transporation">Ambulance/Air Transporation</option>
+                    <option value="Ambulatory Surgical Center">Ambulatory Surgical Center</option>
+                    <option value="Assisted Living Facility">Assisted Living Facility</option>
+                    <option value="Dialysis Center">Dialysis Center</option>
+                    <option value="Durable Medical Equipment">Durable Medical Equipment</option>
+                    <option value="Group Home">Group Home</option>
+                    <option value="Hearing Services">Hearing Services</option>
+                    <option value="Home Healthcare">Home Healthcare</option>
+                    <option value="Hospice">Hospice</option>
+                    <option value="Hospital">Hospital</option>
+                    <option value="Imaging service/cat scans, Mri Only">Imaging service/cat scans, Mri
+                        Only</option>
+                    <option value="Infusion Therapy">Infusion Therapy</option>
+                    <option value="Laboratory Services">Laboratory Services</option>
+                    <option value="Medical/Rural health clinic">Medical/Rural health clinic</option>
+                    <option value="Mental health and substance abuse">Mental health and substance abuse
+                    </option>
+                    <option value="Nursing Home">Nursing Home</option>
+                    <option value="Occupational Medicine">Occupational Medicine</option>
+                    <option value="Office">Office</option>
+                    <option value="Orthotics and Prosthetics">Orthotics and Prosthetics</option>
+                    <option value="Pain Management">Pain Management</option>
+                    <option value="Physical Therapy">Physical Therapy</option>
+                    <option value="Radiology/Imaging/Mamography">Radiology/Imaging/Mamography</option>
+                    <option value="Rehabilition Services">Rehabilition Services</option>
+                    <option value="Skilled Nursing Facility">Skilled Nursing Facility</option>
+                    <option value="Skilled Nursing Home">Skilled Nursing Home</option>
+                    <option value="Sleep Disorder Programs">Sleep Disorder Programs</option>
+                    <option value="Speciality Diagnosis Services">Speciality Diagnosis Services</option>
+                    <option value="Urgent / Emergency Care">Urgent / Emergency Care</option>
+                    <option value="Outpatient Services">Outpatient Services</option>
+
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 mb-3 form-group">
+                <label class="control-label">NPI</label>
+                <input type="text" placeholder="Enter NPI" class="form-control"
+                    [(ngModel)]="searchCriteria.Response.NPI" maxlength="10" (keydown)="searchFacility($event)">
+            </div>
+            <div class="col-md-3 mb-3 form-group">
+                <label class="control-label">ZIP</label>
+                <input type="text" [(ngModel)]="searchCriteria.Response.ZIP" maxlength="10" #FaciHomeZIPP
+                    placeholder="Enter ZIP Code"
+                    onkeypress="return(event.charCode >= 48 && event.charCode <= 57) || (event.keyCode == 8) || (event.keyCode == 9) || (event.keyCode == 16) || (event.keyCode == 37) || (event.keyCode == 39) || (event.keyCode == 46)"
+                    class="form-control" (keydown)="searchFacility($event)" mask="00000-0000">
+            </div>
+            <div class="col-md-3 mb-3 form-group">
+                <label class="control-label">City</label>
+                <input type="text" class="form-control" [(ngModel)]="searchCriteria.Response.City" maxlength="100"
+                    placeholder="Enter City">
+            </div>
+            <div class="col-md-3 mb-3 form-group">
+                <label class="control-label">State</label>
+                <input type="text" [(ngModel)]="searchCriteria.Response.State" maxlength="2" class="form-control"
+                    style="text-transform:uppercase" (keydown)="searchFacility($event)" placeholder="Enter State">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 mb-3 form-group">
+                <label class="control-label">Phone</label>
+                <input type="text" onpaste="return false"
+                    onkeypress="return(event.charCode >= 48 && event.charCode <= 57) || (event.keyCode == 8) || (event.keyCode == 9) || (event.keyCode == 16) || (event.keyCode == 37) || (event.keyCode == 39) || (event.keyCode == 46)"
+                    [(ngModel)]="searchCriteria.Response.Phone" maxlength="14" #FaciHomePhoneee class="form-control"
+                    (keydown)="searchFacility($event)" mask="(000) 000-0000" placeholder="Enter Phone">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <button class="btn btn-primary btn-sm pull-right" type="submit"
+                    (click)="getFacilities('true')">Search</button>
+                <button class="btn btn-default btn-sm pull-right" (click)="ClearSearchFields()"
+                    type="submit">Clear</button>
+            </div>
+        </div>
+    </div>
+    <!-- Facility Search End-->
+
+    <!-- Add Edit Facility -->
+    <div *ngIf="showHideFacilityElements">
+        <!-- <legend>{{FacilityMode}}</legend> -->
+        <div class="row">
+            <!-- Practice Field -->
+            <div class="col-md-3 mb-3form-group">
+                <label class="control-label">Practice<span class="text-danger">*</span></label>
+                <!-- <select disabled="facilityName === 'Claim'" class="form-control" formControlName="practice" (change)="onPracticeChange($event)">
+          <option value=""  disabled selected>{{facilityName === 'Claim' ? loggedInUser.selectedPractice}}Select Practice</option>
+          <option *ngFor="let p of loggedInUser.Practices" [value]="p.PracticeCode">
+            {{p.PracticeCode}}|{{p.PracticeName}}</option>
+                </select>  -->
+                <ngx-select [disabled]="facilityName !== 'Self'" [(ngModel)]="searchCriteria.Response.PracticeCode"
+                    (blur)="onPracticeChange()" [items]="loggedInUser.Practices" optionTextField="PracticeLabel"
+                    placeholder="Select Practice" [allowClear]="false">
+                </ngx-select>
+
+
+
+
+
+
+
+            </div>
+            <div class="col-md-3 mb-3 form-group">
+                <label class="control-label">Code</label>
+                <input type="text" placeholder="" class="form-control" maxlength="5" onpaste="return false"
+                    [(ngModel)]="saveFacilityModel.Response.Facility_Code" disabled
+                    onkeypress="return(event.charCode >= 48 && event.charCode <= 57) || (event.keyCode == 8) || (event.keyCode == 9) || (event.keyCode == 16) || (event.keyCode == 37) || (event.keyCode == 39) || (event.keyCode == 46)">
+            </div>
+            <div class="col-md-3 mb-3 form-group">
+                <label class="control-label">Name<span class="text-danger">*</span></label>
+                <input type="text" placeholder="" class="form-control" maxlength="50"
+                    [(ngModel)]="saveFacilityModel.Response.Facility_Name" id="saveFaciNameID"
+                    oninput="this.value = this.value.replace(/[^A-Za-z0-9 .&,-]|^ /g,'')" />
+            </div>
+            <div class="col-md-3 mb-3 form-group">
+                <label class="control-label">Type<span class="text-danger">*</span></label>
+                <select class="form-control" [(ngModel)]="saveFacilityModel.Response.Facility_Type" id="Faci_Type_Save">
+                    <option value=""></option>
+                    <option value="Adult day care facility">Adult day care facility</option>
+                    <option value="AL Alternative case facility">AL Alternative case facility</option>
+                    <option value="Ambulance/Air Transporation">Ambulance/Air Transporation</option>
+                    <option value="Ambulatory Surgical Center">Ambulatory Surgical Center</option>
+                    <option value="Assisted Living Facility">Assisted Living Facility</option>
+                    <option value="Dialysis Center">Dialysis Center</option>
+                    <option value="Durable Medical Equipment">Durable Medical Equipment</option>
+                    <option value="Group Home">Group Home</option>
+                    <option value="Hearing Services">Hearing Services</option>
+                    <option value="Home Healthcare">Home Healthcare</option>
+                    <option value="Hospice">Hospice</option>
+                    <option value="Hospital">Hospital</option>
+                    <option value="Imaging service/cat scans, Mri Only">Imaging service/cat scans, Mri
+                        Only
+                    </option>
+                    <option value="Infusion Therapy">Infusion Therapy</option>
+                    <option value="Laboratory Services">Laboratory Services</option>
+                    <option value="Medical/Rural health clinic">Medical/Rural health clinic</option>
+                    <option value="Mental health and substance abuse">Mental health and substance abuse
+                    </option>
+                    <option value="Nursing Home">Nursing Home</option>
+                    <option value="Occupational Medicine">Occupational Medicine</option>
+                    <option value="Office">Office</option>
+                    <option value="Orthotics and Prosthetics">Orthotics and Prosthetics</option>
+                    <option value="Pain Management">Pain Management</option>
+                    <option value="Physical Therapy">Physical Therapy</option>
+                    <option value="Radiology/Imaging/Mamography">Radiology/Imaging/Mamography</option>
+                    <option value="Rehabilition Services">Rehabilition Services</option>
+                    <option value="Skilled Nursing Facility">Skilled Nursing Facility</option>
+                    <option value="Skilled Nursing Home">Skilled Nursing Home</option>
+                    <option value="Sleep Disorder Programs">Sleep Disorder Programs</option>
+                    <option value="Speciality Diagnosis Services">Speciality Diagnosis Services</option>
+                    <option value="Urgent / Emergency Care">Urgent / Emergency Care</option>
+                    <option value="Outpatient Services">Outpatient Services</option>
+
+                </select>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-3 mb-3 form-group">
+                <label class="control-label">Address<span class="text-danger">*</span></label>
+                <input type="text" placeholder="" class="form-control" maxlength="200"
+                    [(ngModel)]="saveFacilityModel.Response.Facility_Address" id="Address_NEW">
+            </div>
+
+            <div class="col-md-3 mb-3 form-group">
+                <label class="control-label">ZIP<span class="text-danger">*</span></label>
+                <input type="text" [(ngModel)]="saveFacilityModel.Response.Facility_ZIP" maxlength="10" #FaciHomeZIP
+                    (blur)="GetCityState(saveFacilityModel.Response.Facility_ZIP)" id="ZIP_Save"
+                    onkeypress="return(event.charCode >= 48 && event.charCode <= 57) || (event.keyCode == 8) || (event.keyCode == 9) || (event.keyCode == 16) || (event.keyCode == 37) || (event.keyCode == 39) || (event.keyCode == 46)"
+                    class="form-control" mask="00000-0000">
+            </div>
+
+            <div class="col-md-3 mb-3 form-group">
+                <label for="city" class="pl0 pr0 control-label">City<span class="text-danger">*</span></label>
+                <select id="city" class="form-control" name="city"
+                    [(ngModel)]="saveFacilityModel.Response.Facility_City">
+                    <option [ngValue]="null">Select City</option>
+                    <option *ngFor="let city of zipFacilityData" [value]="city.CityName">
+                        {{city.CityName | titlecase}}
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3 mb-3 form-group">
+                <label class="control-label">State</label>
+                <input type="text" placeholder="" style="text-transform:uppercase" class="form-control" maxlength="2"
+                    [(ngModel)]="saveFacilityModel.Response.Facility_State" disabled>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-3 mb-3 form-group">
+                <label class="control-label">Phone</label>
+                <input type="text" class="form-control"
+                    onkeypress="return(event.charCode >= 48 && event.charCode <= 57) || (event.keyCode == 8) || (event.keyCode == 9) || (event.keyCode == 16) || (event.keyCode == 37) || (event.keyCode == 39) || (event.keyCode == 46)"
+                    mask="(000) 000-0000" maxlength="14" #FaciHomePhone
+                    [(ngModel)]="saveFacilityModel.Response.Facility_Phone" id="Faci_phone" maxlength="14">
+            </div>
+            <div class="col-md-3 mb-3 form-group">
+                <label class="control-label">NPI <span class="text-danger">*</span></label>
+                <input type="text" placeholder="" class="form-control" maxlength="10"
+                    [(ngModel)]="saveFacilityModel.Response.NPI"
+                    onkeypress="return(event.charCode >= 48 && event.charCode <= 57) || (event.keyCode == 8) || (event.keyCode == 9) || (event.keyCode == 16) || (event.keyCode == 37) || (event.keyCode == 39) || (event.keyCode == 46)">
+            </div>
+            <div class="col-md-3 mb-3 form-group">
+                <label class="control-label">Contact Name</label>
+                <input type="text" class="form-control" placeholder="" maxlength="50"
+                    [(ngModel)]="saveFacilityModel.Response.Facility_Contact_Name">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <button type="button" class="btn btn-primary btn-sm pull-right" (click)="SaveData()"
+                    id="btnsave">Save</button>
+                <button type="button" class="btn btn-default btn-sm pull-right"
+                    (click)="EnableDisableFacilityElements('Cancel')">Cancel</button>
+                <button type="button" (click)="EnableDisableFacilityElements('Modify')" [hidden]="true">Open
+                    Modal</button>
+            </div>
+        </div>
+    </div>
+    <!-- Add Edit Facility End-->
+
+    <!-- Facility Table -->
+    <div class="row">
+        <div class="col-lg-12 pt-20" *ngIf="!showHideFacilityElements && isSearchInitiated">
+            <table class="table table-striped table-hover table-bordered display nowrap dtSearchFacility" width="100%">
+                <thead id="header">
+                    <tr style="text-align:center; font-weight:bold">
+                        <th style="width: 2%;text-align:center;">Sr.</th>
+                        <th *ngIf="facilityName === 'Self'" style="text-align:center;">Practice</th>
+                        <th style="text-align:center;">Facility Code</th>
+                        <th style="text-align:center;">Facility Name</th>
+                        <!-- <th style="text-align:center;">Facility ID</th> -->
+                        <th style="text-align:center;">Facility Type</th>
+                        <th style="text-align:center;">NPI</th>
+                        <th style="text-align:center;">Address</th>
+                        <th style="text-align:center;">ZIP</th>
+                        <th style="text-align:center;">City</th>
+                        <th style="text-align:center;">State</th>
+                        <th style="text-align:center;">Phone No.</th>
+                        <th style="text-align:center;">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="row-selected" id="facilitytbl">
+                    <tr *ngFor="let p of responseFacility; let ndx=index" [class.selected]="ndx === selectedFS"
+                        (click)="SelectRow(ndx)" style="cursor:pointer;"
+                        (dblclick)="FillFacility(p.Facility_Name,p.Facility_Code)">
+                        <td style="text-align:left;">{{ndx+1}}</td>
+                        <td *ngIf="facilityName === 'Self'" style="text-align:left;">{{p.Practice_Code === null ||
+                            p.Practice_Code === 0 || p.Practice_Code === '0' ? '' : p.Practice_Code}}</td>
+                        <td style="text-align:left;" (click)="getDepositSlipClaimHistory(ndx)">
+                            {{p.Facility_Code}}</td>
+                        <td style="text-align:left;" title="{{p.Facility_Name}}">
+                            {{p.Facility_Name==null ||
+                            p.Facility_Name==""?"":p.Facility_Name.substring(0,30)+(p.Facility_Name.length>30?"...":"")}}
+                        </td>
+                        <!-- <td style="text-align:left;">{{p.facility_id_number}}</td> -->
+                        <td style="text-align:left;">{{p.Facility_Type}}</td>
+                        <td style="text-align:left">{{p.NPI}}</td>
+                        <td title="{{p.FACILITY_ADDRESS}}">
+                            {{p.Facility_Address==null ||
+                            p.Facility_Address==""?"":p.Facility_Address.substring(0,30)+(p.Facility_Address.length>30?"...":"")}}
+                        </td>
+                        <td>{{p.Facility_ZIP}}</td>
+                        <td>{{p.Facility_City}}</td>
+                        <td style="text-align:center;">{{p.Facility_State}}</td>
+                        <td style="text-align:center;">{{p.Facility_Phone}}</td>
+                        <td>
+                            <button class="btn-white btn btn-xs gridbtn" (click)="EditRow(ndx)">Edit</button>
+                            <button class="btn-danger btn btn-xs gridbtn"
+                                (click)="deleteFacility(p.Facility_Code)">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+<div class="ibox float-e-margins">
+  <div class="ibox-title">
+    <h3>User detail</h3>
+  </div>
+  <div class="ibox-content">
+    <div class="row">
+      <!-- <div class="col-sm-6 col-md-4">
+          <img src="http://placehold.it/380x500" alt="" class="img-rounded img-responsive" />
+        </div> -->
+      <div class="col-sm-6 col-md-8">
+        <h4>{{objUser.LastName+', ' | titlecase}}{{objUser.FirstName | titlecase}}</h4>
+        <small>
+          <i class="fa fa-map-marker"></i>
+          <cite title="{{objUser.Address}}">{{objUser.Address}}
+            <br /> {{objUser.City+', ' | titlecase}}
+            {{objUser.State+' ' | uppercase}} {{objUser.PostalCode | mask:'00000-0000'}}&nbsp;
+          </cite>
+        </small>
+        <p>
+          <i class="fa fa-envelope"></i><a href="mailto:{{objUser.Email}}}" target="_top">{{objUser.Email}}</a>
+          <br />
+          <i class="fa fa-building" *ngIf="objUser.CompanyName"></i>{{objUser.CompanyName}}
+          <br />
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,1 @@
+{"ast":null,"code":"export class responseFacility {\n  constructor() {\n    this.response = new Response();\n  }\n}\nexport class Response {}\nexport class saveFacilityModel {\n  constructor() {\n    this.Response = new Response();\n  }\n}","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

@@ -1,0 +1,32 @@
+.bg-title{
+    background-color: #C9E3F4;
+  }
+  .tab-content {
+    padding: 10px;
+    margin-left: 4px;
+    margin-right: 3px;
+}
+.wrapper-content {
+    padding: 20px 0px 0px;
+}
+.tabs-container .nav-tabs {
+    width: 100%;
+}
+.nav {
+    display: flex;
+    justify-content: space-around;
+}
+.d-flex{
+    display: flex;
+}
+.justify-content-between{
+    justify-content: space-between;
+}
+.text-primary {
+    color: #12A451;
+  }
+
+.dataTable tbody td {
+    border-bottom-width: 0;
+    text-align: center;
+}

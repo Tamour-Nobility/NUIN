@@ -1,0 +1,8 @@
+#printbtn
+{
+    margin-right: 5px;
+}
+.disabled-icon {
+    cursor: not-allowed;
+    opacity: 0.5; /* or any style to indicate disabled */
+  }

@@ -1,0 +1,99 @@
+<form [formGroup]="form">
+  <div class="row">
+    <div class="col-lg-3 col-md-3 form-group">
+      <label class="control-label">Payer Description</label>
+      <input type="text" id="InsDesc" maxlength="250" [(ngModel)]="searchModel.PayerDescription"
+        placeholder="Enter Payer Description" class="form-control" formControlName="payerDesc" autocomplete="off">
+    </div>
+    <div class="col-lg-3 col-md-3 form-group">
+      <label class="control-label">Insurance Name</label>
+      <input type="text" placeholder="Enter Insurance Name" maxlength="50" [(ngModel)]="searchModel.InsuranceName"
+        class="form-control" formControlName="insName" autocomplete="off">
+    </div>
+
+    <div class="col-lg-3 col-md-3 form-group">
+      <label class="control-label">Group Name</label>
+      <input type="text" placeholder="Enter Group Name" maxlength="10" id="insGroup" class="form-control"
+        formControlName="groupName" [(ngModel)]="searchModel.GroupName" autocomplete="off">
+    </div>
+    <div class="col-lg-2 col-md-2 form-group">
+      <label class="control-label">ZIP</label>
+      <input type="text" placeholder="_____-____" maxlength="10" id="zipID" [(ngModel)]="searchModel.ZIP"
+        class="form-control" formControlName="zip" mask="00000-0000" autocomplete="off">
+    </div>
+    <div class="col-lg-1 col-md-1 form-group">
+      <label class="control-label">State</label>
+      <input type="text" placeholder="Enter State" maxlength="2" onlyAlphabets="true" [(ngModel)]="searchModel.State"
+        class="form-control" formControlName="state" autocomplete="off">
+    </div>
+    <div class="col-lg-3 col-md-3 form-group">
+      <label class="control-label">City</label>
+      <input type="text" placeholder="Enter City" alphabetsWithSpace="true" maxlength="50"
+        [(ngModel)]="searchModel.City" class="form-control" formControlName="city" autocomplete="off">
+    </div>
+    <div class="col-lg-3 col-md-3 form-group">
+      <label class="control-label" for="payerId">Payer Id</label>
+      <input type="text" placeholder="Enter Payer Id" maxlength="50" class="form-control" formControlName="payerId"
+        id="payerId" [(ngModel)]="searchModel.PayerId" autocomplete="off">
+    </div>
+    <div class="col-lg-6 form-group">
+      <label class="control-label">Insurance Address</label>
+      <input type="text" placeholder="Enter Address" maxlength="500" class="form-control" formControlName="address"
+        id="InsAddress" [(ngModel)]="searchModel.InsuranceAddress" autocomplete="off">
+    </div>
+  </div>
+  <div class="pull-right">
+    <button class="btn btn-sm btn-default" (click)="clearForm()" type="reset">Clear</button>
+    <button class="btn btn-sm btn-primary" type="submit" (click)="searchInsurance()">Search</button>
+  </div>
+</form>
+
+<div class="row">
+  <div class="col-lg-12 pt-20">
+    <div *ngIf="(insurances && insurances.length>0) || isSearchInitiated">
+      <table class="table table-striped table-hover table-bordered PISearchInsurace" cellspacing="0">
+        <thead>
+          <tr>
+            <!-- <th>Sr.</th> -->
+            <th>Group Name</th>
+            <th>Payer Name</th>
+            <th>Payer Id</th>
+            <th> Insurance Name</th>
+            <th>Address</th>
+            <th>ZIP</th>
+            <th>City</th>
+            <th>Insurance State</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody class="row-selected">
+          <tr *ngFor="let p of insurances let ndx=index;" [class.selected]="ndx === selectedInsName"
+            (dblclick)="onDblClickInsurance(p)">
+            <!-- <td>{{ndx+1}}</td> -->
+            <td>{{p.Insgroup_Name}}</td>
+            <td>{{p.Inspayer_Description | titlecase}}</td>
+            <td>{{p.Inspayer_Id}}</td>
+            <td>{{p.Insname_Description | titlecase}}</td>
+            <td>
+              {{p.Insurance_Address | titlecase}}
+            </td>
+            <td>
+              {{p.Insurance_Zip | mask:'00000-0000'}}
+            </td>
+            <td>
+              {{p.Insurance_City | titlecase}}
+            </td>
+            <td>
+              {{p.Insurance_State+' ' |
+              uppercase}}
+            </td>
+            <!-- <td  >
+              {{p.InsPayerID}}
+            </td> -->
+            <td><button class="btn btn-sm btn-primary" (click)="mapPayer(p)">Map</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,314 @@
+<!-- <div class="row main-form-bg">
+    <div class="ibox-content" id="manageForms">
+        <div class="row wrapper border-bottom white-bg page-heading" style="padding-bottom:2px;vertical-align:middle;background-color: #12a451;">
+            <div class="col-lg-9">
+                <h2 style="color:white; ">Deposit Slip</h2>
+            </div>
+        </div>
+        <div class="form-group col-md-12  right-full row">
+            <div class="col-smd-6 text-right m-t-md pl0">
+                <button class="btn btn-success" type="button" (click)="showNewDS()" id="btnAddEditPractice"  title="">
+                    <i class="fa fa-plus pull-left" style="padding-top: 3px;"></i>New DepositSlip</button>
+                    <button class="btn btn-danger" type="button" (click)="DSCancel()" id="btnAddEditPractice"  title="" [hidden]="!isCancel">
+                            <i class="fa fa  pull-left " style="padding-top: 3px;"></i>Cancel</button>
+                            <button class="btn btn-success" type="button" (click)="showNewDS()" id="btnAddEditPractice"  title="">
+                                    <i class="fa fa pull-left" style="padding-top: 3px;"></i>Save</button>
+            </div>
+        </div>
+        <div class="hr-line-solid left-full"></div>
+        <div style="margin: auto; margin-bottom: 50px;">
+      <div id="deposit-slip-stab" class="tab-pane active" role="tabpanel">
+          <div class="clearfix"></div>
+          <div class="content-scroll">
+              <div class="row margin-b15" [hidden]="isNewDS">
+                  <div class="col-md-12">
+                          <legend>Search Criteria</legend>
+                          <div class="form-group">
+                              <div class="btn-group btn-switch" data-toggle="buttons">
+                                  <div class="btn btn-default btn-sm active" (click)="ShowHideSearch('Date')">
+                                      <input type="radio" name="select_date-0" id="select_date-0" autocomplete="off" checked="">
+                                      By Date
+                                  </div>
+                                  <div class="btn btn-default btn-sm" (click)="ShowHideSearch('Method')">
+                                      <input type="radio" name="select_method-1" id="select_method-1" autocomplete="off">
+                                      By Method
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="clearfix"></div>
+                          <div class="row">
+                                  <div class="col-md-3 form-group" >
+                                      <div class="form-group">
+                                      <label class="control-label">Date Type</label>
+                                      <select class="form-control" [disabled]="!DateMethodSearch"  id="dType">
+                                          <option value="0">Check Date</option>
+                                          <option value="1">Batch Date</option>
+                                          <option value="2">Entry Date</option>
+                                      </select>
+                                  </div>
+                                </div>
+                                  <div class="col-md-2 form-group" >
+                                      <div class="form-group">
+                                      <label class="control-label">Time Frame</label>
+                                      <select class="form-control" id="TFrame" [(ngModel)]="dsSearchModel.Response.TimeFrame">
+                                          <option value="0">Daily Report</option>
+                                          <option value="1">Month to Date</option>
+                                          <option value="2">Last 30 Days</option>
+                                          <option value="3">Last Month</option>
+                                          <option value="4">Year to Date</option>
+                                          <option value="5">Last Year</option>
+                                          <option value="6">Date Range</option>
+                                      </select>
+                                  </div>
+                                </div>
+                                  <div class="col-md-2 form-group" >
+                                      <div class="form-group">
+                                      <label class="control-label">From</label>
+                                          <my-date-picker id="dateFrom" [selDate]="from_date" [options]="myDatePickerOptions"></my-date-picker>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-2 form-group" >
+                                      <div class="form-group">
+                                          <label class="control-label">From</label>
+                                          <my-date-picker id="dateFrom" [selDate]="from_date"  [options]="myDatePickerOptions"></my-date-picker>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row">
+                                    <div class="col-md-3 form-group" >
+                                        <div class="form-group">
+                                        <label class="control-label">Method</label>
+                                        <select class="form-control"  id="dsMethod">
+                                                <option value="Check">Check #</option>
+                                                <option value="Batch">Batch #</option>
+                                                <option value="DepositSlipID">Deposit Slip ID</option>
+                                            </select>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-2 form-group" >
+                                        <div class="form-group">
+                                                <label class="control-label"> Detail  </label>
+                                                <input type="search" class="form-control" placeholder="" [(ngModel)]="dsSearchModel.Response.Method">
+                                    </div>
+                                  </div>
+                                </div>
+                              <div class="row">
+                              <div class="col-lg-12 col-md-12 text-right">
+                                  <button type="button" class="btn btn-sm btn-blue" (click)="getDWCDeposit('true')">Search</button>
+                              </div>
+                          </div>
+                  </div>
+              </div>
+
+              <fieldset class="margin-b15" [hidden]="!isNewDS">
+                  <legend>New Deposit Slip</legend>
+                  <div class="row">
+                        <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="form-group">
+                                    <label class="control-label">Check/Filing Date</label>
+                                    <my-date-picker id="dateFrom" [selDate]="from_date"  [options]="myDatePickerOptions"></my-date-picker>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-md-3 col-lg-3">
+                            <div class="form-group">
+                            <label class="control-label">Payment Source<sup class="text-danger">*</sup></label>
+                            <select class="form-control" (blur)="onBlurPS()" (focus)="onFocusPS()" id="paySource" [(ngModel)]="dSModel.Response.PAY_SOURCE">
+                              <option value=""></option>
+                              <option value="1">1- IOU CASH REGISTER</option>
+                              <option value="2">2- SUPERBILL</option>
+                              <option value="3">3- AMAZING CHARTS</option>
+                              <option value="4">4- EOB FROM PROVIDER</option>
+                              <option value="5">5- ERA-PAYMENT</option>
+                              <option value="6">6- ERA-REJECTED</option>
+                              <option value="7">7- ERA-UNMATCHED</option>
+                              <option value="8">8- WEBCASE</option>
+                              <option value="9">9- CALL RESULT</option>
+                              <option value="10">10- WEBSITE</option>
+                              <option value="11">11- ARU</option>
+                              <option value="12">12-RECIFICATION</option>
+                              <option value="13">13- NCO</option>
+                              <option value="14">14- PTL FEEDBACK</option>
+                              <option value="15">15- SPECIAL INSTRUCTION</option>
+                              <option value="16">16- REAL TIME CLAIM STATUS</option>
+                              <option value="17">17- PATIENT CALL</option>
+                              <option value="18">18- PATIENT PAYMENT</option>
+                              <option value="19">19- MEDICAID SECONDARY</option>
+                              <option value="20">20- IOU POLICY</option>
+                              <option value="21">21- FAX</option>
+                              <option value="22">22- CCI EDITS</option>
+                              <option value="23">23- PROVIDER INSTRUCTIONS ON SSC</option>
+                              <option value="24">24- PATIENT CREDIT</option>
+                              <option value="25">25- ESTIMATED CAPITATION</option>
+                              <option value="26">26- EMAIL </option>
+                              <option value="27">27- WEBPT</option>
+                              <option value="28">28- EMR NOTES</option>
+                              <option value="29">29- SIGN IN SHEET</option>
+                              <option value="30">30- PHRESSIA</option>
+                              <option value="31">31- INSURANCE LETTER</option>
+                              <option value="32">32- STERN ASSOCIATES</option>
+                              <option value="33">33- EOB FROM WEBSITE</option>
+                              <option value="34">34- STATE LAW</option>
+                              <option value="35">35- KPI REJECTION</option>
+                              <option value="36">36- CRITERION</option>
+                              <option value="37">37- PROVIDER REMARKS</option>
+                              <option value="38">38- REAL TIME ELIGIBILITY</option>
+                              <option value="39">39- CAPITATION</option>
+                              <option value="40">40- PATIENT PAID IN OFFICE</option>
+                              <option value="41">41- THEOS</option>
+                              <option value="42">42- DECEASED PATIENT</option>
+                              <option value="43">43- PATIENT PAID AT THE TIME OF VISIT</option>
+                              <option value="44">44- PATIENT PAID AFTER GETTING STATEMENT</option>
+                              <option value="45">45- PROVIDER ADJUSTMENT</option>
+                              <option value="46">46- PRIVATE PAY</option>
+                              <option value="47">47- INTERFACE</option>
+                          </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                            <div class="form-group">
+                          <label class="control-label">Payment Type</label>
+                          <select class="form-control" (blur)="onBlurPT()" (focus)="onFocusPT()" id="pmtType" [(ngModel)]="dSModel.Response.PAYMENT_TYPE">
+                              <option value="" selected></option>
+                              <option value="EOB">EOB</option>
+                              <option value="ERA">ERA</option>
+                              <option value="Ref">REFUND</option>
+                              <option value="EandR">EOB AND REFUND</option>
+                              <option value="Oth">OTHER</option>
+                              <option value="Pat">PATIENT</option>
+                              <option value="Cop">COPAY</option>
+                          </select>
+                      </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                            <div class="form-group">
+                          <label class="control-label">Pmt. Method<sup class="text-danger">*</sup></label>
+                          <select class="form-control" id="payMethod" (blur)="onBlurPM()" (focus)="onFocusPM()" [(ngModel)]="dSModel.Response.Payment_Method" (change)="PaymentMethod()">
+                              <option value="" selected></option>
+                              <option value="C">C-Cash</option>
+                              <option value="K">K-Check</option>
+                              <option value="R">R-Credit Card</option>
+                              <option value="O">O-OTHER</option>
+                          </select>
+                      </div>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="form-group">
+                          <label class="control-label" >Check/CC No.<sup class="text-danger">**</sup></label>
+                          <input type="text" placeholder="" id="chkNo" class="form-control" [(ngModel)]="dSModel.Response.check_No" [disabled]="!enableDisablePaymentMethod" maxlength="50" onpaste="return false">
+                      </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                            <div class="form-group">
+                            <label class="control-label">Insurance Name</label>
+                              <input class="form-control pull-left w-100" placeholder="" disabled>
+                      </div>
+                    </div>
+                    <div class="col-sm-3 col-md-2 col-lg-2">
+                          <label class="control-label" >Batch Amt.<sup class="text-danger">*</sup></label>
+                          <input type="text" placeholder="" class="form-control" maxlength="20" id="amt" [(ngModel)]="dSModel.Response.Paid_Amount">
+                      </div>
+                      <div class="col-sm-3 col-md-1 col-lg-1">
+                          <label class="control-label">Oth. Party Amt.</label>
+                          <input type="text" placeholder="" class="form-control" id="othAmt" maxlength="20" [(ngModel)]="dSModel.Response.Paid_Amount_Other">
+                      </div>
+                      <div class="col-sm-3 col-md-3 col-lg-3">
+                            <div class="form-group">
+                                <label class="control-label">Check/Filing Date</label>
+                                <my-date-picker id="dateFrom" [selDate]="from_date"  [options]="myDatePickerOptions"></my-date-picker>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="row">
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                          <label class="control-label" for="bNo">Batch No.</label>
+                          <input type="text" placeholder="" id="bNo" class="form-control" maxlength="20" [(ngModel)]="dSModel.Response.BATCH_NO">
+
+                      </div>
+                      <div class="col-sm-3 col-md-9 col-lg-9">
+                          <label class="control-label">Notes</label>
+                          <input type="text" placeholder="" class="form-control" [(ngModel)]="dSModel.Response.NOTES" maxlength="284">
+                      </div>
+                  </div>
+              </fieldset>
+              <div class="alert alert-info cursor-pointer wb-alert w-30 margin-b10" [hidden]="!showDepositSlipTray">
+                  <a (click)="RemoveGlobalValues()" class="close" aria-label="close"> ×</a>
+                  <span class="popover-table popover-bottom" data-container="#websoft" data-popwrapper="#popover_2" rel="popover">
+                      <span class="d-inline-block margin-r5 fs-14">Check/CC No.: <b>{{globalCheckNo}}</b>,</span>
+                      <span class="d-inline-block margin-r5 fs-14">Batch Amt.: <b>{{globalChkAmt | number:'1.2-2'}}</b>,</span>
+                      <span class="d-inline-block margin-r5 fs-14">Rem. Amt.: <b>{{globalRemAmt | number:'1.2-2'}}</b></span>
+                  </span>
+              </div>
+              <div class="table-panel margin-b20">
+                  <div class="table-panel-head">
+                      <h5 class="table-heading">Deposit Slip</h5>
+                  </div>
+                  <div class="table-panel-body">
+                      <div class="clearfix"></div>
+                      <div>
+                          <div class="table-horizontal-scroll-lg" id="DivDSTable">
+                              <table class="table table-theme table-hover margin-b10" id="DSTable">
+                                  <thead>
+                                      <tr>
+                                          <th>Sr. #</th>
+                                          <th width="80">Action</th>
+                                          <th>Deposit Slip ID</th>
+                                          <th>Check/Filing Date</th>
+                                          <th>Payment Source</th>
+                                          <th>Payment Type</th>
+                                          <th>Pmt. Method</th>
+                                          <th>Check/CC No.</th>
+                                          <th>Insurance Name</th>
+                                          <th>Batch Amt.</th>
+                                          <th>Oth. Party Amt.</th>
+                                          <th>Rem. Amt.</th>
+                                          <th>Notes</th>
+                                          <th>Batch No.</th>
+                                          <th>Batch Date</th>
+                                          <th>Created By</th>
+                                          <th>Created Date</th>
+                                          <th>Modified By</th>
+                                          <th>Modified Date</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody class="row-selected">
+                                      <tr class="open-global-search" *ngFor="let p of dSModelResponse; let ndx=index" [class.selected]="ndx === selectedDS" (dblclick)="DSGlobalValues(ndx)" (click)="SelectRow(ndx)" style="cursor:pointer;">
+                                          <td align="left">{{p.ROW}}</td>
+                                          <td align="center">
+                                              <span class="margin-r5" title="Modify"><i class="app-icon-Amazing-Fusion-61 text-blue" aria-hidden="true" title="Modify" id="editbtn" (click)="EditRow(ndx)"></i></span>
+                                              <span hidden><i class="app-icon-IconSet-1-33 text-danger" aria-hidden="true" title="Modify"></i></span>
+                                          </td>
+                                          <td style="color:blue" align="left" (click)="getDepositSlipClaimHistory(ndx)" data-toggle="modal" data-target="#depositslip-posting-history-modal">{{p.DWC_DEPOSITSLIP_ID}}</td>
+                                          <td align="center">{{p.PAYMENT_DATE}}</td>
+                                          <td>{{p.PAY_SOURCE}}</td>
+                                          <td>{{p.PAYMENT_TYPE}}</td>
+                                          <td>{{p.PAYMENT_METHOD}}</td>
+                                          <td>{{p.CHECK_NO}}</td>
+                                          <td>{{p.PAYMENT_SOURCE}}</td>
+                                          <td align="right">{{p.PAID_AMOUNT | number:'1.2-2'}}</td>
+                                          <td align="right">{{p.PAID_AMOUNT_OTHER | number:'1.2-2'}}</td>
+                                          <td align="right">{{p.REMAININGAMOUNT | number:'1.2-2'}}</td>
+                                          <td title="{{p.NOTES}}">{{p.NOTES==null || p.NOTES==""?"":p.NOTES.substring(0,50)+"..."}}</td>
+                                          <td align="left">{{p.BATCH_NO}}</td>
+                                          <td align="center">{{p.BATCH_DATE}}</td>
+                                          <td>{{p.CREATED_BY}}</td>
+                                          <td align="center">{{p.CREATED_DATE}}</td>
+                                          <td>{{p.MODIFIED_BY}}</td>
+                                          <td align="center">{{p.MODIFIED_DATE}}</td>
+                                      </tr>
+                                  </tbody>
+                              </table>
+                          </div>
+                      </div>
+
+
+                  </div>
+              </div>
+          </div>
+      </div>
+
+</div>
+</div>
+
+ -->

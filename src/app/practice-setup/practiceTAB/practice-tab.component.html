@@ -1,0 +1,671 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5><i class="fa fa-hospital-o"></i>&nbsp;{{Practice}}</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a data-toggle="tab" href="#tab-1">Practice Info</a>
+                        </li>
+                        <li [class.disabled]="isAdd" [attr.aria-disabled]="isAdd ? 'true' : null"
+                            (click)="isAdd ? $event.preventDefault() : null">
+                            <a data-toggle="tab" href="#tab-2">Providers</a>
+                        </li>
+                        <li [class.disabled]="isAdd" [attr.aria-disabled]="isAdd ? 'true' : null"
+                            (click)="isAdd ? $event.preventDefault() : null">
+                            <a data-toggle="tab" href="#tab-3">Locations</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="tab-1" class="tab-pane active">
+                            <div class="panel-body">
+                                <div class="col-md-12">
+                                    <div class="row tab-content-heading">
+                                        <div class="pull-right" style="margin-left:10px;">
+                                            <button class="btn btn-sm btn-primary ml-2"
+                                                (click)="enableSynchronization()"
+                                                [attr.disabled]="syncDisable?true:null"><i class="fa fa-refresh"
+                                                    aria-hidden="true">&nbsp; Sync</i></button>
+                                        </div>
+                                        <div class="pull-right" style="margin-left:10px;">
+                                            <a (click)="loadPracticeNotes()" data-toggle="modal"
+                                                data-target="#practiceNotes"><i
+                                                    class="fa fa-sticky-note"></i>&nbsp;Notes</a>
+                                        </div>
+                                        <div class="pull-right">
+                                            <a (click)="loadPracticeNoteSIModel()" data-toggle="modal"
+                                                data-target="#practiceSpecialInstructions"><i
+                                                    class="fa fa-pencil-square"></i>&nbsp;Instructions</a>
+                                        </div>
+                                        <div *ngIf="Practice!= '(New Practice)'" class="pull-right"
+                                            style="margin-right:10px;">
+                                            <a (click)="ReportingDataOnLoad()" data-toggle="modal"
+                                                data-target="#practiceReporting"><i
+                                                    class="fa fa-pencil-square"></i>&nbsp;Reporting</a>
+                                        </div>
+                                        <div *ngIf="Practice!= '(New Practice)'" class="pull-right"
+                                            style="margin-right:10px;">
+                                            <a data-toggle="modal" data-target="#providerpayersInfo"
+                                                (click)="getPracticeProviderLocation('ProviderPayers')"><i
+                                                    class="fa fa-info-circle"></i>&nbsp;Practice Payers
+                                            </a>
+                                        </div>
+
+                                        <h3 style="margin-bottom: 4px;"><i aria-hidden="true"
+                                                class="fa fa-info-circle"></i>&nbsp;<u>General Information</u></h3>
+                                        <!-- <hr style="margin-top: 15px;border-top: 2px solid #12a451;" /> -->
+                                    </div>
+                                    <app-add-edit-practice [listWCBRating]="listWCBRating"
+                                        [listSpecialtyGroups]="listSpecialtyGroups"
+                                        (onChangeVendor)="onChangeVendor($event)"></app-add-edit-practice>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tab-2" class="tab-pane">
+                            <div class="panel-body">
+                                <app-providers [listWCBRating]="listWCBRating"
+                                    [listSpecialtyGroups]="listSpecialtyGroups"
+                                    [listSpecializations]="listSpecializations"></app-providers>
+                            </div>
+                        </div>
+                        <div id="tab-3" class="tab-pane">
+                            <div class="panel-body">
+                                <app-locations></app-locations>
+                            </div>
+                        </div>
+                        <div id="tab-4" class="tab-pane">
+                            <div class="panel-body">
+                                <app-facility></app-facility>
+                            </div>
+                        </div>
+                        <div id="tab-5" class="tab-pane">
+                            <div class="panel-body">
+                                <div class="col-md-9">
+                                    <div class="col-md-5">
+                                        <div class="tab-content-heading"> Additional Settings </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--- Provider Models Starts --->
+<div class="modal inmodal" id="providerNotes" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header" style="padding-top:15px;padding-bottom:15px;">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+
+                <h4 class="modal-title">Provider Notes</h4>
+                <!-- <div class="form-group">
+                        <label>Select Provider</label> <select id="ddlProvider" class="form-control">
+                            <option value="1">John Smith</option>
+                            <option value="2">John Doe</option>
+                        </select>
+                    </div> -->
+            </div>
+            <div class="modal-body">
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs">
+                        <li class="active" [class.active]="numActiveProv==1"><a data-toggle="tab" href="#tabpn-1"
+                                [class.active]="numActiveProv==1"> Add Notes</a></li>
+                        <li class="" [class.active]="numActiveProv==0"><a data-toggle="tab" href="#tabpn-2"
+                                (click)="loadProviderNotes()" [class.active]="numActiveProv==0">History</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tabpn-1" class="tab-pane active" [class.active]="numActiveProv==1">
+                            <div class="panel-body">
+                                <textarea rows="6" id="txtProviderNotes" [(ngModel)]="objProviderNotes.Note_Content"
+                                    style="width:100%"></textarea>
+                                <button type="button" class="btn btn-w-m btn-primary" style="float:right"
+                                    (click)="saveProviderNotes()">Save Notes</button>
+                            </div>
+                        </div>
+                        <div id="tabpn-2" class="tab-pane" [class.active]="numActiveProv==0">
+                            <div class="panel-body">
+                                <strong>All Previous Notes</strong>
+                                <div class="table-responsive left-full">
+                                    <table class="table table-striped table-hover table-bordered responsive">
+                                        <thead>
+                                            <tr>
+                                                <th>Notes</th>
+                                                <th>Created On</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="gradeX" *ngFor="let p of this.objProviderNotesModel.Response">
+                                                <td>{{p.Note_Content}}</td>
+                                                <td>{{transformDate(p.Note_Date)}}</td>
+                                                <td class="text-right footable-visible footable-last-column">
+                                                    <div class="btn-group">
+                                                        <!-- <button class="btn-white btn btn-xs gridbtn" >View</button> -->
+                                                        <button class="btn-white btn btn-xs gridbtn" data-toggle="tab"
+                                                            href="#tabpn-1"
+                                                            (click)="modifyProviderNote(p.Provider_Notes_Id)">Edit</button>
+                                                        <button class="btn-white btn btn-xs gridbtn"
+                                                            (click)="deleteProviderNote(p.Provider_Notes_Id)">Delete</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal inmodal" id="providerpayersInfo" role="dialog" aria-labelledby="providerPayersTitle">
+    <div class="modal-dialog custom-modal-width">
+
+        <div class="modal-content modal-contentP animated bounceInRight">
+            <div class="modal-header" style="padding: 15px;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span>&times;</span>
+                </button>
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <h4 id="providerPayersTitle" class="modal-title"
+                        style="flex-grow: 1; text-align: center; margin: 0;">
+                        Practice Payers
+                    </h4>
+                    <a class="link" style="margin-top: 30px;" (click)="ShowInsuranceNamePopup()">
+                        <i class="fa fa-plus"></i>&nbsp;Map Payer
+                    </a>
+                </div>
+            </div>
+            <div class="modal-body modal-bodyP">
+                <div class="panel-body">
+                    <div class="table-responsive table-responsiveP left-full">
+                        <table id="providerPayerTable" class="table table-striped table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Insurance Payer ID</th>
+                                    <th>Insurance 837ID</th>
+                                    <th>Insurance Payer Description</th>
+                                    <th>Submission Setup Description</th>
+                                    <th>Insurance Payer State</th>
+                                    <th>Provider Payer ID</th>
+                                    <th>Provider Payer Group</th>
+                                    <th>Individual NPI</th>
+                                    <th>Group NPI</th>
+                                    <th>EDI Setup Pending</th>
+                                    <th>Trial Submission</th>
+                                    <th>Is Participating</th>
+                                    <th>Stop Patient Billing</th>
+                                    <th>Provider Number/TPIN</th>
+                                    <th>Effective Date</th>
+                                    <th>Next Validation Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let p of listProviderPayer" class="gradeX">
+                                    <td>{{ p.INSURANCE_PAYER_ID }}</td>
+                                    <td>{{p.INSURANCE_837_ID}}</td>
+                                    <td>{{ p.INSURANCE_PAYER_DESCRIPTION }}</td>
+                                    <td>{{ p.SUBMISSION_SETUP_DESCRIPTION }}</td>
+                                    <td>{{ p.INSURANCE_PAYER_STATE }}</td>
+                                    <td>{{ p.PROVIDER_PAYER_ID }}</td>
+                                    <td>{{ p.PROVIDER_PAYER_GROUP }}</td>
+                                    <td>{{ p.INDIVIDUAL_NPI }}</td>
+                                    <td>{{ p.GROUP_NPI }}</td>
+                                    <td>{{ p.EDI_SETUP_PENDING }}</td>
+                                    <td>{{ p.TRIAL_SUBMISSION }}</td>
+                                    <td>{{ p.IS_PARTICIPATING }}</td>
+                                    <td>{{ p.STOP_PATIENT_BILLING }}</td>
+                                    <td>{{ p.CREDENTIALING }}</td>
+                                    <td>{{ p.CREDENTIALING_DATE | date: 'shortDate' }}</td>
+                                    <td>{{ p.CREDENTIALING_EXPIRY_DATE | date: 'shortDate' }}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-danger"
+                                            (click)="deleteProviderPayer(p.PROVIDER_PAYER_ID)">
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnProviderPayer" (click)="getPracticeProviderLocation('ProviderPayers')"
+                    hidden></button>
+                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal inmodal" id="providerResources" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header" style="padding-top:15px;padding-bottom:15px;">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title">Provider Resources</h4>
+                <div class="row">
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <div class="table-responsive left-full">
+                        <table class="table table-striped table-hover table-bordered responsive">
+                            <thead>
+                                <tr>
+                                    <th>Payer Name</th>
+                                    <th>Ins Payer Id</th>
+                                    <th>URL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="gradeX" *ngFor=" let p of listProviderResources">
+                                    <td>{{p.Insurance_Name}}</td>
+                                    <td>{{p.InsPayer_Id}}</td>
+                                    <td><a>{{p.URL}}</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnProviderResources" (click)="loadProviderResources()" hidden></button>
+                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!---------------------------------Provider Working Hours----------------------------------------------------------------------------------------------------->
+<div class="modal inmodal" id="providerWorkingHours" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header" style="padding-top:15px;padding-bottom:15px;">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+
+                <h4 class="modal-title">Provider Working Hours</h4>
+                <div class="row">
+                    <!-- <div class="form-group col-lg-6">
+                            <label>Provider</label> <select id="ddlProvider" class="form-control">
+                                <option value="1">John Smith</option>
+                                <option value="2">John Doe</option>
+                            </select>
+                        </div> -->
+                    <div class="form-group col-lg-6">
+                        <label>Location</label>
+                        <select class="form-control" id="ddlLocation" [(ngModel)]="strUpdatedLocationCode"
+                            (change)="getProviderWorkingHours(strUpdatedLocationCode);">
+                            <!-- <option value="" selected></option> -->
+                            <option *ngFor="let p of objPracticeModel.Response.LocationComboFillingList"
+                                value="{{p.Location_Code}}">
+                                {{p.Location_Name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <!-- <strong>Working Hours Details</strong> -->
+                    <div style="overflow: auto;">
+                        <table class="table table-striped table-hover table-bordered display nowrap dtPracInstruction"
+                            style="table-layout: fixed; width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>Days</th>
+                                    <th>Start Time</th>
+                                    <th>Close Time</th>
+                                    <th>Break From</th>
+                                    <th>Break To</th>
+                                    <!-- <th>Created On</th>
+                                        <th>Actions</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let p of listProvider_Working_Days_Time">
+                                    <td>{{transformD(p.Weekday_Id)}}</td>
+                                    <td>{{transformT(p.Time_From) | date:'h:mm a'}}</td>
+                                    <td>{{transformT(p.Time_To) | date:'h:mm a'}}</td>
+                                    <td>{{transformT(p.Break_Time_From) | date:'h:mm a'}}</td>
+                                    <td>{{transformT(p.Break_Time_To) | date:'h:mm a'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnLoadLocation" (click)="getPracticeLocation()" hidden></button>
+                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Provider Models Ends here-->
+<!--- Practice Models Starts --->
+<div class="modal inmodal" id="practiceNotes" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header" style="padding-top:15px;padding-bottom:15px;">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+
+                <h4 class="modal-title">Practices Notes</h4>
+            </div>
+            <div class="modal-body">
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs">
+                        <li class="active" [class.active]="numActive==1"><a data-toggle="tab" href="#tabprn-1"> Add
+                                Notes</a></li>
+                        <li class="" [class.active]="numActive==0"><a data-toggle="tab" href="#tabprn-2"
+                                (click)="loadPracticeNotes()">History</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tabprn-1" class="tab-pane active" [class.active]="numActive==1">
+                            <div class="panel-body">
+                                <textarea rows="6" id="txtPracticesNotes"
+                                    [(ngModel)]="ObjPractice_Notes.Response.NOTE_CONTENT" style="width:100%"
+                                    maxlength="1000"></textarea>
+                                <button type="button" class="btn btn-w-m btn-primary" style="float:right"
+                                    (click)="savePractice_Notes()">Save Notes</button>
+                            </div>
+                        </div>
+                        <div id="tabprn-2" class="tab-pane" [class.active]="numActive==0">
+                            <div class="panel-body">
+                                <strong>All Previous Notes</strong>
+                                <!-- <div class="table-responsive left-full"> -->
+                                <div style="overflow: auto;"></div>
+                                <table
+                                    class="table table-striped table-hover table-bordered display nowrap practiceNotesTable"
+                                    style="table-layout: fixed; width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>Notes</th>
+                                            <th>Created On</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let p of listPractice_Notes">
+                                            <td>{{p.NOTE_CONTENT}}</td>
+                                            <td>{{p.NOTE_DATE|date:'MM/dd/yyyy'}}</td>
+                                            <td class="text-right footable-visible footable-last-column">
+                                                <div class="btn-group">
+                                                    <button class="btn-white btn btn-xs gridbtn" data-toggle="tab"
+                                                        href="#tabprn-2"
+                                                        (click)="modifyPracticeNote(p.Practice_Notes_Id)">Edit</button>
+                                                    <button class="btn-white btn btn-xs gridbtn"
+                                                        (click)="deletePracticeNote(p.Practice_Notes_Id)">Delete</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="practiceReporting" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header"
+                style="border-bottom: 0px; padding-left: 15px;padding-right: 15px; padding-top:15px;padding-bottom:15px;">
+                <button type="button" class="close" data-dismiss="modal" (click)="onclose()"><span
+                        aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Reporting Details</h4>
+            </div>
+            <br>
+            <br>
+            <!-- Modal Body -->
+            <div style="padding: 0px 10px 20px 10px;">
+                <form [formGroup]="ReportingModelForm" onsubmit="saveReportingDetails()">
+                    <div class="row">
+                        <div class="form-group col-lg-3">
+                            <label>Practice Alias</label>
+                            <input type="email" class="form-control" maxlength="50" placeholder="yourname@example.com"
+                                name="PracEmail" id="PracEmail" formControlName="Practice_Alias"
+                                pattern="[a-zA-z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                                (keydown.space)="$event.preventDefault();">
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label style="text-align: start;">Assigned Manager</label>
+                            <ngx-select [items]="usersSelectList" placeholder="Select user" formControlName="ManagerID"
+                                [ngModel]="managerData"> <!-- Here, bind ngModel to MyField -->
+                            </ngx-select>
+                        </div>
+
+                        <div class="form-group col-lg-3" style="margin-bottom: 2px;">
+                            <label>Assigned Team Lead</label>
+                            <ngx-select [items]="usersSelectList" [ngModel]="teamLeadData" placeholder="Select user"
+                                formControlName="TeamLeadID">
+                            </ngx-select>
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label>Primary Billing Associates</label>
+                            <ngx-select [items]="usersSelectList" [ngModel]="billingAssociateData"
+                                placeholder="Select user" formControlName="BillingAssociateID">
+                            </ngx-select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-3">
+                            <label>Division</label>
+                            <select class="form-control" formControlName="DivisionID"
+                                (click)="populateDropDownValues()">
+                                <option [ngValue]="null" disabled selected>Select Division</option>
+                                <option *ngFor="let division of divisionDropdownData" [value]="division.Division_ID">
+                                    {{division.Division_Name}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label>Shift</label>
+                            <select class="form-control" formControlName="Shift">
+                                <option [ngValue]="null" disabled selected>Select Shift</option>
+                                <option value="M">Morning</option>
+                                <option value="E">Evening</option>
+                                <option value="H">Hybrid</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label>PHD POC </label>
+                            <ngx-select formControlName="PHDPOCId" [items]="listUser" optionTextField="DisplayLabel"
+                                optionValueField="UserId" [allowClear]="false" placeholder="Select">
+                            </ngx-select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div style="text-align: right; padding: 10px;">
+                <button type="button" class="btn btn-primary btn-sm" (click)="saveReportingDetails()">Save</button>
+                <button type="button" class="btn btn-white" (click)="onclose()" data-dismiss="modal">Close</button>
+            </div>
+            <br>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="practiceSpecialInstructions" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header" style="padding-top:15px;padding-bottom:15px;">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+
+                <h4 class="modal-title">Special Instructions</h4>
+                <div class="form-group col-lg-6">
+                    <label>Category</label>
+                    <select id="ddlSICategory" class="form-control"
+                        [(ngModel)]="objSpecialInstructionModel.objSpecialInstruction.Category_Id"
+                        (change)="loadQuestionsSIModel(objSpecialInstructionModel.objSpecialInstruction.Category_Id)">
+                        <option value=0></option>
+                        <option *ngFor="let p of objSpecialInstructionModel.listCategoryList" value={{p.Id}}>
+                            {{p.Id}}-{{p.Name}}</option>
+                    </select>
+                </div>
+                <div class="form-group col-lg-6">
+                    <label>Question</label>
+                    <select id="ddlSIQuestion" class="form-control"
+                        [(ngModel)]="objSpecialInstructionModel.objSpecialInstruction.Question_Id"
+                        (change)="sortedSpecialInsList()">
+                        <option value=0></option>
+                        <option *ngFor="let p of objSpecialInstructionModel.listQuestion" value={{p.Id}}>
+                            {{p.Id}}-{{p.Name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs">
+                        <li class="active" [class.active]="numActiveSI==1"><a data-toggle="tab" href="#tabspnS-1"
+                                (click)="mainNotes(false)" [class.active]="numActiveSI==1"> Add Instruction</a></li>
+                        <li [class.active]="numActiveSI==0"><a data-toggle="tab" href="#tabspnS-2"
+                                (click)="loadPracticeNoteSIModel(true)" [class.active]="numActiveSI==0">History</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tabspnS-1" class="tab-pane active" [class.active]="numActiveSI==1">
+                            <div class="panel-body">
+                                <textarea rows="6"
+                                    [(ngModel)]="objSpecialInstructionModel.objSpecialInstruction.Special_Instruction"
+                                    id="txtPracticesSpecialInstruction" style="width:100%" maxlength="1000"></textarea>
+                                <button type="button" class="btn btn-w-m btn-primary"
+                                    (click)="SavePracticeInstruction()" style="float:right">Save</button>
+                            </div>
+                        </div>
+                        <div id="tabspnS-2" class="tab-pane" [class.active]="numActiveSI==0">
+                            <div class="panel-body">
+                                <strong>All Previous Instructions</strong>
+                                <!-- <div class="table-responsive left-full"> -->
+                                <div style="overflow: auto;">
+                                    <table
+                                        class="table table-striped table-hover table-bordered display nowrap dtPracInstruction"
+                                        style="table-layout: fixed; width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th width="15%">Question Id</th>
+                                                <th width="60%">Special Instruction</th>
+                                                <th width="15%">Status</th>
+                                                <th width="10%">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let p of objSpecialInstructionModel.listSpecialInstruction">
+                                                <td>{{p.Question_Id}}</td>
+                                                <td>{{p.Special_Instruction}}</td>
+                                                <td>{{p.Status}}</td>
+                                                <td class="text-right footable-visible footable-last-column">
+                                                    <div class="btn-group">
+                                                        <button class="btn-white btn btn-xs gridbtn"
+                                                            (click)="editInstruction(p.Question_Id)">Edit</button>
+                                                        <!-- <button class="btn-white btn btn-xs gridbtn"
+                                                            (click)="deleteSINote(p.Question_Id)">Delete</button> -->
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" (click)="addTag() " data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal inmodal" id="practiceResources" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content animated bounceInRight">
+                <div class="modal-header" style="padding-top:15px;padding-bottom:15px;">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Resources</h4>
+                    <div class="row">
+                        <div class="form-group col-lg-6">
+                            <label>Provider</label> <select id="ddlProvider" class="form-control">
+                                <option value="1">John Smith</option>
+                                <option value="2">John Doe</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label>Location</label> <select id="ddlLocation" class="form-control">
+                                <option value="1">NewJersy</option>
+                                <option value="2">Washington</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-body">
+                        <!-- <strong>Resources List</strong> -->
+                        <div class="table-responsive left-full">
+                            <table class="table table-striped table-hover table-bordered responsive dataTables-example">
+                                <thead>
+                                    <tr>
+                                        <th>Payer Name</th>
+                                        <th>Ins Payer Id</th>
+                                        <th>Created On</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="gradeX">
+                                        <td>Aetna</td>
+                                        <td>123</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--Practice Models Ends here-->
+<modal-window [title]="'Practice Tab Insurance Search'" [description]="'Find and select insurance.'" #insuranceSearch
+    (onHidden)="onCloseSearch(); addNewIns(null);">
+    <ng-container body>
+        <prac-tab-insurance-search [PracticeCode]="this.SelectedPracticeCode"
+            (onSelectInsurance)="onSelectInsurance($event)" (onMapSuccess)="insuranceSearch.hide();handleMapSuccess();">
+        </prac-tab-insurance-search>
+    </ng-container>
+</modal-window>

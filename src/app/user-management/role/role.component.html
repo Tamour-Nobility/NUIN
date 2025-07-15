@@ -1,0 +1,50 @@
+<div class="row">
+    <div class="col-lg-8">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5><i class="fa fa-users"></i>&nbsp;User Management</h5>
+                <div class="ibox-tools">
+                    <a class="link" [routerLink]="['/users/role/add']">
+                        <i class="fa fa-plus"></i>&nbsp;Add New Role
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs">
+                        <li [routerLink]="['/users/module']"><a aria-expanded="false">Modules</a></li>
+                        <li [routerLink]="['/users/submodule']"><a aria-expanded="false">Sub Modules</a></li>
+                        <li [routerLink]="['/users/properties']"><a aria-expanded="false">Properties</a></li>
+                        <li class="active" [routerLink]="['/users/role']"><a aria-expanded="true">Roles</a></li>
+                        <li role="presentation" class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                                aria-haspopup="true" aria-expanded="false">
+                                Role and Rights <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="nav-link" [routerLinkActive]="['active']"
+                                    [routerLink]="['/users/rights/rolewise']"><a aria-expanded="false">Role Wise</a>
+                                </li>
+                                <li class="nav-link" [routerLinkActive]="['active']"
+                                    [routerLink]="['/users/rights/userwise']"><a aria-expanded="false">User Wise</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li [routerLink]="['/users/users']"><a aria-expanded="false">Users</a></li>
+                        <li [routerLink]="['/users/employees']"><a aria-expanded="false">Employees</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active">
+                            <div class="panel-body">
+                                <app-list-role></app-list-role>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <router-outlet></router-outlet>
+    </div>
+</div>

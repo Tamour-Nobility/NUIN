@@ -1,0 +1,116 @@
+<div class="row">
+  <div class="form-group col-lg-3">
+    <label for="" class="control-label col-form-label">Provider</label>
+    <ngx-select [items]="providerSelectList" optionValueField="Id" optionTextField="Name"
+      [(ngModel)]="requestModel.providerCode" [formControl]="providerSelectControl" (remove)="resetBatchSelectList()"
+      (select)="onTypeBatch($event)">
+    </ngx-select>
+  </div>
+  <form [formGroup]="claimsForm">
+    <div class="form-group col-lg-2">
+      <label for="" class="control-label col-form-label">Batch type</label>
+      <select class="form-control" formControlName="type" (change)="onBillingTypeChange($event.target.value)">
+        <option *ngIf = "BillingType=='all'"  [value]="'all'">All</option>
+        <option *ngIf = "BillingType=='P' || BillingType=='all'"  [value]="'professional'">Professional</option>
+        <option *ngIf = "BillingType=='I' || BillingType=='all'" [value]="'institutional'">Institutional</option>
+      </select>
+    </div>
+  </form>
+  <div class="form-group col-lg-3">
+    <label for="" class="control-label col-form-label">Batch</label>
+    <ngx-select [items]="batchesSelectList" optionValueField="Id" optionTextField="Name" [allowClear]="true"
+      [(ngModel)]="requestModel.bactchId" [formControl]="batchSelectControl">
+    </ngx-select>
+  </div>
+  <div class="form-group col-lg-3">
+    <label class="control-label" for="status">Error Date</label>
+    <my-date-range-picker [options]="myDateRangePickerOptions" [placeholder]="'MM/DD/YYYY'"
+      (dateRangeChanged)="onDateRangeChanged($event)">
+    </my-date-range-picker>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12 col-md-12">
+    <button class="btn btn-sm btn-primary pull-right" type="submit" (click)="GetBatchFileErrors()">Search</button>
+  </div>
+</div>
+<div class="row mt10" *ngIf="(batchFileErrorsList && batchFileErrorsList.length>0) || isSearchInitiated">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        Batch File Errors
+      </div>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table table-striped table-hover table-bordered display nowrap dataTableErrors" width="100%">
+            <thead>
+              <tr>
+                <th class="center">Batch</th>
+                <th class="center">Errors</th>
+                <th class="center">Patient Name</th>
+                <th class="center">Claim No</th>
+                <th class="center">Claim DOS</th>
+                <th class="center">Error Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let e of batchFileErrorsList">
+                <td>{{e.Batch_Name}}</td>
+                <td>
+                  <ul>
+                    <li *ngFor="let error of e.ErrorsArray">
+                      {{error}}
+                    </li>
+                  </ul>
+                </td>
+                <td>{{e.Patient_Name}}</td>
+                <td align="center">
+                  <a (click)="editClaim(e.Claim_No,e.Patient_Account,e.First_Name,e.Last_Name)">{{e.Claim_No}}</a>
+                </td>
+                <td align="center">{{e.DOS | date:'MM/dd/yyyy'}}</td>
+                <td align="center">{{e.Error_Date | date:'MM/dd/yyyy'}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row mt10" *ngIf="(batchFileErrorsList && batchFileErrorsList.length>0) || isSearchInitiated">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        Batch File Exceptions
+      </div>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table table-striped table-hover table-bordered display nowrap dataTableErrors" width="100%">
+            <thead>
+              <tr>
+                <th class="center">Batch</th>
+                <th class="center">Exception Errors</th>
+                <th class="center">Error Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let e of batchFileExceptionList">
+                <td>{{e.Batch_Name}}</td>
+                <td>
+                  <ul>
+                    <li *ngFor="let error of e.ErrorsArray">
+                      {{error}}
+                    </li>
+                  </ul>
+                </td>     
+                <td align="center">{{e.Error_Date | date:'MM/dd/yyyy'}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

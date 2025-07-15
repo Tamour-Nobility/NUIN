@@ -1,0 +1,266 @@
+<div>
+  <div class="row">
+    <div class="col-lg-7">
+      <h3 style="color: black;">Scrubber Rejection Report</h3>
+      <form [formGroup]="SearchForm">
+        <div class="row">
+          <div class="form-group col-lg-3">
+            <label class="control-label">Practices<span class="text-danger">*</span></label>
+            <ngx-select formControlName="PracCode" (blur)="onchangePractices()" [items]="listPracticesList"
+              optionTextField="PracticeLabel" [allowClear]="false">
+            </ngx-select>
+
+
+
+
+          </div>
+          <div class="col-sm-3 col-md-3 col-lg-3">
+            <div class="form-group">
+              <label class="control-label" for="status">From - To<span class="text-danger">*</span></label>
+              <my-date-range-picker [options]="myDateRangePickerOptions" [placeholder]="'MM/DD/YYYY'"
+                componentDisabled="true" (dateRangeChanged)="onDateChanged($event)" formControlName="DOSRange">
+              </my-date-range-picker>
+            </div>
+          </div>
+        </div>
+      </form>
+      <button class="btn btn-primary btn-sm pull-right" type="submit" (click)="onSearch()">Search</button>
+      <button type="button" class="btn btn-white pull-right ml-2 btn-sm" (click)="onClear()">Clear</button>
+    </div>
+    <div class="col-lg-5">
+      <h3 style="color: black;">Rejection Count Summary</h3>
+      <div *ngIf="showHistory">
+        <table class="table table-hover dataTable" width="90%">
+          <thead>
+            <tr>
+              <th>Reject Reason</th>
+              <th>Count</th>
+              <!-- <th>Charges</th> -->
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let rejectioncount of ScrubberRejectionCount | slice:0:5">
+              <td>{{rejectioncount.RejectionReason}}</td>
+              <td>{{rejectioncount.RejectionReasonCount}}</td>
+              <!-- <td>{{rejectioncount.TotalChargeAmount}}</td> -->
+            </tr>
+          </tbody>
+        </table>
+        <div class="text-right mt10"><a (click)="patientAttachments.show()"><i class="fa fa-paperclip"></i>Detail
+            Summary</a>
+        </div>
+        <div class="modal fade" bsModal #patientAttachments="bs-modal" tabindex="-1" role="dialog">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" (click)="patientAttachments.hide()">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Rejections Details Summary</h4>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="table-responsive">
+                    <div *ngIf="showHistory">
+                      <table
+                        class="table table-hover table-striped table-bordered DataTable ScrubberRejectionCountDetail"
+                        width="100%">
+                        <thead>
+                          <tr>
+                            <th>Reject Reason</th>
+                            <th>Count</th>
+                            <!-- <th>Charges</th> -->
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <ng-container *ngFor="let rejectioncount of ScrubberRejectionCount">
+                            <tr>
+                              <td>{{rejectioncount.RejectionReason}}</td>
+                              <td>{{rejectioncount.RejectionReasonCount}}</td>
+                              <!-- <td>{{rejectioncount.TotalChargeAmount}}</td> -->
+                            </tr>
+                          </ng-container>
+                        </tbody>
+                      </table>
+                      <br><br>
+                      <td style="text-align:right;"><b>Total Number of Claims : {{ totalClaim }}</b></td>
+                      <br>
+                      <td><b>Rejected Charge Amount : ${{ totalChargeAmountSum }}</b></td>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="row">
+    <div class="col-lg-12 pt-20">
+      <div *ngIf="showHistory">
+        <table class="table table-hover table-striped table-bordered dataTable scrubberrejectionhistory" width="100%">
+          <thead>
+            <tr>
+              <th>Practice Code</th>
+              <th>Practice Name</th>
+              <th>Rejection Date</th>
+              <th>Account Number</th>
+              <th>Patient Name</th>
+              <th>Claim Number</th>
+              <th>Date of Service</th>
+              <th>Charge Amount</th>
+              <th>Rejection Reason</th>
+              <th>Insurance Name</th>
+             <th>Status</th> 
+              <th>Action Taken</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let rejection of ScrubberRejectionReport ">
+              <td>{{rejection.Practice_Code}}</td>
+              <td>{{rejection.Practice_Name}}</td>
+              <td>{{rejection.Rejection_Date | date : "medium"}}</td>
+              <td>{{rejection.Account_Number}}</td>
+              <td>{{rejection.Patient_Name}}</td>
+              <td>{{rejection.Claim_Number}}</td>
+              <td>{{rejection.Date_Of_Service | date:'MM/dd/yyyy'}}</td>
+              <td>${{rejection.Charge_amount}}</td>
+              <td>{{rejection.Rejection_Reason}}</td>
+              <td>{{rejection.Insurance_Name}}</td>
+          <td>{{rejection.status}}</td> 
+              <td>{{rejection.Action_Taken}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div> -->
+  <div class="row justify-content-center" *ngIf="isSearchInitiated == true">
+    <div class="col-lg-12">
+      <h3> Scrubber Rejection Report</h3>
+    </div>
+    <div *ngIf="ScrubberRejectionReport.length > 0 || ddlPracticeCode != 0" class="col-lg-2 d-flex my-4"
+      style="display: flex; align-items: center; margin-top: 20px;">
+      <label style="font-weight: normal">Show</label>
+      <select (change)="countValueChanged($event)" class="form-control input-sm mx-2"
+        style="width: 3rem; margin-left: 5px; margin-right: 5px; max-width: 37% !important;">
+        <option [value]="10" [selected]="count === 10">10</option>
+        <option [value]="25" [selected]="count === 25">25</option>
+        <option [value]="50" [selected]="count === 50">50</option>
+        <option [value]="100" [selected]="count === 100">100</option>
+      </select>
+      <label style="font-weight: normal">entries</label>
+    </div>
+    <div class="col-lg-4  my-4" style="display: flex; align-items: center; margin-top: 20px;padding-left: 30%;"
+      *ngIf=" ddlPracticeCode != 0">
+      <button class="btn btn-default btn-sm" (click)="exportExcel()"><i
+          class="fa fa-file-excel-o"></i>&nbsp;Excel</button>
+
+    </div>
+
+    <div class="col-sm-6 d-flex my-4" style="display: flex; align-items: center; margin-top: 23px;padding-left: 33%;"
+      *ngIf="ScrubberRejectionReport.length > 0 || ddlPracticeCode != 0">
+      <span>Search:&nbsp;</span><input class="form-control" type="text" [(ngModel)]="searchText">
+    </div>
+
+
+  </div>
+
+
+  <div class="col-lg-12 pt-20  table-horizontal-scroll">
+    <div class="row d-flex justify-content-between" *ngIf="ScrubberRejectionReport.length > 0 || ddlPracticeCode != 0">
+
+      <table id="example" class="table table-striped table-hover table-bordered dataTableASR" width="100%"
+        *ngIf="(ScrubberRejectionReport | filter: searchText).length>0 || ddlPracticeCode!=0">
+        <thead>
+          <tr>
+            <th (click)="toggleSorting('Practice_Code')">Practice Code
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'Practice_Code' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+            <th (click)="toggleSorting('Practice_Name')">Practice Name
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'Practice_Name' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+            <th (click)="toggleSorting('Rejection_Date')">Rejection Date
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'Rejection_Date' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+            <th (click)="toggleSorting('Account_Number')">Account Number
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'Account_Number' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+            <th (click)="toggleSorting('Patient_Name')">Patient Name
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'Patient_Name' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+            <th (click)="toggleSorting('Claim_Number')">Claim Number
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'Claim_Number' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+            <th (click)="toggleSorting('Date_Of_Service')">Date of Service
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'Date_Of_Service' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+            <th (click)="toggleSorting('Charge_amount')">Charge Amount
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'Charge_amount' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+            <th (click)="toggleSorting('Rejection_Reason')">Rejection Reason
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'Rejection_Reason' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+            <th (click)="toggleSorting('Insurance_Name')">Insurance Name
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'Insurance_Name' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+            <th (click)="toggleSorting('Action_Taken')">Action Taken
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'Action_Taken' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <ng-container *ngIf="ScrubberRejectionReport.length === 0 && ddlPracticeCode !== 0">
+            <tr>
+              <td colspan="24" style="padding-left: 70vh ;">No data available</td>
+            </tr>
+          </ng-container>
+
+
+          <tr *ngFor="let rejection of ScrubberRejectionReport | filter: searchText;">
+            <td>{{rejection.Practice_Code}}</td>
+            <td>{{rejection.Practice_Name}}</td>
+            <td>{{rejection.Rejection_Date | date:'MM/dd/yyyy'}}</td>
+            <td>{{rejection.Account_Number}}</td>
+            <td>{{rejection.Patient_Name}}</td>
+            <td>{{rejection.Claim_Number}}</td>
+            <td>{{rejection.Date_Of_Service | date:'MM/dd/yyyy'}}</td>
+            <td>{{rejection.Charge_amount | currency}}</td>
+            <td>{{rejection.Rejection_Reason}}</td>
+            <td>{{rejection.Insurance_Name}}</td>
+
+            <td>{{rejection.Action_Taken}}</td>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+
+  <div *ngIf="ScrubberRejectionReport.length > 0 || ddlPracticeCode != 0" class="row d-flex"
+    style="margin-left: 5px; margin-right: 5px; margin-top: 15px">
+    <span>Showing {{ (filteredRecords) }} of {{ totalResults }} entries</span>
+    <div style="float: right;margin-top: 0.5%;">
+      <button (click)="loadPreviousPage()" [disabled]="currentPage === 1">
+        Previous
+      </button>
+      {{ currentPage }}/{{ totalPages }}
+      <button (click)="loadNextPage()" [disabled]="currentPage === totalPages">
+        Next
+      </button>
+    </div>
+  </div>
+</div>

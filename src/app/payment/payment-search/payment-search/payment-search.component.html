@@ -1,0 +1,429 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="ibox float-e-margins">
+      <!-- Component Title -->
+      <div class="ibox-title">
+        <h5><i class="fa fa-search"></i>&nbsp;Payments</h5>
+      </div>
+      <!-- Search Filters Section -->
+      <div class="ibox-content">
+        <!--Search form-->
+        <form [formGroup]="PaymentsSearchForm">
+          <div class="row">
+            <div class="form-group col-lg-3 col-md-6">
+              <label class="control-label">Payment From</label>
+              <select class="form-control input-sm form-select m-b" formControlName="PaymentFrom" class="form-control">
+                <option value=0 disabled>Select Payment From</option>
+                <option *ngFor="let pf of listPaymentFrom" value={{pf.value}}>{{pf.name}}</option>
+              </select>
+            </div>
+            <div class="form-group col-lg-3 col-md-6">
+              <label class="control-label">Check No</label>
+              <input class="form-control input-sm m-b" formControlName="CheckNo" class="form-control">
+              <div *ngIf="isSearchInitiated && f.CheckNo.errors" class="error-text">
+                <div *ngIf="e.CheckNo.errors.pattern">Invalid check no</div>
+              </div>
+            </div>
+            <div class="form-group col-lg-3 col-md-6">
+              <label class="control-label">Facility</label>
+              <div class="has-feedback custom-search">
+                <input type="search" readonly placeholder="Search"
+                  (click)="openSearchFacilityModal(facilitySearchModalTemplate, 'Payment Search')" class="form-control"
+                  formControlName="Facility">
+                <span (click)="openSearchFacilityModal(facilitySearchModalTemplate, 'Payment Search')"
+                  class="form-control-feedback text-grey"><i class="text-blue glyphicon glyphicon-search"></i></span>
+              </div>
+            </div>
+            <div class="form-group col-lg-3 col-md-6">
+              <label class="control-label">Posted By</label>
+              <select class="form-control input-sm form-select m-b" formControlName="PostedBy" class="form-control" disable>
+                <option value=0 disabled>Select Posted By</option>
+                <option *ngFor="let pb of listPostedby" value={{pb.value}}>{{pb.name}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-lg-3 col-md-6">
+              <label class="control-label">Batch No</label>
+              <input class="form-control input-sm m-b" formControlName="BatchNo" class="form-control">
+            </div>
+            <div class="form-group col-lg-3 col-md-6">
+              <label class="control-label">Payment ID</label>
+              <input class="form-control input-sm m-b" formControlName="PaymentId" class="form-control" readonly>
+            </div>
+            <div class="form-group col-lg-3 col-md-6">
+              <label class="control-label">Patient Name</label>
+              <div class="has-feedback custom-search">
+                <input type="search" readonly placeholder="Search"
+                  (click)="openSearchPatientModal(patientSearchModalTemplate, 'Payment Search')" class="form-control"
+                  formControlName="PatientName">
+                <span (click)="openSearchPatientModal(patientSearchModalTemplate, 'Payment Search')"
+                  class="form-control-feedback text-grey"><i class="text-blue glyphicon glyphicon-search"></i></span>
+              </div>
+            </div>
+            <div class="form-group col-lg-3 col-md-6">
+              <label class="control-label">Insurance Name</label>
+              <div class="has-feedback custom-search">
+                <input type="search" readonly placeholder="Search"
+                  (click)="openInsuranceSearchModal(insuranceSearchModalTemplate, 'Payment Search')"
+                  class="form-control" formControlName="InsuranceName">
+                <span (click)="openInsuranceSearchModal(insuranceSearchModalTemplate, 'Payment Search')"
+                  class="form-control-feedback text-grey"><i class="text-blue glyphicon glyphicon-search"></i></span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-lg-3 col-md-6">
+              <label class="control-label">Payment Type</label>
+              <select class="form-control input-sm form-select m-b" formControlName="PaymentType" class="form-control">
+                <option value=0 disabled>Select Payment Type</option>
+                <option *ngFor="let pt of listPaymentTypes" value={{pt.Id}}>{{pt.Name}}</option>
+              </select>
+            </div>
+            <div class="form-group col-lg-3 col-md-6">
+              <label class="control-label">Payment Status</label>
+              <select class="form-control input-sm form-select m-b" formControlName="PaymentStatus"
+                class="form-control">
+                <option value=0 disabled>Select Payment Status</option>
+                <option *ngFor="let ps of listStatus" value={{ps.value}}>{{ps.name}}</option>
+              </select>
+            </div>
+            <div class="form-group col-lg-3 col-md-6">
+              <label class="control-label">Payment Date From</label>
+              <my-date-picker id="dtpFrom" [options]="myDatePickerOptions" [placeholder]="placeholder"
+                (dateChanged)="onDateChanged($event,'PaymentDateFrom')" formControlName="PaymentDateFrom">
+              </my-date-picker>
+            </div>
+            <div class="form-group col-lg-3 col-md-6">
+              <label class="control-label">Payment Date To</label>
+              <my-date-picker id="dtpTo" [placeholder]="placeholder" formControlName="PaymentDateTo"
+                (dateChanged)="onDateChanged($event,'PaymentDateTo')" [options]="myDatePickerOptions">
+              </my-date-picker>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-lg-12">
+              <button class="btn btn-primary btn-sm ml-2 pull-right" [disabled]="!PaymentsSearchForm.valid"
+                type="submit" (click)="onLookUp()">Look Up</button>
+              <button class="btn btn-white pull-right ml-2 btn-sm" (click)="onClear()" >Reset</button>
+            </div>
+          </div>
+        </form>
+        <!-- Payment pop-up buttons -->
+        <div class="row">
+          <div class="col-lg-12">
+            <button class="btn btn-sm btn-primary pull-right ml-2"
+              (click)="onAddPatientPayment(patientPaymentModalTemplate)">Add Patient
+              Payment</button>
+            <button class="btn btn-sm btn-primary pull-right ml-2"
+              (click)="onAddInsurancePayment(insurancePaymentModalTemplate)">Add Insurance
+              Payment</button>
+          </div>
+        </div>
+        <!--Table to show search records-->
+        <div class="row mt-5" *ngIf="isSearchInitiated == true">
+          <div class="col-lg-12">
+            <table class="table table-striped table-hover table-bordered table-responsive PaymentsDatatable dtPayments">
+              <thead>
+                <tr>
+                  <th class="text-center">
+                    <input type='checkbox' title="Select all" (change)="onToggleCheckAll($event.target.checked)"
+                      *ngIf="dataPayments && dataPayments.length>0" />
+                  </th>
+                  <th> Batch ID </th>
+                  <!-- <th> Payment ID </th>
+                  <th> Posted by </th> -->
+                  <th> Date </th>
+                  <th> Payment From </th>
+                  <th> Payment Type </th>
+                  <th> Check # </th>
+                  <th> Check Date </th>
+                  <th> Deposit Date </th>
+                  <th> Amount </th>
+                  <th> Posted </th>
+                  <th> Unposted </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let dp of dataPayments">
+                  <td></td>
+                  <td *ngIf="dp.PatientAccount == null"><a (click)="getInsPayement(dp,insurancePaymentModalTemplate)">{{dp.BatchNo}}</a></td>
+                  <td *ngIf="dp.InsuranceID == null"><a (click)="getPatientPayement(dp,patientPaymentModalTemplate)">{{dp.BatchNo}}</a></td>
+                  <!-- <td>{{dp.paymentId}}</td>
+                  <td>{{dp.postedBy}}</td> -->
+                  <td>{{dp.ReceivedDate | date:'MM/dd/yyyy'}}</td>
+                  <td *ngIf="dp.InsuranceID == null">Patient</td>
+                  <td *ngIf="dp.PatientAccount == null">{{dp.Ins_name}}</td>
+                  <td>{{PaymentType(dp.PaymentTypeID)}}</td>
+                  <td>{{dp.CheckNo}}</td>
+                  <td>{{dp.CheckDate | date:'MM/dd/yyyy'}}</td>
+                  <td>{{dp.DepositDate | date: 'MM/dd/yyyy'}}</td>
+                  <td>{{dp.Amount}}</td>
+                  <td>{{dp.PostedAmount}}</td>
+                  <td>{{Number(dp.Amount)-Number(dp.PostedAmount)}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Insurance Payment Modal -->
+<ng-template #insurancePaymentModalTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Insurance Payment</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="insurancePaymentForm.reset();insurancePaymentModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <!-- <app-insurance-payment></app-insurance-payment> -->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+          <form [formGroup]="insurancePaymentForm">
+            <div class="row">
+              <div class="form-group col-lg-4 col-md-6">
+                <label class="control-label">Insurance</label>
+                <div class="has-feedback custom-search">
+                  <input type="search" readonly placeholder="Search"
+                    (click)="openInsuranceSearchModal(insuranceSearchModalTemplate, 'Insurance Payment')"
+                    class="form-control" formControlName="Insurance">
+                  <span (click)="openInsuranceSearchModal(insuranceSearchModalTemplate, 'Insurance Payment')"
+                    class="form-control-feedback text-grey"><i class="text-blue glyphicon glyphicon-search"></i></span>
+                </div>
+                <!-- <select class="form-control input-sm form-select m-b" formControlName="Insurance" class="form-control">
+                  <option value=0 disabled>Select Insurance</option>
+                  <option *ngFor="let ins of listInsurances" value={{ins.value}}>{{ins.name}}</option>
+                </select> -->
+              </div>
+              <div class="form-group col-lg-4 col-md-6">
+                <label class="control-label">Payment Type</label>
+                <select class="form-control input-sm form-select m-b" formControlName="PaymentType"
+                  class="form-control">
+                  <option value=0 disabled>Select Payment Type</option>
+                  <option *ngFor="let pt of listInsurancePaymentType" value={{pt.Id}}>{{pt.Name}}</option>
+                </select>
+              </div>
+              <div class="form-group col-lg-4 col-md-6">
+                <label class="control-label">Check No</label>
+                <input class="form-control input-sm m-b" formControlName="CheckNo" class="form-control">
+                <div *ngIf="isSearchInitiated && f.CheckNo.errors" class="error-text">
+                  <div *ngIf="e.CheckNo.errors.pattern">Invalid check no</div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-lg-4 col-md-6">
+                <label class="control-label">Batch No</label>
+                <input class="form-control input-sm m-b" formControlName="BatchNo" class="form-control" readonly>
+              </div>
+              <div class="form-group col-lg-4 col-md-6">
+                <label class="control-label">Amount</label>
+                <input class="form-control input-sm m-b" formControlName="Amount" class="form-control">
+              </div>
+              <div class="form-group col-lg-4 col-md-6">
+                <label class="control-label">Facility</label>
+                <div class="has-feedback custom-search">
+                  <input type="search" readonly placeholder="Search"
+                    (click)="openSearchFacilityModal(facilitySearchModalTemplate, 'Insurance Payment')"
+                    class="form-control" formControlName="Facility">
+                  <span (click)="openSearchFacilityModal(facilitySearchModalTemplate, 'Insurance Payment')"
+                    class="form-control-feedback text-grey"><i class="text-blue glyphicon glyphicon-search"></i></span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-lg-4 col-md-6">
+                <label class="control-label">EOB Date</label>
+                <my-date-picker [placeholder]="placeholder" formControlName="EOBDate"
+                  (dateChanged)="onDateChanged($event,'EOBDate')" [options]="myDatePickerOptions"  [selDate]="selDateDOB">
+                </my-date-picker>
+              </div>
+              <div class="form-group col-lg-4 col-md-6">
+                <label class="control-label">Deposit Date</label>
+                <my-date-picker [options]="myDatePickerOptions" [placeholder]="placeholder"
+                  (dateChanged)="onDateChanged($event,'ipfDepositDate')" formControlName="DepositDate"  [selDate]="selDateDOB">
+                </my-date-picker>
+              </div>
+              <div class="form-group col-lg-4 col-md-6">
+                <label class="control-label">Received Date</label>
+                <my-date-picker [options]="myDatePickerOptions" [placeholder]="placeholder"
+                  (dateChanged)="onDateChanged($event,'ReceivedDate')" formControlName="ReceivedDate"  [selDate]="selDateDOB">
+                </my-date-picker>
+              </div>
+              <div class="form-group col-lg-4 col-md-6">
+                <label class="control-label">Check Date</label>
+                <my-date-picker [options]="myDatePickerOptions" [placeholder]="placeholder"
+                  (dateChanged)="onDateChanged($event,'CheckDate')" formControlName="CheckDate"  [selDate]="selDateDOB">
+                </my-date-picker>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-lg-12">
+                <label class="control-label">Note</label>
+                <textarea formControlName="Note" style="width: 100%; max-width: 100%;" rows="5"></textarea>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="row">
+      <div class="col-lg-12">
+        <button *ngIf="!showInsBtn" type="button" class="btn btn-warning pull-left"
+          (click)="openPaymentAdvisoryModal(paymentAdvisoryModalTemplate, 'Insurance Payment')">Payment
+          Advisory</button>
+        <button  class="btn btn-primary btn-sm ml-2 pull-right" [disabled]="!insurancePaymentForm.valid" type="submit"
+          (click)="onOkInsPayment()">OK</button>
+        <button  type="button" class="btn btn-white ml-2 btn-sm pull-right"
+          (click)="insurancePaymentForm.reset(); insurancePaymentModalRef.hide()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Patient Payment Modal -->
+<ng-template #patientPaymentModalTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Patient Payment</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="patientPaymentForm.reset();patientPaymentModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <!-- <app-patient-payment (onShowpayAdv)="onShowpayAdv($event)"></app-patient-payment> -->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+          <form [formGroup]="patientPaymentForm">
+            <div class="row">
+              <div class="form-group col-lg-4 col-md-6">
+                <label class="control-label">Patient Name</label>
+                <div class="has-feedback custom-search">
+                  <input type="search" readonly placeholder="Search" id="Patient_Name"
+                    (click)="openSearchPatientModal(patientSearchModalTemplate, 'Patient Payment')" class="form-control"
+                    formControlName="PatientName">
+                  <span (click)="openSearchPatientModal(patientSearchModalTemplate, 'Patient Payment')"
+                    class="form-control-feedback text-grey"><i class="text-blue glyphicon glyphicon-search"></i></span>
+                </div>
+              </div>
+              <div class="form-group col-lg-4 col-md-6">
+                <label class="control-label">Facility</label>
+                <div class="has-feedback custom-search">
+                  <input type="search" readonly placeholder="Search" id="Facility"
+                    (click)="openSearchFacilityModal(facilitySearchModalTemplate, 'Patient Payment')"
+                    class="form-control" formControlName="Facility">
+                  <span (click)="openSearchFacilityModal(facilitySearchModalTemplate, 'Patient Payment')"
+                    class="form-control-feedback text-grey"><i class="text-blue glyphicon glyphicon-search"></i></span>
+                </div>
+              </div>
+              <div class="form-group col-lg-4 col-md-6">
+                <label class="control-label">Deposit Date</label>
+                <my-date-picker [placeholder]="placeholder" formControlName="DepositDate" id="DepositDate"
+                  (dateChanged)="onDateChanged($event,'DepositDate')" [options]="myDatePickerOptions" [selDate]="selDateDOB" >
+                </my-date-picker>
+              </div>
+              <div class="form-group col-lg-4 col-md-6">
+                <label class="control-label">Amount</label>
+                <input class="form-control input-sm m-b" formControlName="Amount" class="form-control" id="Amount">
+              </div>
+              <!-- </div>
+            <div class="row"> -->
+              <div class="form-group col-lg-4 col-md-6">
+                <label class="control-label">Payment Type</label>
+                <select class="form-control input-sm form-select m-b" formControlName="PaymentType"
+                  class="form-control" id="PaymentType">
+                  <option value=0 disabled>Select Payment Type</option>
+                  <option *ngFor="let pt of listPatientPaymentType" value={{pt.Id}}>{{pt.Name}}</option>
+                </select>
+              </div>
+              <div class="form-group col-lg-4 col-md-6">
+                <label class="control-label">Check Date</label>
+                <my-date-picker [options]="myDatePickerOptions" [placeholder]="placeholder"
+                  (dateChanged)="onDateChanged($event,'CheckDate')" formControlName="CheckDate" [selDate]="selDateDOB">
+                </my-date-picker>
+              </div>
+              <div class="form-group col-lg-4 col-md-6">
+                <label class="control-label">Check No</label>
+                <input class="form-control input-sm m-b" formControlName="CheckNo" class="form-control" id="CheckNo">
+                <div *ngIf="isSearchInitiated && f.CheckNo.errors" class="error-text">
+                  <div *ngIf="e.CheckNo.errors.pattern">Invalid check no</div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="row">
+      <div class="form-group col-lg-12">
+        <button *ngIf="!ShowPayBtn" type="button" class="btn btn-warning pull-left" [disabled]="!patientPaymentForm.valid"  
+          (click)="openPaymentAdvisoryModal(paymentAdvisoryModalTemplate, 'Patient Payment')">Payment Advisory</button>
+        <button *ngIf="!showAdv" class="btn btn-primary btn-sm ml-2 pull-right" [disabled]="!patientPaymentForm.valid" type="submit"
+          (click)="onOkPatPayment()">OK</button>
+        <button *ngIf="!showAdv" type="button" class="btn btn-white pull-right ml-2 btn-sm"
+          (click)="patientPaymentForm.reset(); patientPaymentModalRef.hide()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Insurance Search Modal -->
+<ng-template #insuranceSearchModalTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Insurance Search</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="insuranceSearchModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <insurance-search (onSelectInsurance)=onSelectInsurance($event)></insurance-search>
+  </div>
+</ng-template>
+
+<!-- Payment Advisory Modal -->
+<ng-template #paymentAdvisoryModalTemplate >
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Payment Advisory</h4>
+    <button type="button"   class="close pull-right" aria-label="Close" (click)="closeData();">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-payment-advisory  #PAC [paymentDetail]="paymentdetail"   (onSelectPayment)="onPaymentPost($event)"></app-payment-advisory>
+  </div>
+</ng-template>
+
+<!-- Patient Search Modal -->
+<ng-template #patientSearchModalTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Patient Search</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="patientSearchModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-patient-search (onSelectpatient)="getPatientName($event)"></app-patient-search>
+  </div>
+</ng-template>
+
+<!-- Facility Search Modal -->
+<ng-template #facilitySearchModalTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Facility Search</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="facilitySearchModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-facilities (onSelectFacility)="getFacilityName($event)"></app-facilities>
+  </div>
+</ng-template>

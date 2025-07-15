@@ -1,0 +1,601 @@
+<div class="tabs-container">
+  <div class="d-flex justify-content-between">
+    <h3 class="text-dark" ><b>Eligibility Summary</b></h3>
+    <button type="button" class="btn-primary" onclick="history.back()" >Go Back</button>
+  </div>
+  <ul class="nav nav-tabs">
+    <li class="nav-item active">
+      <a class="nav-link active" id="pills-summary-tab" data-toggle="pill" href="#pills-summary" role="tab" aria-controls="pills-summary" aria-selected="true">Summary</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="pills-coverage-tab" data-toggle="pill" href="#pills-coverage" role="tab" aria-controls="pills-coverage" aria-selected="false">Coverage</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="pills-co-insurance-tab" data-toggle="pill" href="#pills-co-insurance" role="tab" aria-controls="pills-co-insurance" aria-selected="false">Co-insurance</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="pills-co-payment-tab" data-toggle="pill" href="#pills-co-payment" role="tab" aria-controls="pills-co-payment" aria-selected="false">Co-payment</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="pills-limitations-tab" data-toggle="pill" href="#pills-limitations" role="tab" aria-controls="pills-limitations" aria-selected="false">Limitations</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="pills-deductible-tab" data-toggle="pill" href="#pills-deductible" role="tab" aria-controls="pills-deductible" aria-selected="false">Deductible</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="pills-out-of-pocket-tab" data-toggle="pill" href="#pills-out-of-pocket" role="tab" aria-controls="pills-out-of-pocket" aria-selected="false">Out-of-Pocket</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="pills-non-covered-tab" data-toggle="pill" href="#pills-non-covered" role="tab" aria-controls="pills-non-covered" aria-selected="false">Non-covered</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="pills-primary-care-provider-tab" data-toggle="pill" href="#pills-primary-care-provider" role="tab" aria-controls="pills-primary-care-provider" aria-selected="false">Primary-Care-Provider</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="pills-others-tab" data-toggle="pill" href="#pills-others" role="tab" aria-controls="pills-others" aria-selected="false">Others</a>
+    </li>
+  </ul>
+
+  <div class="tab-content" id="pills-tabContent">
+    <div class="tab-pane fade  active in" id="pills-summary" role="tabpanel" aria-labelledby="pills-summary-tab">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="row ">
+            <div class="col-lg-8">
+              
+
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="pt-10 text-success"><b>Patient</b></div>
+              <div><b>Name</b> {{patientFirstName}} {{patientMiddleName}} {{patientLastName}}</div>
+              <div><b>Sex</b> {{patientSex}}</div>
+              <div><b>DOB</b> {{patientDateofBirth}}</div>
+              <div>  <b>Address</b> {{patientAddress}} {{patientCity}} {{patientState}} {{patientZip}}</div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="pt-10 text-success"><b>Insured</b></div>
+                  <div><b>Name</b> {{patientFirstName}} {{patientMiddleName}} {{patientLastName}}</div>
+                  <div><b>ID Num</b> {{this.eligbilityDetails[0].eligibilityresponse.subscriber.patientid}}</div>
+                  <div><b>Relation</b> {{relationship}}</div>
+                  <div><b>Address</b>{{patientAddress}} {{patientCity}} {{patientState}} {{patientZip}}</div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="pt-10 text-success"><b>Provider</b></div>
+                  <div><b>Name</b> {{providerFirstName}} {{providerLastName}}</div>
+                  <div><b>NPI</b> {{this.eligbilityDetails[0].eligibilityresponse.inforeceiver.npi}}</div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="pt-10 text-success"><b>Payer</b></div>
+                  <div><b>Name</b> {{this.eligbilityDetails[0].eligibilityresponse.infosource.payername}}</div>
+                  <div><b>Payer Id</b> {{this.eligbilityDetails[0].eligibilityresponse.infosource.payerid}}</div>
+                </div>
+                
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="text-success"><b>Status </b> <b class="text-primary" (mouseover)="Tooltip()"> Active</b></div>
+              <div  *ngFor="let item of date">
+                <div><b>{{item.datequalifier}}</b> {{item['date-of-service']}}</div>
+              </div>
+
+              
+
+              
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="pills-coverage" role="tabpanel" aria-labelledby="pills-coverage-tab">
+      <div class="row">
+        <div class="col-lg-12 pt-20">
+            <table class="table table-hover table-striped table-bordered dataTable pracTable" width="100%"  >
+              <thead>
+                <tr>
+                  <th>Coverage Level</th>
+                  <th>Service Type</th>
+                  <th>Service Type Code</th>
+                  <th>Insurance Type</th>
+                  <th>Plan Coverage </th>
+                  
+                  <th>Amount</th>
+                  
+                  <th>Authorization</th>
+                  <th>Network Indicator</th>
+                  
+                  <th>Message</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of activeCoverage">
+                  <td>{{item.coveragelevel}}</td>
+                  <td>{{item.servicetype}}</td>
+                  <td>{{item.servicetypecode}}</td>
+                  <td>{{item.insurancetype}}</td>
+                  <td>{{item.plancoveragedescription}}</td>
+                  <td>
+                    <span *ngIf="item.percent!='' && item.percent!='NaN %'">{{item.percent}} <span *ngIf="item.time_period_qualifier!='' || item.quantityqualifier!=''" >Per</span>  {{ item.time_period_qualifier}} {{ item.quantityqualifier}}</span>
+                    <span *ngIf="item.percent==''">
+                      {{item.benefitamount}} 
+                    <span *ngIf="item.quantity!=''">{{item.quantity}}</span> 
+                    <span *ngIf="item.benefitamount=='' && item.quantity!='' && item.quantityqualifier==''">Visits </span> 
+                    <span *ngIf="item.time_period_qualifier!='Remaining' && item.benefitamount!='$0' && item.benefitamount!='' && item.time_period_qualifier!=''"  > Per </span> 
+                      {{ item.time_period_qualifier}}
+                      {{ item.quantityqualifier}}
+                    </span>
+                  </td>
+                  <td>{{item.yes_no_response_code}}</td>
+                  <td>{{item.plannetworkindicator}}</td>
+                  
+                  <td>
+                    <button *ngIf="item.message!='No Info'" type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" [title]="item.message">
+                      Info
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="pills-co-insurance" role="tabpanel" aria-labelledby="pills-co-insurance-tab">
+      <div class="row">
+        <div class="col-lg-12 pt-20">
+          <table class="table table-hover table-striped table-bordered dataTable pracTable" width="100%"  >
+            <thead>
+              <tr>
+                <th>Coverage Level</th>
+                <th>Service Type</th>
+                <th>Service Type Code</th>
+                <th>Insurance Type</th>
+                <th>Plan Coverage </th>
+                
+                <th>Amount</th>
+                
+                <th>Authorization</th>
+                <th>Network Indicator</th>
+                
+                <th>Message</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of coInsurance">
+                <td>{{item.coveragelevel}}</td>
+                <td>{{item.servicetype}}</td>
+                <td>{{item.servicetypecode}}</td>
+                <td>{{item.insurancetype}}</td>
+                <td>{{item.plancoveragedescription}}</td>
+                <td>
+                  <span *ngIf="item.percent!='' && item.percent!='NaN %'">{{item.percent}} <span *ngIf="item.time_period_qualifier!='' || item.quantityqualifier!=''" >Per</span>  {{ item.time_period_qualifier}} {{ item.quantityqualifier}}</span>
+                  <span *ngIf="item.percent==''">
+                    {{item.benefitamount}} 
+                  <span *ngIf="item.quantity!=''">{{item.quantity}}</span> 
+                  <span *ngIf="item.benefitamount=='' && item.quantity!='' && item.quantityqualifier==''">Visits </span> 
+                  <span *ngIf="item.time_period_qualifier!='Remaining' && item.benefitamount!='$0' && item.benefitamount!='' && item.time_period_qualifier!=''"  > Per </span> 
+                    {{ item.time_period_qualifier}}
+                    {{ item.quantityqualifier}}
+                  </span>
+                </td>
+                <td>{{item.yes_no_response_code}}</td>
+                <td>{{item.plannetworkindicator}}</td>
+                <td>
+                    <button *ngIf="item.message!='No Info'" type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" [title]="item.message">
+                      Info
+                    </button>
+                  </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="pills-co-payment" role="tabpanel" aria-labelledby="pills-co-payment-tab">
+      <div class="row">
+        <div class="col-lg-12 pt-20">
+          <table class="table table-hover table-striped table-bordered dataTable pracTable" width="100%"  >
+            <thead>
+              <tr>
+                <th>Coverage Level</th>
+                <th>Service Type</th>
+                <th>Service Type Code</th>
+                <th>Insurance Type</th>
+                <th>Plan Coverage </th>
+                
+                <th>Amount</th>
+                
+                <th>Authorization</th>
+                <th>Network Indicator</th>
+                
+                <th>Message</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of coPayment">
+                <td>{{item.coveragelevel}}</td>
+                <td>{{item.servicetype}}</td>
+                <td>{{item.servicetypecode}}</td>
+                <td>{{item.insurancetype}}</td>
+                <td>{{item.plancoveragedescription}}</td>
+                <td>
+                  <span *ngIf="item.percent!='' && item.percent!='NaN %'">{{item.percent}} <span *ngIf="item.time_period_qualifier!='' || item.quantityqualifier!=''" >Per</span>  {{ item.time_period_qualifier}} {{ item.quantityqualifier}}</span>
+                  <span *ngIf="item.percent==''">
+                    {{item.benefitamount}} 
+                  <span *ngIf="item.quantity!=''">{{item.quantity}}</span> 
+                  <span *ngIf="item.benefitamount=='' && item.quantity!='' && item.quantityqualifier==''">Visits </span> 
+                  <span *ngIf="item.time_period_qualifier!='Remaining' && item.benefitamount!='$0' && item.benefitamount!='' && item.time_period_qualifier!=''"  > Per </span> 
+                    {{ item.time_period_qualifier}}
+                    {{ item.quantityqualifier}}
+                  </span>
+                </td>
+                <td>{{item.yes_no_response_code}}</td>
+                <td>{{item.plannetworkindicator}}</td>
+                <td>
+                    <button *ngIf="item.message!='No Info'" type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" [title]="item.message">
+                      Info
+                    </button>
+                  </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="pills-limitations" role="tabpanel" aria-labelledby="pills-limitations-tab">
+      <div class="row">
+        <div class="col-lg-12 pt-20">
+          <table class="table table-hover table-striped table-bordered dataTable pracTable" width="100%"  >
+            <thead>
+              <tr>
+                <th>Coverage Level</th>
+                <th>Service Type</th>
+                <th>Service Type Code</th>
+                <th>Insurance Type</th>
+                <th>Plan Coverage </th>
+                
+                <th>Amount</th>
+                
+                <th>Authorization</th>
+                <th>Network Indicator</th>
+                
+                <th>Message</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of limitations">
+                <td>{{item.coveragelevel}}</td>
+                <td>{{item.servicetype}}</td>
+                <td>{{item.servicetypecode}}</td>
+                <td>{{item.insurancetype}}</td>
+                <td>{{item.plancoveragedescription}}</td>
+                <td>
+                  <span *ngIf="item.percent!='' && item.percent!='NaN %'">{{item.percent}} <span *ngIf="item.time_period_qualifier!='' || item.quantityqualifier!=''" >Per</span>  {{ item.time_period_qualifier}} {{ item.quantityqualifier}}</span>
+                  <span *ngIf="item.percent==''">
+                    {{item.benefitamount}} 
+                  <span *ngIf="item.quantity!=''">{{item.quantity}}</span> 
+                  <span *ngIf="item.benefitamount=='' && item.quantity!='' && item.quantityqualifier==''">Visits </span> 
+                  <span *ngIf="item.time_period_qualifier!='Remaining' && item.benefitamount!='$0' && item.benefitamount!='' && item.time_period_qualifier!=''"  > Per </span> 
+                    {{ item.time_period_qualifier}}
+                    {{ item.quantityqualifier}}
+                  </span>
+                </td>
+                <td>{{item.yes_no_response_code}}</td>
+                <td>{{item.plannetworkindicator}}</td>
+                <td>
+                    <button *ngIf="item.message!='No Info'" type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" [title]="item.message">
+                      Info
+                    </button>
+                  </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="pills-deductible" role="tabpanel" aria-labelledby="pills-deductible-tab">
+      <div class="row">
+        <div class="col-lg-12 pt-20">
+          <table class="table table-hover table-striped table-bordered dataTable pracTable" width="100%"  >
+            <thead>
+              <tr>
+                <th>Coverage Level</th>
+                <th>Service Type</th>
+                <th>Service Type Code</th>
+                <th>Insurance Type</th>
+                <th>Plan Coverage </th>
+                
+                <th>Amount</th>
+                
+                <th>Authorization</th>
+                <th>Network Indicator</th>
+                
+                <th>Message</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of deductible">
+                <td>{{item.coveragelevel}}</td>
+                <td>{{item.servicetype}}</td>
+                <td>{{item.servicetypecode}}</td>
+                <td>{{item.insurancetype}}</td>
+                <td>{{item.plancoveragedescription}}</td>
+                <td>
+                  <span *ngIf="item.percent!='' && item.percent!='NaN %'">{{item.percent}} <span *ngIf="item.time_period_qualifier!='' || item.quantityqualifier!=''" >Per</span>  {{ item.time_period_qualifier}} {{ item.quantityqualifier}}</span>
+                  <span *ngIf="item.percent==''">
+                    {{item.benefitamount}} 
+                  <span *ngIf="item.quantity!=''">{{item.quantity}}</span> 
+                  <span *ngIf="item.benefitamount=='' && item.quantity!='' && item.quantityqualifier==''">Visits </span> 
+                  <span *ngIf="item.time_period_qualifier!='Remaining' && item.benefitamount!='$0' && item.benefitamount!='' && item.time_period_qualifier!=''"  > Per </span> 
+                    {{ item.time_period_qualifier}}
+                    {{ item.quantityqualifier}}
+                  </span>
+                </td>
+                <td>{{item.yes_no_response_code}}</td>
+                <td>{{ item.plannetworkindicator}}</td>
+                <td>
+                    <button *ngIf="item.message!='No Info'" type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" [title]="item.message">
+                      Info
+                    </button>
+                  </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="pills-out-of-pocket" role="tabpanel" aria-labelledby="pills-out-of-pocket-tab">
+      <div class="row">
+        <div class="col-lg-12 pt-20">
+          <table class="table table-hover table-striped table-bordered dataTable pracTable" width="100%"  >
+            <thead>
+              <tr>
+                <th>Coverage Level</th>
+                <th>Service Type</th>
+                <th>Service Type Code</th>
+                <th>Insurance Type</th>
+                <th>Plan Coverage </th>
+                
+                <th>Amount</th>
+                
+                <th>Authorization</th>
+                <th>Network Indicator</th>
+                
+                <th>Message</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of outOfPocket">
+                <td>{{item.coveragelevel}}</td>
+                <td>{{item.servicetype}}</td>
+                <td>{{item.servicetypecode}}</td>
+                <td>{{item.insurancetype}}</td>
+                <td>{{item.plancoveragedescription}}</td>
+                <td>
+                  <span *ngIf="item.percent!='' && item.percent!='NaN %'">{{item.percent}} <span *ngIf="item.time_period_qualifier!='' || item.quantityqualifier!=''" >Per</span>  {{ item.time_period_qualifier}} {{ item.quantityqualifier}}</span>
+                  <span *ngIf="item.percent==''">
+                    {{item.benefitamount}} 
+                  <span *ngIf="item.quantity!=''">{{item.quantity}}</span> 
+                  <span *ngIf="item.benefitamount=='' && item.quantity!='' && item.quantityqualifier==''">Visits </span> 
+                  <span *ngIf="item.time_period_qualifier!='Remaining' && item.benefitamount!='$0' && item.benefitamount!='' && item.time_period_qualifier!=''"  > Per </span> 
+                    {{ item.time_period_qualifier}}
+                    {{ item.quantityqualifier}}
+                  </span>
+                </td>
+                <td>{{item.yes_no_response_code}}</td>
+                <td>{{item.plannetworkindicator}}</td>
+                <td>
+                    <button *ngIf="item.message!='No Info'" type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" [title]="item.message">
+                      Info
+                    </button>
+                  </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="pills-non-covered" role="tabpanel" aria-labelledby="pills-non-covered-tab">
+      <div class="row">
+        <div class="col-lg-12 pt-20">
+          <table class="table table-hover table-striped table-bordered dataTable pracTable" width="100%"  >
+            <thead>
+              <tr>
+                <th>Coverage Level</th>
+                <th>Service Type</th>
+                <th>Service Type Code</th>
+                <th>Insurance Type</th>
+                <th>Plan Coverage </th>
+                
+                <th>Amount</th>
+                
+                <th>Authorization</th>
+                <th>Network Indicator</th>
+                
+                <th>Message</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of nonCovered">
+                <td>{{item.coveragelevel}}</td>
+                <td>{{item.servicetype}}</td>
+                <td>{{item.servicetypecode}}</td>
+                <td>{{item.insurancetype}}</td>
+                <td>{{item.plancoveragedescription}}</td>
+                <td>
+                  <span *ngIf="item.percent!='' && item.percent!='NaN %'">{{item.percent}} <span *ngIf="item.time_period_qualifier!='' || item.quantityqualifier!=''" >Per</span>  {{ item.time_period_qualifier}} {{ item.quantityqualifier}}</span>
+                  <span *ngIf="item.percent==''">
+                    {{item.benefitamount}} 
+                  <span *ngIf="item.quantity!=''">{{item.quantity}}</span> 
+                  <span *ngIf="item.benefitamount=='' && item.quantity!='' && item.quantityqualifier==''">Visits </span> 
+                  <span *ngIf="item.time_period_qualifier!='Remaining' && item.benefitamount!='$0' && item.benefitamount!='' && item.time_period_qualifier!=''"  > Per </span> 
+                    {{ item.time_period_qualifier}}
+                    {{ item.quantityqualifier}}
+                  </span>
+                </td>
+                <td>{{item.yes_no_response_code}}</td>
+                <td>{{item.plannetworkindicator}}</td>
+                <td>
+                    <button *ngIf="item.message!='No Info'" type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" [title]="item.message">
+                      Info
+                    </button>
+                  </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="pills-primary-care-provider" role="tabpanel" aria-labelledby="pills-primary-care-provider-tab">
+      <div class="row">
+        <div class="col-lg-12 pt-20">
+          <table class="table table-hover table-striped table-bordered dataTable pracTable" width="100%"  >
+            <thead>
+              <tr>
+                <th>Coverage Level</th>
+                <th>Service Type</th>
+                <th>Service Type Code</th>
+                <th>Insurance Type</th>
+                <th>Plan Coverage </th>
+                
+                <th>Amount</th>
+                
+                <th>Authorization</th>
+                <th>Network Indicator</th>
+                
+                <th>Message</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of primaryCareProvider">
+                <td>{{item.coveragelevel}}</td>
+                <td>{{item.servicetype}}</td>
+                <td>{{item.servicetypecode}}</td>
+                <td>{{item.insurancetype}}</td>
+                <td>{{item.plancoveragedescription}}</td>
+                <td>
+                  <span *ngIf="item.percent!='' && item.percent!='NaN %'">{{item.percent}} <span *ngIf="item.time_period_qualifier!='' || item.quantityqualifier!=''" >Per</span>  {{ item.time_period_qualifier}} {{ item.quantityqualifier}}</span>
+                  <span *ngIf="item.percent==''">
+                    {{item.benefitamount}} 
+                  <span *ngIf="item.quantity!=''">{{item.quantity}}</span> 
+                  <span *ngIf="item.benefitamount=='' && item.quantity!='' && item.quantityqualifier==''">Visits </span> 
+                  <span *ngIf="item.time_period_qualifier!='Remaining' && item.benefitamount!='$0' && item.benefitamount!='' && item.time_period_qualifier!=''"  > Per </span> 
+                    {{ item.time_period_qualifier}}
+                    {{ item.quantityqualifier}}
+                  </span>
+                </td>
+                <td>{{item.yes_no_response_code}}</td>
+                <td>{{item.plannetworkindicator}}</td>
+                <td>
+                    <button *ngIf="item.message!='No Info'" type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" [title]="item.message">
+                      Info
+                    </button>
+                  </td>
+              </tr>
+            </tbody>
+          </table>
+          <div *ngFor="let item of benefitentity">
+            <div class="row">
+              <div class="col-lg-6">
+              </div>
+              <div class="col-lg-12" style="margin-top: 10px;">
+                <div><b class="text-success">{{item.plancoveragedescription}}</b></div>
+              </div>
+              <div class="col-lg-6">
+                <div><b>{{item.entitycode}}</b></div>
+              </div>
+              <div class="col-lg-6">
+                <div>{{item.first}} {{item.middle}} {{item.name}}</div>
+              </div>
+              <div class="col-lg-12" *ngIf="item.benefit_related_entity_id">
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div><b>Payer Identification</b></div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div> {{item.benefit_related_entity_id}}</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-lg-12" *ngIf="item.benefit_related_entity_address_1">
+                
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div><b>Address</b></div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div> {{item.benefit_related_entity_address_1}} {{item.benefit_related_entity_city}} {{item.benefit_related_entity_state}} {{item.benefit_related_entity_zip}}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div> <b>{{item.communicationnumberqualifier}}</b></div>
+              </div>
+              <div class="col-lg-6">
+                <div> {{item.communicationnumber}}</div>
+              </div>
+
+              
+            
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="pills-others" role="tabpanel" aria-labelledby="pills-others-tab">
+      <div class="row">
+        <div class="col-lg-12 pt-20">
+          <table class="table table-hover table-striped table-bordered dataTable pracTable" width="100%"  >
+            <thead>
+              <tr>
+                <th>Coverage Level</th>
+                <th>Service Type</th>
+                <th>Service Type Code</th>
+                <th>Insurance Type</th>
+                <th>Plan Coverage </th>
+                
+                <th>Amount</th>
+                
+                <th>Authorization</th>
+                <th>Network Indicator</th>
+                
+                <th>Message</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of other">
+                <td>{{item.coveragelevel}}</td>
+                <td>{{item.servicetype}}</td>
+                <td>{{item.servicetypecode}}</td>
+                <td>{{item.insurancetype}}</td>
+                <td>{{item.plancoveragedescription}}</td>
+                <td>
+                  <span *ngIf="item.percent!='' && item.percent!='NaN %'">{{item.percent}} <span *ngIf="item.time_period_qualifier!='' || item.quantityqualifier!=''" >Per</span>  {{ item.time_period_qualifier}} {{ item.quantityqualifier}}</span>
+                  <span *ngIf="item.percent==''">
+                    {{item.benefitamount}} 
+                  <span *ngIf="item.quantity!=''">{{item.quantity}}</span> 
+                  <span *ngIf="item.benefitamount=='' && item.quantity!='' && item.quantityqualifier==''">Visits </span> 
+                  <span *ngIf="item.time_period_qualifier!='Remaining' && item.benefitamount!='$0' && item.benefitamount!='' && item.time_period_qualifier!=''"  > Per </span> 
+                    {{ item.time_period_qualifier}}
+                    {{ item.quantityqualifier}}
+                  </span>
+                </td>
+                <td>{{item.yes_no_response_code}}</td>
+                <td>{{item.plannetworkindicator}}</td>
+                <td>
+                    <button *ngIf="item.message!='No Info'" type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" [title]="item.message">
+                      Info
+                    </button>
+                  </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>

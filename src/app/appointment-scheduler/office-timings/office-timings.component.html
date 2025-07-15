@@ -1,0 +1,86 @@
+<div class="row">
+  <div class="form-group col-lg-3">
+    <label for="provider">Provider<span class="text-danger">*</span></label>
+    <select class="form-control" [(ngModel)]="timingSearchViewModel.providerCode" (change)="onSelect($event)">
+      <option [ngValue]="null" disabled>Select Provider</option>
+      <option *ngFor="let provider of providerSelectList" [value]="provider.Id">{{provider.Name}}</option>
+    </select>
+  </div>
+  <div class="form-group col-lg-3 col-md-3">
+    <label for="location">Location<span class="text-danger">*</span></label>
+    <select class="form-control" [(ngModel)]="timingSearchViewModel.locationCode" (change)="onSelect($event)">
+      <option [ngValue]="null" disabled>Select Location</option>
+      <option *ngFor="let location of locationSelectList" [value]="location.Id">{{location.Name}}</option>
+    </select>
+  </div>
+</div>
+<div class="row">
+  <div class="form-group col-lg-3 col-md-3">
+    <label for="location">Office Timings</label>
+    <select class="form-control" [(ngModel)]="selectedProviderScheduleId" (change)="onChangeProviderSchedule($event)">
+      <option [ngValue]="null">Select Scheduler</option>
+      <option *ngFor="let schedule of providerSchedules" [value]="schedule.SrNo">
+        {{schedule.DateFrom | date:'MMMM, d y'}} -
+        {{schedule.DateTo | date:'MMMM, d y'}}</option>
+    </select>
+  </div>
+  <div class="col-lg-3 col-md-3"
+    *ngIf="timingSearchViewModel.locationCode!==null && timingSearchViewModel.locationCode!==undefined && timingSearchViewModel.providerCode!==null && timingSearchViewModel.providerCode!==undefined">
+    <label for="" style="visibility: hidden;">Not to display</label>
+    <div>
+      <button class="btn btn-sm btn-primary pull-right ml-2" (click)="onNew()"
+        title="Add new Office Timing.">Add New</button>
+      <button class="btn btn-sm btn-primary pull-right ml-2"
+        *ngIf="selectedProviderScheduleId!==null && selectedProviderScheduleId!==0 && selectedProviderScheduleId!==undefined"
+        (click)="onEdit()" title="Edit Office Timing">Edit</button>
+    </div>
+  </div>
+</div>
+<div class="row"
+  *ngIf="selectedProviderScheduleId!==null && selectedProviderScheduleId!==0 && selectedProviderScheduleId!==undefined">
+  <div class="col-lg-6">
+    <table class="table table-striped table-hover table-bordered">
+      <thead>
+        <tr>
+          <th></th>
+          <th colspan="2" class="text-center">
+            <strong>Office Timing</strong>
+          </th>
+          <th colspan="2" class="text-center">
+            <strong>Break Timing</strong>
+          </th>
+          <th></th>
+        </tr>
+        <tr>
+          <th>Week Day</th>
+          <th>From</th>
+          <th>To</th>
+          <th>From</th>
+          <th>To</th>
+          <th class="text-center">Slot Size</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="timings.length>0">
+        <tr *ngFor="let time of timings let ndx=index">
+          <td>{{time.dayNam | titlecase}}</td>
+          <td>{{transform(time.Time_From) | date:'h:mm a'}}</td>
+          <td>{{transform(time.Time_To) | date:'h:mm a'}}</td>
+          <td>{{transform(time.Break_time_From) | date:'h:mm a'}}</td>
+          <td>{{transform(time.Break_Time_To) | date:'h:mm a'}}</td>
+          <td class="text-center">{{transformSlotSize(time.time_slot_size)}}</td>
+        </tr>
+      </tbody>
+      <tbody *ngIf="timings.length===0">
+        <tr>
+          <td colspan="6" class="text-center">No day is ON against selected office timing. Click edit to make changes.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<add-edit-office-timing [providerCode]="timingSearchViewModel.providerCode" #addEditProviderSchedule
+  [locationCode]="timingSearchViewModel.locationCode" [providerSchedule]="selectedProviderSchedule"
+  (close)="onCloseAddEditWindow($event)">
+</add-edit-office-timing>

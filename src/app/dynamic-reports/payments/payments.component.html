@@ -1,0 +1,19 @@
+<h3>Payment Reports</h3>
+<div class="tabs-container">
+    <ul class="nav nav-tabs">
+        <li [routerLink]="['daily']" [routerLinkActive]="['active']"><a aria-expanded="true">Daily</a></li>
+        <li [routerLink]="['monthly']" [routerLinkActive]="['active']"><a aria-expanded="true">Monthly</a></li>
+        <li [routerLink]="['by-carrier']" [routerLinkActive]="['active']"><a aria-expanded="true">By Carrier</a></li>
+        <li [routerLink]="['by-primary-dx']" [routerLinkActive]="['active']"><a aria-expanded="true">By Primary DX</a>
+        </li>
+        <li [routerLink]="['by-procedure-code']" [routerLinkActive]="['active']"><a aria-expanded="true">By Procedure
+                Code</a></li>
+    </ul>
+    <div class="tab-content">
+        <div id="tab-1" class="tab-pane active">
+            <div class="panel-body">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+</div>

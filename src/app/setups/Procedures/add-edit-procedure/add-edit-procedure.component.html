@@ -1,0 +1,188 @@
+<div class="col-lg-12">
+  <div class="ibox-title">
+    <h5>{{title}}</h5>
+  </div>
+  <div class="ibox-content">
+    <form role="form" [formGroup]="ProcedureForm">
+      <div class="row">
+        <!-- <div class="col-lg-2 form-group" [ngClass]="{'has-error':isDublicateProc}">
+          <label class="control-label">Proc Code<span class="text-danger">*</span></label>
+          <input type="text" Class="form-control" placeholder="Enter Proc Code" formControlName="proCode"
+            (input)="onProcedureCodeChange($event)" [(ngModel)]="ObjProcedure.ProcedureCode" maxlength="10" noSpace
+            autoFocus="true">
+        </div> -->
+        <div class="col-lg-2 form-group">
+          <label class="control-label">Proc Code<span class="text-danger">*</span></label>
+          <input type="text" Class="form-control" placeholder="Enter Proc Code" formControlName="proCode"
+            [(ngModel)]="ObjProcedure.ProcedureCode" maxlength="5">
+        </div>
+        <div class="col-lg-2 form-group">
+          <label class="control-label">Short Description<span class="text-danger">*</span></label>
+          <input type="text" Class="form-control" placeholder="Enter Description" formControlName="description"
+            [(ngModel)]="ObjProcedure.ProcedureDescription" maxlength="255">
+        </div>
+        <div class="col-lg-2 form-group">
+          <label class="control-label">Long Description<span class="text-danger">*</span></label>
+          <input type="text" Class="form-control" placeholder="Enter Long Description" formControlName="longDescription"
+            [(ngModel)]="ObjProcedure.LongDescription" maxlength="500">
+        </div>
+        <div class="col-lg-2 form-group">
+          <label class="control-label">Proc Default Charge</label>
+          <input type="text" Class="form-control" placeholder="0.00"
+          formControlName="defaultCharge" 
+            [(ngModel)]="ObjProcedure.ProcedureDefaultCharge"  (keypress)="restrictInput($event)" 
+            (paste)="restrictPaste($event)" 
+            (input)="formatInput($event)">
+        </div>
+        <div class="col-lg-2 form-group">
+          <label class="control-label">Alternate Code</label>
+          <input type="text" Class="form-control" formControlName="alternateCode" placeholder="Enter Alternate Code"
+            [(ngModel)]="ObjProcedure.Alternate_Code"  maxlength="5" >
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-2 form-group">
+          <label class="control-label">Default Modifier</label>
+          <select Class="form-control" formControlName="defaultModifier"
+            [(ngModel)]="ObjProcedure.ProcedureDefaultModifier">
+            <option [ngValue]="null" selected>Select Default Modifier</option>
+            <option *ngFor="let item of DropdownLists.Modifiers" [value]="item.IdStr">{{item.IdStr}}
+            </option>
+          </select>
+        </div>
+        <div class="col-lg-2 form-group">
+          <label class="control-label">POS Code<span class="text-danger">*</span></label>
+          <select Class="form-control" formControlName="posCode" [(ngModel)]="ObjProcedure.ProcedurePosCode">
+            <option [ngValue]="null"  disabled selected>Select POS Code</option>
+            <!-- <option *ngFor="let item of DropdownLists.POS" [value]="item.IdStr">{{item.IdStr +'|'+item.Name}}
+            </option> -->
+            <option *ngFor="let item of DropdownLists.POS" [value]="item.IdStr">{{item.Name}}
+            </option>
+          </select>
+        </div>
+        <div class="col-lg-2 form-group">
+          <label class="control-label">Proc Category<span class="text-danger">*</span></label>
+          <select Class="form-control" formControlName="categoryId" [(ngModel)]="ObjProcedure.CategoryId">
+            <option value='0' disabled selected>Select Proc Category</option>
+            <option *ngFor="let item of DropdownLists.Category" [value]="item.Id">{{item.Name}}
+            </option>
+          </select>
+        </div>
+        <div class="col-lg-2 form-group">
+          <label class="control-label">Effective Date<span class="text-danger">*</span></label>
+          <my-date-picker [options]="myDatePickerOptions" (keyup)="dateMaskGS($event)" [placeholder]="'MM/DD/YYYY'"
+            (dateChanged)="onEffectiveDateChanged($event)" formControlName="effectiveDate" [selDate]="EffectiveDate">
+          </my-date-picker>
+        </div>
+
+        <div class="col-lg-2 form-group">
+          <label class="control-label">Gender Applied on</label>
+          <select class="form-control" id="ddlGender" Class="form-control" formControlName="genderAppliedOn"
+            [(ngModel)]="ObjProcedure.GenderAppliedOn" (change)="onChangeGenderAppliedOn($event.target.value)">
+            <!-- <option [ngValue]="undefined" disabled selected>Select Gender</option> -->
+            <option [ngValue]="null" selected>Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+       
+      </div>
+      <div class="row">
+        <div class="col-lg-2 form-group">
+          <label class="control-label" for="ddlAgeCategory">Age Category</label>
+          <select class="form-control" id="ddlAgeCategory" Class="form-control" formControlName="ageCategory"
+            [(ngModel)]="ObjProcedure.AgeCategory">
+            <!-- <option [ngValue]="undefined" selected>Select Age Category</option> -->
+            <option [ngValue]="null" selected>Select Age Category</option>
+            <option value="New Born">New Born</option>
+            <option value="Pediatric">Pediatric</option>
+            <option value="Adult">Adult</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="col-lg-2 ">
+          <label class="control-label" for="ddlAgeRangeCriteria">Age Range</label>
+          <select class="form-control" id="ddlAgeRangeCriteria" Class="form-control" formControlName="ageRange"
+            [(ngModel)]="ObjProcedure.AgeRangeCriteria" (change)="onAgeRangeChange($event.target.value)">
+            <!-- <option [ngValue]="undefined" selected>Select Age Range</option> -->
+            <option [ngValue]="null" selected>Select Age Range</option>
+            <option value="Greater Than">Greater Than</option>
+            <option value="Less than">Less than</option>
+            <option value="Equal To And Greater Than">Equal To And Greater Than</option>
+            <option value="Equal To And Less Than">Equal To And Less Than</option>
+            <option value="Between">Between</option>
+          </select>
+        </div>
+        <ng-container [ngTemplateOutlet]="ObjProcedure.AgeRangeCriteria==='Between'?between:age"></ng-container>
+        <ng-template #between>
+          <div class="col-lg-1" *ngIf="ObjProcedure.AgeRangeCriteria==='Between'">
+            <label class="control-label">Age From</label>
+            <input type="text" Class="form-control" placeholder="From" formControlName="ageFrom"
+              [(ngModel)]="ObjProcedure.AgeFrom" maxlength="4" mask="0000">
+          </div>
+
+          <div class="col-lg-1">
+            <label class="control-label">Age To</label>
+            <input type="text" placeholder="To" Class="form-control" formControlName="ageTo"
+              [(ngModel)]="ObjProcedure.AgeTo" maxlength="4" mask="0000">
+          </div>
+        </ng-template>
+        <ng-template #age>
+          <div class="col-lg-2">
+            <label class="control-label">Age</label>
+            <input type="text" Class="form-control" placeholder="Enter Age" formControlName="ageFrom"
+              [(ngModel)]="ObjProcedure.AgeFrom" maxlength="4" mask="0000">
+          </div>
+        </ng-template>
+        <!-- <div class="col-lg-2">
+          <label class="control-label" for="ddlQualifier">Qualifier</label>
+          <select class="form-control" id="ddlQualifier" Class="form-control" formControlName="qualifier"
+            [(ngModel)]="ObjProcedure.Qualifier">
+            <option [ngValue]="undefined" selected>Please Select Qualifier</option>
+            <option value="GR">GR-GRAM</option>
+            <option value="ME">ME-MILLIGRAM</option>
+            <option value="ML">ML-MILLILITER</option>
+            <option value="UN">UNIT</option>
+            <option value="F2">F2-INTERNATIONAL UNIT</option>
+          </select>
+        </div> -->
+        <!-- <div class="col-lg-2">
+          <label class="control-label">MxUnits</label>
+          <input type="text" placeholder="Enter MxUnits" Class="form-control" formControlName="mxUnits"
+            [(ngModel)]="ObjProcedure.MxUnits" maxlength="4" mask="0000">
+        </div>
+        <div class="col-lg-2 form-group">
+          <label class="control-label">Component Code</label>
+          <input type="text" placeholder="Enter Component Code" Class="form-control" formControlName="componentCode"
+            [(ngModel)]="ObjProcedure.ComponentCode" maxlength="4" mask="0000">
+        </div>
+        <div class="col-lg-2 form-group">
+          <label class="control-label">CPT Dosage</label>
+          <input type="text" placeholder="Enter CPT Dosage" Class="form-control" formControlName="CPTDosage"
+            [(ngModel)]="ObjProcedure.CPTDosage" maxlength="10">
+        </div> -->
+      </div>
+      <!-- <div class="row">
+        <div class="col-lg-2">
+          <div class="checkbox checkbox-primary">
+            <input id="includeInEdi" type="checkbox" formControlName="inclInEDI"
+              [(ngModel)]="ObjProcedure.IncludeInEDI">
+            <label for="includeInEdi">
+              Include in EDI
+            </label>
+          </div>
+        </div>
+      </div> -->
+      <div class="row">
+        <div class="form-group col-lg-12 pull-right">
+          <div class="col-smd-12 text-right m-t-md pl0">
+            <a class="btn btn-white btn-sm" type="reset" [routerLink]="['/procedures']">Cancel</a>
+            <button class="btn btn-primary btn-sm" type="submit" [disabled]="isDublicateProc || !ProcedureForm.valid"
+              (click)="onSave()">{{title === 'Edit Procedure' ?'Update' : 'Save'}}</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,202 @@
+<div class="row main-form-bg ">
+    <div class="ibox-title">
+        <h5><i class="fa fa-plus-square"></i>&nbsp;National Drug Code</h5>
+        <div class="ibox-tools">
+            <a class="link" (click)="EnableDisableModifierElements('New')" [hidden]="showHideGuarantorElements">
+                <i class="fa fa-plus"></i>&nbsp;Add New Drug Code
+            </a>
+        </div>
+    </div>
+    <div class="ibox-content m-b-sm ">
+
+        <fieldset class="margin-b20" [hidden]="showHideGuarantorElements">
+            <legend>Search Criteria</legend>
+            <div class="row">
+                <!-- //mychanges -->
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <label class="control-label">Practices</label>
+                    <ngx-select [(ngModel)]="practiceCode" (blur)="onSelectPractice()" [items]="listPracticesList"
+                        optionTextField="PracticeLabel" [allowClear]="false">
+                    </ngx-select>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <label class="control-label">Drug Code </label>
+                    <input type="text" id="lName" mask="00000-0000-00" placeholder="_____ -____-__" maxlength="13"
+                        [(ngModel)]="SearchCriteria.ndc_code"
+                        onkeypress="return (event.charCode >= 20 && event.charCode <= 68) || (event.keyCode == 8) || (event.keyCode == 9)"
+                        class="form-control" (keydown)="searchndcbyKey($event)">
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <label class="control-label">HCPCS Code</label>
+                    <input type="text" placeholder="" [(ngModel)]="SearchCriteria.HCPCS_code"
+                        onkeypress="return (event.charCode >= 47 && event.keyCode <= 90) || (event.charCode >= 97 && event.keyCode <= 122) || (event.keyCode == 8) || (event.keyCode == 9) "
+                        class="form-control" (keydown)="searchndcbyKey($event)">
+                </div>
+                <div class="col-lg-2 col-md-3 form-group">
+                    <label class="control-label">Drug Name</label>
+                    <input type="text" placeholder="" [(ngModel)]="SearchCriteria.drug_name" class="form-control"
+                        (keydown)="searchndcbyKey($event)">
+                </div>
+
+
+                <div class="form-group col-md-12  right-full row">
+                    <div class="col-smd-12 text-right m-t-md pl0" pr0>
+
+                        <button class="btn btn-primary" type="submit" (click)="searchNDC()">Search</button>
+                        <button class="btn btn-white" (click)="EnableDisableModifierElements('Clear')"
+                            type="reset">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="margin-b20" [hidden]="!showHideGuarantorElements">
+            <legend>{{showText}} NDC </legend>
+
+            <div class="row">
+                <!-- //mychanges -->
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <label class="control-label">Practices<span class="text-danger">*</span></label>
+                    <ngx-select [attr.disabled]="showText==='Edit'?true:null" [(ngModel)]="practiceCode"
+                        (change)="onSelectPractice()" [items]="listPracticesList" optionTextField="PracticeLabel"
+                        valueField="Id" placeholder="Select Practice" [allowClear]="false">
+                    </ngx-select>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <label class="control-label">HCPCS Code<sup class="text-danger">*</sup></label>
+                    <input type="text" placeholder="" id="lastName" class="form-control" maxlength="20"
+                        [(ngModel)]="NDCModel.HCPCS_code"
+                        onkeypress="return  (event.charCode >= 47 && event.keyCode <= 90) || (event.charCode >= 97 && event.keyCode <= 122) || (event.keyCode == 8) || (event.keyCode == 9) || (event.keyCode == 20)  ">
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <label class="control-label">Drug Code<sup class="text-danger">*</sup></label>
+                    <input type="text" id="lName" mask="00000-0000-00" placeholder="_____-____-__" maxlength="13"
+                        [(ngModel)]="NDCModel.ndc_code"
+                        onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || (event.keyCode == 8) || (event.keyCode == 9)"
+                        class="form-control">
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <label class="control-label">Drug Name</label>
+                    <input type="text" placeholder="" class="form-control" [(ngModel)]="NDCModel.drug_name">
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <label class="control-label">Quantity<sup class="text-danger">*</sup></label>
+
+
+                    <input type="number" min="1" max="5000"
+                        oninput="this.value = !!this.value && Math.abs(this.value) >= 1 ? Math.abs(this.value) : null"
+                        placeholder=""
+                        oninput="if(this.value>100000){this.value='100000';}else if(this.value<0){this.value='0';}"
+                        class="form-control" [(ngModel)]="NDCModel.PKG_Qty">
+
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <label class="control-label">Qualifier<sup class="text-danger">*</sup></label>
+                    <select class="form-control" [(ngModel)]="NDCModel.qualifer">
+                        <option value="ML">ML</option>
+                        <option value="ME">ME</option>
+                        <option value="UN">UN</option>
+                        <option value="GR">GR</option>
+                        <option value="N4">N4</option>
+
+                    </select>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <label class="control-label">Labeler Name</label>
+                    <input type="text" placeholder="" id="Address" class="form-control" maxlength="300"
+                        [(ngModel)]="NDCModel.labeler_name">
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <label class="control-label">Effective From<sup class="text-danger">*</sup></label>
+                    <my-date-picker [options]="myDatePickerOptions" (keyup)="dateMaskGS($event)"
+                        [placeholder]="placeholderGS" [selDate]="NDCModel.effectivefrom" required
+                        (dateChanged)="onDateChangedFromAddUpdate($event)">
+                    </my-date-picker>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 pl2 ">
+                    <label class="control-label">Effective To<sup class="text-danger">*</sup></label>
+                    <my-date-picker class="small" [options]="myDatePickerOptions" (keyup)="dateMaskGS($event)"
+                        [placeholder]="placeholderGS" [selDate]="NDCModel.effectiveto" required
+                        (dateChanged)="onDateChangedToAddUpdate($event)">
+                    </my-date-picker>
+                </div>
+
+                <!-- //mychanges -->
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <label class="control-label">Service Description</label>
+                    <input type="text" placeholder="" class="form-control" [(ngModel)]="NDCModel.description"
+                        maxlength="80">
+                </div>
+
+                <div class="form-group col-md-12  right-full row">
+                    <div class="col-smd-12 text-right m-t-md pl0" pr0>
+                        <button class="btn btn-primary" type="submit" (click)="canSave()">{{showText}} </button>
+                        <button class="btn btn-white" (click)="EnableDisableModifierElements('Cancel')"
+                            type="submit">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <div class="table-panel margin-b20" [hidden]="isEdit">
+
+        <div class="table-panel-body">
+            <div class="row margin-b10">
+            </div>
+            <div class="hr-line-solid left-full"></div>
+            <div>
+                <div class="">
+                    <table class="table table-striped table-hover table-bordered display nowrap  dataTableNDC"
+                        width="100%">
+                        <thead>
+                            <tr>
+                                <!-- //mychanges -->
+                                <th>Practice</th>
+                                <th>HCPCS Code</th>
+                                <th>Drug Name</th>
+                                <th>Labeler Name</th>
+                                <!-- //mychanges -->
+                                <th>Service Description</th>
+                                <th>Drug Code</th>
+                                <th>Qualifier</th>
+                                <th>Quantity</th>
+
+                                <th>Effective Date From</th>
+                                <th>Effective Date To</th>
+
+                                <th width="80">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="row-selected">
+                            <tr style="cursor:pointer;" *ngFor="let p of RequestModel let ndx=index;">
+
+                                <!-- //mychanges -->
+                                <td style="text-align:left;">{{this.practiceName}}</td>
+                                <td style="text-align:left;">{{p.HCPCS_Code}}</td>
+                                <td style="text-align:left;">{{p.Drug_Name}}</td>
+                                <td>{{p.Labeler_Name}}</td>
+                                <!-- //mychanges -->
+                                <td style="text-align:left;">{{p.Short_Description}}</td>
+                                <td style="width:10%;">{{p.NDC2 }}</td>
+                                <td>{{p.Qualifier}}</td>
+                                <td>{{p.PKG_Qty}}</td>
+                                <td>{{p.Effective_Date_From | date: 'MM/dd/yyyy'}}</td>
+                                <td>{{p.Effective_Date_To | date: 'MM/dd/yyyy'}}</td>
+
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn-white btn btn-xs gridbtn" (click)="ModifyNDCinfo(ndx)"
+                                            title="Modify">Edit</button>
+
+                                        <!-- <button class="btn-danger  btn btn-xs gridbtn" (click)="DeleteNDC(ndx)"
+                                        title="Delete">Delete</button> -->
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

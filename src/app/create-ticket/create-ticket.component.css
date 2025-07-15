@@ -1,0 +1,59 @@
+.custom-file-input {
+  width: 100%;           /* Full width */
+  height: 50px;          /* Increase height */
+  font-size: 16px;       /* Optional: larger font */
+  padding: 10px;         /* Space inside input */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+ .file-select {
+    position: relative;
+    height: 50px;              /* increased height */
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;    /* optional styling */
+    border-radius: 4px;
+    padding: 0 10px;
+    background: #fff;
+  }
+
+  .file-select-button {
+    border: 1px solid;
+    cursor: pointer;
+    background-color: white;
+    color: black;
+    padding: 10px 20px;
+    border-radius: 4px;
+    user-select: none;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .file-select-name {
+    margin-left: 15px;
+    flex-grow: 1;
+    font-size: 14px;
+    color: #555;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Hide the native input but keep it clickable and full size */
+  .file-select input[type="file"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .selected-files {
+  margin-left: 60px; /* indent under the paperclip */
+  max-width: auto;
+}
+  

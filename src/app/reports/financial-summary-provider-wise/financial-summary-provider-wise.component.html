@@ -1,0 +1,71 @@
+<h3>Provider wise Financial Summary</h3>
+<div class="row">
+  <form [formGroup]="FSPWForm">
+    <div class="form-group col-lg-3">
+      <label>Practices<span class="text-danger">*</span></label>
+      <select class="form-control input-sm form-select m-b" [(ngModel)]="ddlPracticeCode" formControlName="practice"
+        class="form-control">
+        <option value=0 disabled>Select Practice</option>
+        <option *ngFor="let c of listPracticesList" value={{c.Id}}>{{c.Name}}</option>
+      </select>
+    </div>
+    <div class="form-group col-lg-3">
+      <label>Date From<span class="text-danger">*</span></label>
+      <my-date-picker id="dtpFrom" [options]="myDatePickerOptions" [placeholder]="placeholder" [selDate]="strFromDate"
+        (dateChanged)="onDateChanged($event,'FROM')" formControlName="dateFrom">
+      </my-date-picker>
+    </div>
+    <div class="form-group col-lg-3">
+      <label>Date To<span class="text-danger">*</span></label>
+      <my-date-picker id="dtpTo" [selDate]="strToDate" [placeholder]="placeholder" formControlName="dateTo"
+        (dateChanged)="onDateChanged($event,'TO')" (blur)="formatDate($event)" [options]="myDatePickerOptions">
+      </my-date-picker>
+    </div>
+  </form>
+</div>
+<div class="row col-lg-12">
+  <button class="btn btn-primary btn-sm pull-right" [disabled]="!FSPWForm.valid || ddlPracticeCode==0" type="submit"
+    (click)="getAgingSummaryReport()">Search</button>
+</div>
+<div class="row">
+  <div class="col-lg-12 pt-20">
+    <table class="table table-striped table-hover table-bordered dataTableFSPW" width="100%" *ngIf="isSearchInitiated">
+      <thead>
+        <tr>
+          <th>Rendering Provider</th>
+          <th>Procedure Code</th>
+          <th>Billed Units</th>
+          <th>Billed Charge</th>
+          <th>Insurance Charge</th>
+          <th>Self Charge</th>
+          <th>Payments</th>
+          <th>Patient Payments</th>
+          <th>Insurance Payments</th>
+          <th>Contractual Adjustments</th>
+          <th>WriteOff Adjustments</th>
+          <th>Due Amount</th>
+          <th>Visit Count</th>
+          <th>Patient Count</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of listFinancialSummary">
+          <td>{{p.RENDERRING_PROVIDER}}</td>
+          <td>{{p.PROCEDURE_CODE}}</td>
+          <td>{{p.BILLED_UNITS}}</td>
+          <td>{{p.BILLED_CHARGE}}</td>
+          <td>{{p.INSURANCE_CHARGE}}</td>
+          <td>{{p.SELF_CHARGE}}</td>
+          <td>{{p.PAYMENTS}}</td>
+          <td>{{p.PATIENT_PAYMENTS}}</td>
+          <td>{{p.INSURANCE_PAYMENTS}}</td>
+          <td>{{p.CONTRACTUAL_ADJUSTMENTS}}</td>
+          <td>{{p.WRITEOFF_ADJUSTMENTS}}</td>
+          <td>{{p.DUE_AMOUNT}}</td>
+          <td>{{p.VISIT_COUNT}}</td>
+          <td>{{p.PATIENT_COUNT}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

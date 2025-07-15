@@ -1,0 +1,124 @@
+<div class="modal inmodal" id="accountassignment" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-md col-6 w-100" style="float: right; width: 450px; height: 100%;">
+    <div class="modal-content animated bounceInUp">
+      <div class="modal-header " style="padding-top:15px;padding-bottom:15px;">
+        <button type="button" (click)="onclose()"  #closebutton  class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+            class="sr-only" >Close</span></button>
+        <h4 class="modal-title">Account Assignment</h4>
+        <form [formGroup]="AccountAssignment">
+          <div style="margin-top: 50px;">
+            <div class="form-group col-12" *ngIf="accountInfo.A_ID!=null ">
+              <div style="display: flex; align-items: center;" >
+                <h4 style="width: 150px; text-align: start;">Assigned User</h4>
+                <p style="width: 100%; text-align: start;"> {{ editaccountuser && editaccountuser.length > 0 ? (editaccountuser[0]?.Assignedto_UserId + ' - ' + editaccountuser[0]?.Assignedto_FullName) : '' }}</p>
+              </div>
+            </div>
+
+            <div class="form-group col-12">
+              <div style="display: flex; align-items: center;">
+                <h4 style="width: 100px; text-align: start;">User</h4>
+                <!-- <select (change)="onSelected($event.target.value)" style="margin-left: 70px;"
+                formControlName="User">
+                  <option disabled>Select User</option>
+                  <option *ngFor="let v of selecteduserslist; let i=index" value="{{v.Id}}">{{v.FullName}} -{{v.UserName}}</option>
+                </select> -->
+                 
+                <ngx-select  style="width: 220px; margin-left: 10px;" [items]="usersSelectList"
+                  (typed)="onTypeUsers($event)" optionValueField="Id" optionTextField="Name" [allowClear]="true"
+                  (remove)="onRemoveUser($event)" [formControl]="ngxSelectUser" (select)="onSelectUser($event)"
+                  placeholder="Search for users" formControlName="User">
+                </ngx-select>
+              </div>
+            </div>
+            <div class="form-group col-12">
+              <div style="display: flex; align-items: center;">
+                <h4 style="width: 100px; text-align: start;">Start Date</h4>
+                <my-date-picker style="width: 220px; margin-left: 10px;" [options]="myDateRangePickerOptions"
+                  (keyup)="dateMaskGS($event)" [placeholder]="'MM/DD/YYYY'"
+                  (dateChanged)="onStartDateChangeStart($event)" formControlName="StartDate" [selDate]="selDateDD">
+                </my-date-picker>
+              </div>
+            </div>
+            <div class="form-group col-12">
+              <div style="display: flex; align-items: center;">
+                <h4 style="width: 100px; text-align: start;">Priority</h4>
+                <select (change)="onPrioritychanged($event)" 
+                style="width: 220px; margin-left: 10px; height: 25px;"
+                  formControlName="Priority">
+                  <option disabled >Select Status</option>
+                  <option value="normal">  Normal</option>
+                  <option value="high">  High</option>
+                  <option value="low">  Low</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-12">
+              <div style="display: flex; align-items: center;">
+                <h4 style="width: 100px; text-align: start;">Status</h4>
+                <select (change)="onStatuschanged($event)"  
+                style="width: 220px; margin-left: 10px; height: 25px;"
+                  formControlName="Status">
+                  <option disabled>Select Status</option>
+                  <option value="Open">Open</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Completed">Completed</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-12">
+              <div style="display: flex; align-items: center;">
+                <h4 style="width: 100px; text-align: start;">Due Date</h4>
+                <my-date-picker style="width: 220px; margin-left: 10px;" [options]="myDateRangePickerOptions1"
+                  (keyup)="dateMaskGS($event)" [placeholder]="'MM/DD/YYYY'" (dateChanged)="onDueDateChangeStart($event)"
+                  formControlName="DueDate" [selDate]="selDateDD">
+                </my-date-picker>
+              </div>
+            </div>
+
+            <div class="form-group col-12" style="text-align: left;">
+              <h4>Notes</h4>
+              <!-- <div style="overflow: auto!important;" class="nav nav-pills na anyClass"
+              *ngIf="accountInfo.A_ID!=null && accountInfo.Patient_Account!=null">
+              <div  *ngFor="let v of accountassigneenotes" style="text-align: left; margin-top: 10px; overflow-y: auto !important; max-height: 50px !important;  background-color: blueviolet;" >
+                <div class="overflow-auto">
+                  <label>Created By </label>
+                  {{v.Name}} <label> on</label> {{v.Created_Date |date }}
+                </div>
+                <div>
+                  <label>Assigned Notes </label>
+                  {{}}
+                </div>
+              </div>
+            </div> -->
+
+
+            <div class="nav nav-pills nav-stacked anyClass"
+            *ngIf="accountInfo.A_ID!=null && accountInfo.Patient_Account!=null">
+                <div *ngFor="let v of accountassigneenotes" style="text-align: left; margin-top: 10px;">
+                  <div class="overflow-auto">
+                    <label>Created By </label>
+                    {{v.Name}} <label> on</label> {{v.Created_Date |date }}
+                  </div>
+                  <div>
+                    <label>Assigned Notes </label>
+                    {{v.Account_notes}}
+                  </div>
+                </div>
+              </div>
+
+              <textarea formControlName="Notes" rows="5" style="width: 100%; max-width: 100%;" [(ngModel)]="accountnotes"></textarea>
+<div>
+
+              <button *ngIf="accountInfo.A_ID==null "  [disabled]="isDisabled" id="Savebutton"  type="button" 
+                class="btn btn-w-m btn-primary"  style="float:right" (click)="saveaccountassignee()">Save</button>
+              <button *ngIf="accountInfo.A_ID!=null " [disabled]="isDisabled" type="button" (click)="editaccountassignee()"
+                class="btn btn-w-m btn-primary"  style="float:right">Edit</button>
+            </div>
+          </div>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>

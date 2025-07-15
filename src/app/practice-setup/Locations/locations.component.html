@@ -1,0 +1,150 @@
+<!-- <div class="panel-body"> -->
+<div class="col-md-12 pl0 pr0">
+    <div class="row  tab-content-heading" style="margin-left: 0px;">
+        <div class="pull-right">
+            <a style="margin-left: 5px; color: #1c84c6;" (click)="LocationEmptyModel()"><i class="fa fa-plus"></i> Add
+                New Location</a>
+        </div>
+        <h3 style="margin-bottom: 4px;"><i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp;<u>Locations</u></h3>
+    </div>
+</div>
+<div id="List" *ngIf="isList">
+    <div id="ManageLocation"></div>
+    <div id="listLocation">
+        <div class="table-responsive left-full">
+            <table class="table table-striped table-hover table-bordered praclocTable">
+                <thead>
+                    <tr>
+                        <th>Location Name</th>
+                        <th>City</th>
+                        <th>Phone</th>
+                        <th>CLIA #</th>
+                        <th>NPI #</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let loc of locationmodel" class="gradeX">
+                        <td>{{loc.Location_Name}}</td>
+                        <td>{{loc.Location_City}}</td>
+                        <td>{{loc.Phone_one}}</td>
+                        <td>{{loc.Clia_Number}}</td>
+                        <td>{{loc.NPI}}</td>
+                        <td class="text-right footable-visible footable-last-column">
+                            <div class="btn-group">
+                                <button class="btn-white btn btn-xs gridbtn"
+                                    (click)="ViewLocation(loc.Location_Code)">View</button>
+                                <button class="btn-white btn btn-xs gridbtn" id="editAddEditLocation"
+                                    (click)="EditLocation(loc.Location_Code)">Edit</button>
+                                <button class="btn-red btn btn-xs gridbtn" id="deleteAddEditLocation"
+                                    (click)="DeleteLocation(loc.Location_Code)">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!--Location form section-->
+<div id="Add" *ngIf="isAdd">
+    <div class="ibox-body" id="frmAddEditLocation">
+        <div class="row">
+            <div class="pull-right" style="margin-right: 15px; display: inline-flex;">
+                <label class="checkbox-inline i-checks control-label" style="margin-right: 5px;">Default</label>
+                <input type="checkbox" [disabled]="!bisEdit" class="form-check-input" id="materialUnchecked"
+                    [(ngModel)]="saveLocationRequest.is_default">
+            </div>
+        </div>
+        <div class="row mt10">
+            <div class="form-group col-md-3">
+                <label class="pl0 pr0 control-label">Location: <span style="color:red">*</span></label>
+                <input class="form-control" [readonly]="!bisEdit" [(ngModel)]="saveLocationRequest.Location_Name"
+                    name="Location Name" placeholder="Location Name" type="text">
+            </div>
+            <div class="form-group col-md-3">
+                <label class="pl0 pr0 control-label">Zip:<span style="color:red">*</span></label>
+                <input class="form-control" (blur)="onBlurMethod()" [readonly]="!bisEdit"
+                    [(ngModel)]="saveLocationRequest.Location_Zip" name="Zip" placeholder="_____-____" type="text"
+                    maxlength="10" mask="00000-0000">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="city" class="pl0 pr0 control-label">City<span class="text-danger">*</span></label>
+                <select class="form-control" name="city" [(ngModel)]="saveLocationRequest.Location_City"
+                    [disabled]="!bisEdit">
+                    <option [ngValue]="null">Select City</option>
+                    <option *ngFor="let city of zipLocationData" [value]="city.CityName">
+                        {{city.CityName | titlecase}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group col-md-3">
+                <label class="pl0 pr0 control-label">State:</label>
+                <input class="form-control" disabled [(ngModel)]="saveLocationRequest.Location_State" name="State"
+                    placeholder="State" type="text">
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-3">
+                <label class="pl0 pr0 control-label">CLIA #:</label>
+                <input class="form-control" [readonly]="!bisEdit" [(ngModel)]="saveLocationRequest.Clia_Number"
+                    name="CLIA" placeholder="CLIA" type="text" maxlength="10" style="text-transform: uppercase;"
+                    (keydown.space)="$event.preventDefault();" (keypress)="keyPressAlphaNumeric($event)">
+            </div>
+            <div class="form-group col-md-3">
+                <label class="pl0 pr0 control-label">Exp:</label>
+                <div class="input-group date" style="width: 100% !important;">
+                    <my-date-picker [disabled]="!bisEdit" [options]="myDatePickerOptions"
+                        [selDate]="saveLocationRequest.Clia_Expiry_Date" required
+                        (dateChanged)="onDateChangedExp($event)"></my-date-picker>
+                </div>
+            </div>
+            <div class="form-group col-md-3">
+                <label class="pl0 pr0 control-label">Address:<span style="color:red">*</span></label>
+                <input class="form-control" [readonly]="!bisEdit" [(ngModel)]="saveLocationRequest.Location_Address"
+                    name="Address" placeholder="Address" type="text">
+            </div>
+            <div class="form-group col-md-3">
+                <label class="pl0 pr0 control-label">Address 2:</label>
+                <input class="form-control" [readonly]="!bisEdit" [(ngModel)]="saveLocationRequest.Location_Short"
+                    name="Address2" placeholder="Address2" type="text">
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-3">
+                <label class="pl0 pr0 control-label">Phone:</label>
+                <input class="form-control" id="inpphoneno" [readonly]="!bisEdit" placeholder="(___) ___-____"
+                    mask="(000) 000-0000" [(ngModel)]="saveLocationRequest.Phone_one" name="Phone" type="text">
+            </div>
+            <div class="form-group col-md-3">
+                <label class="pl0 pr0 control-label">Fax:</label>
+                <input class="form-control" id="inpfaxno" [readonly]="!bisEdit" placeholder="(___) ___-____"
+                    mask="(000) 000-0000" [(ngModel)]="saveLocationRequest.Phone_two" name="Fax" type="text">
+            </div>
+            <div class="form-group col-md-3">
+                <label class="pl0 pr0 control-label">NPI:</label>
+                <input class="form-control" [readonly]="!bisEdit" maxlength="10" [(ngModel)]="saveLocationRequest.NPI"
+                    name="" placeholder="NPI" type="text">
+            </div>
+        </div>
+        <div class="form-group col-md-12  right-full row" *ngIf="bisEdit">
+            <div class="col-smd-12 text-right m-t-md pl0" pr0>
+                <button class="btn btn-white" type="button" id="btnCancelLocation" title=""
+                    (click)="showList()">Cancel</button>
+                <button class="btn btn-primary" type="button" id="btnresetLocation" (click)="resetFields()">Reset
+                </button>
+                <button class="btn btn-primary" type="button" id="btnSaveLocation" (click)="AddLocation()">Save
+                </button>
+            </div>
+        </div>
+        <div class="form-group col-md-12  right-full row" *ngIf="!bisEdit">
+            <div class="col-smd-12 text-right m-t-md pl0" pr0>
+                <button class="btn btn-white" type="button" id="btnCancelAddEditLocation" title=""
+                    (click)="showList()">Cancel</button>
+                <button class="btn btn-primary" type="button" id="btnEditLocation" (click)="bisEdit=!bisEdit">Edit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- </div> -->

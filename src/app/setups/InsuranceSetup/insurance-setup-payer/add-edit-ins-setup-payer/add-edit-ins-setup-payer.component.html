@@ -1,0 +1,104 @@
+<div class="ibox float-e-margin">
+    <div class="ibox-title">
+        <h5>{{strAddEditTitle}}</h5>
+    </div>
+    <div class="ibox-content">
+        <form [formGroup]="payerForm" (ngSubmit)="onSaveClick()">
+            <div class="row">
+                <div class="form-group col-lg-12">
+                    <label>Payer Name<span class="text-danger">*</span></label>
+                    <input type="text" maxlength="50" class="form-control"
+                        [(ngModel)]="insPayerModel.Inspayer_Description" (keypress)="checkSpcialCharfornum($event)"
+                        (input)="insPayerModel.Inspayer_Description=insPayerModel.Inspayer_Description.toUpperCase()"
+                        formControlName="pName">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-12">
+                    <label>Group Name<span class="text-danger">*</span></label>
+                    <ngx-select [items]="groupsSelectList" (typed)="onTypeGroups($event)" optionValueField="Id"
+                        optionTextField="Name" [allowClear]="true" (select)="onSelectGroup($event)"
+                        (remove)="onRemoveGroup($event)" [(ngModel)]="insPayerModel.Insgroup_Id"
+                        placeholder="Search Groups" [formControl]="gaName">
+                    </ngx-select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-12">
+                    <label>Insurance Name<span class="text-danger">*</span></label>
+                    <ngx-select [items]="nameSelectList" (typed)="onTypeName($event)" optionValueField="Id"
+                        optionTextField="Name" [allowClear]="true" (select)="onSelectName($event)"
+                        (remove)="onRemoveName($event)" [(ngModel)]="insPayerModel.Insname_Id"
+                        placeholder="Search Payers" [formControl]="iName">
+                    </ngx-select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-12">
+                    <label>Payer Plan</label>
+                    <input type="text" maxlength="1" class="form-control" [(ngModel)]="insPayerModel.Inspayer_Plan"
+                        (keypress)="checkSpcialCharfornum($event)" formControlName="pPlan">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-12">
+                    <label>Payer State</label>
+                    <input type="text" maxlength="2" class="form-control" [(ngModel)]="insPayerModel.Inspayer_State"
+                        (keypress)="checkSpcialCharfornum($event)" formControlName="pState">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-12">
+                    <label>Submission Type</label>
+                    <input type="text" maxlength="6" class="form-control" [(ngModel)]="insPayerModel.Submission_type"
+                        (keypress)="checkSpcialCharfornum($event)" formControlName="sType">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-12">
+                    <label>Timely Filing Days</label>
+                    <input type="text" maxlength="4" class="form-control" [(ngModel)]="insPayerModel.Timely_Filing_Days"
+                        formControlName="tfDay">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-12">
+                    <label>Insurance Payer 837 ID<span class="text-danger">*</span></label>
+                    <input type="text" maxlength="50" class="form-control" [(ngModel)]="insPayerModel.Inspayer_837_Id"
+                        formControlName="pId">
+                </div>
+            </div>
+            <div class="row col-lg-12">
+                <div class="checkbox checkbox-inline checkbox-primary col-lg-4 m-n">
+                    <input type="checkbox" id="chkEdisetupRequired" [(ngModel)]="insPayerModel.Edisetup_Required"
+                        class="styled" formControlName="eSetup">
+                    <label for="chkEdisetupRequired" data-placement="bottom" title="Department Head">EDI setup
+                        Req.</label>
+                </div>
+                <div class="checkbox checkbox-inline checkbox-primary col-lg-4 m-n">
+                    <input type="checkbox" id="chkErasetupRequired" [(ngModel)]="insPayerModel.Erasetup_Required"
+                        class="styled" formControlName="erSetup">
+                    <label for="chkErasetupRequired" data-placement="bottom" title="Department Head">ERA setup
+                        Req.</label>
+                </div>
+                <div class="checkbox checkbox-inline checkbox-primary col-lg-3 m-n">
+                    <input type="checkbox" id="chkIsPartA" [(ngModel)]="insPayerModel.Is_Part_A" class="styled"
+                        formControlName="partA">
+                    <label for="chkIsPartA" data-placement="bottom" title="Department Head">Part A</label>
+                </div>
+                <div class="checkbox  checkbox-primary col-lg-3 m-n">
+                    <input type="checkbox" id="chkIsRTAPayer" [(ngModel)]="insPayerModel.Is_RTA_Payer" class="styled"
+                        formControlName="rPayer">
+                    <label for="chkIsRTAPayer" data-placement="bottom" title="Department Head">RTA Payer</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <button class="btn btn-primary btn-sm pull-right" type="submit"
+                        [disabled]="!payerForm.valid && (!gaName.valid && !iName.valid)">Save</button>
+                    <button class="btn btn-default btn-sm pull-right" (click)="onCancelClick()">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

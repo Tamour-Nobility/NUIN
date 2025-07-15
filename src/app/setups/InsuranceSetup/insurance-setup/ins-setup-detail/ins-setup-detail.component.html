@@ -1,0 +1,45 @@
+<div class="ibox float-e-margins">
+  <div class="ibox-title">
+    <h5>Insurance Detail</h5>
+  </div>
+  <div class="ibox-content">
+    <div class="row">
+      <div class="col-lg-12">
+        <ul class="list-group">
+          <li class="list-group-item">
+            <b>Payer Name </b> <span> {{insModel.ObjResponse.InsurancePayerDescription}}</span>
+          </li>
+          <li class="list-group-item">
+            <b>Address: </b> <span>
+              {{getFormattedAddress(insModel.ObjResponse.Insurance_Address,insModel.ObjResponse.Insurance_Zip,insModel.ObjResponse.Insurance_City,insModel.ObjResponse.Insurance_State)}}</span>
+          </li>
+          <li class="list-group-item">
+            <b>Phone Type1: </b> <span> {{insModel.ObjResponse.Insurance_Phone_Type1}}:
+              {{insModel.ObjResponse.Insurance_Phone_Number1 | mask: '(000) 000-0000'}}</span>
+          </li>
+          <li class="list-group-item">
+            <b>Phone Type2: </b> <span> {{insModel.ObjResponse.Insurance_Phone_Type2}}:
+              {{insModel.ObjResponse.Insurance_Phone_Number2 | mask: '(000) 000-0000'}}</span>
+          </li>
+          <li class="list-group-item">
+            <b>Insurance Department: </b> <span> {{insModel.ObjResponse.Insurance_Department}}</span>
+          </li>
+          <li class="list-group-item form-control-static">
+            <div class="checkbox checkbox-inline checkbox-primary col-lg-4 m-n">
+              <input type="checkbox" disabled [(ngModel)]="insModel.ObjResponse.Is_Sec_Attach_Need" class="styled">
+              <label data-placement="bottom" title="Department Head">Sec Attach Need</label>
+            </div>
+            <div class="checkbox checkbox-inline checkbox-primary col-lg-4 m-n">
+              <input type="checkbox" disabled [(ngModel)]="insModel.ObjResponse.IS_SEC_Paper" class="styled">
+              <label data-placement="bottom" title="Department Head">SEC Paper</label>
+            </div>
+            <div class="checkbox  checkbox-primary col-lg-4 m-n">
+              <input type="checkbox" disabled [(ngModel)]="insModel.ObjResponse.InActive" class="styled">
+              <label data-placement="bottom" title="Department Head">InActive</label>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

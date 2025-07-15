@@ -1,0 +1,47 @@
+.toggle-btn {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+  }
+  
+  /* Hide the default checkbox */
+  .toggle-btn input {
+    display: none;
+  }
+  
+  /* The slider (toggle button) */
+  .slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border-radius: 34px;
+    cursor: pointer;
+    transition: 0.4s;
+  }
+  
+  /* Change slider background color when the checkbox is checked (active) */
+  .toggle-btn input:checked + .slider {
+    background-color: #2196F3;
+  }
+  
+  /* Style the slider (toggle button) when it's in the "on" state */
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.4s;
+  }
+  
+  /* Style the slider (toggle button) when it's in the "off" state */
+  .toggle-btn input:checked + .slider:before {
+    transform: translateX(20px);
+  }

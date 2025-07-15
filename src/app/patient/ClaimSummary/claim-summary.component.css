@@ -1,0 +1,100 @@
+.center {
+  text-align: center;
+
+}
+
+.btn-white {
+  display: block;
+  margin: 0 auto;
+  transition: background-color 0.3s;
+}
+
+
+
+
+
+/* .btn-white:hover {
+    background-color: rgba(0, 128, 0, 0.8);; 
+    color: white; 
+  } */
+
+
+/* 
+commented for claim diagnose level bug fixation
+    ::ng-deep .my-custom-modal .modal-backdrop{
+    
+    position: fixed !important;
+
+    right: 0 !important;
+    
+    bottom: 0 !important;
+    left: 0 !important;
+    z-index: -1 !important;
+    background-color: #0F5D9B !important;
+
+  } */
+
+/* added by umer for statement messages allignment */
+option.dropd:hover::before {
+
+  content: attr(title);
+  position: absolute;
+  background-color: #f0f0f0;
+  padding: 4px;
+  border: 1px solid #646363;
+  border-radius: 4px;
+  white-space: nowrap;
+  max-width: 60px !important;
+  z-index: 1;
+  display: block;
+  /* Adjust as needed */
+  margin-left: 20px;
+  /* Adjust the position */
+}
+.disabled-link {
+  color: grey;
+  pointer-events: none; /* Prevents mouse clicks */
+  cursor: not-allowed;
+}
+
+/* claim summary - cpt-description */
+/* .modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+} */
+
+.modal.is-active {
+  display: block;
+}
+
+/* .modal-content {
+  position: relative;
+  margin: auto;
+  top: 10%;
+  background-color: white;
+  border-radius: 5px;
+  padding: 20px;
+  width: 80%;
+}
+
+.modal-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+.close {
+
+  margin-top: -40px;
+  margin-right: -8px;
+} */
+
+/*  */

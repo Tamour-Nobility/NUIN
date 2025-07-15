@@ -1,0 +1,15 @@
+#otpHead{
+    color: #0070b9;
+    margin-bottom: 30px 0;
+
+}
+
+#OTPform{
+    display: flex;
+    text-align: center;
+
+}   
+
+::ng-deep .each_input:focus{
+    border: 2px solid #0070b9!important;
+  }

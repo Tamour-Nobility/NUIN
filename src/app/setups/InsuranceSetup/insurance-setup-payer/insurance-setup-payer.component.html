@@ -1,0 +1,32 @@
+<div class="col-lg-8">
+  <div class="ibox float-e-margins">
+    <div class="ibox-title">
+      <h5><i class="fa fa-universal-access"></i>&nbsp;Insurance Setup</h5>
+      <div class="ibox-tools">
+        <a class="link" [routerLink]="['/InsuranceSetup/insPayer/add']">
+          <i class="fa fa-plus"></i>&nbsp;Add New Payer
+        </a>
+      </div>
+    </div>
+    <div class="ibox-content">
+      <div class="tabs-container">
+        <ul class="nav nav-tabs">
+          <li [routerLink]="['/InsuranceSetup/insGroup']"><a aria-expanded="true">Groups</a></li>
+          <li [routerLink]="['/InsuranceSetup/insName']"><a aria-expanded="false">Names</a></li>
+          <li class="active" [routerLink]="['/InsuranceSetup/insPayer']"><a aria-expanded="false">Payers</a></li>
+          <li [routerLink]="['/InsuranceSetup/insSetup']"><a aria-expanded="false">Insurances</a></li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active">
+            <div class="panel-body">
+              <app-list-ins-setup-payer></app-list-ins-setup-payer>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-lg-4">
+  <router-outlet></router-outlet>
+</div>

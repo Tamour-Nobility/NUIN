@@ -1,0 +1,431 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h4 class="modal-title pull-left" style="font-weight: bold;text-decoration: underline;">Ticket Tracker</h4>
+    <div class="dropdown pull-right">
+      <!-- 2) Trigger: can be an <a> or <button> -->
+      <a class="link dropdown-toggle" id="statusDropdown"
+        style="color:white; margin-left: 5px; background-color: #2792ea; padding: 2px 5px 3px 10px; border-radius: 10px;"
+        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Set Status <i class="fa fa-chevron-down"></i>
+      </a>
+
+      <!-- 3) The actual dropdown menu -->
+      <ul class="dropdown-menu" aria-labelledby="statusDropdown">
+        <ng-container *ngIf="checkTicketStatus != 'Closed'">
+          <li><a class="dropdown-item" (click)="setStatus('In_Process')">In Process</a></li>
+          <li><a class="dropdown-item" (click)="setStatus('Information_Required')">Information Required</a></li>
+          <li><a class="dropdown-item" (click)="setStatus('Closed')">Closed</a></li>
+        </ng-container>
+
+        <!-- Show only if status IS Closed -->
+        <ng-container *ngIf="checkTicketStatus == 'Closed'">
+          <li><a class="dropdown-item" (click)="setStatus('In_Process')">Reopen</a></li>
+        </ng-container>
+      </ul>
+    </div>
+    <span class="edit-icon pull-right"
+      style="color:white; margin-left: 5px; background-color: #2792ea; padding: 2px 5px 3px 10px; border-radius: 10px; cursor: pointer;"
+      (click)="userModal.show()">
+
+      <i class="fa fa-edit mr-10"></i>
+      Set Responsible
+
+    </span>
+  </div>
+
+
+
+
+  <div class="modal-body" style="overflow: auto; max-height: 85vh;" *ngIf="ticket_Type == 'Patient_Call'">
+    <div class="pull-left">
+      <h3>
+        <label class="control-label" style="font-weight: bold;">Ticket # :
+          {{editTicketalldate?.Ticket_Id}}</label>&nbsp;|&nbsp;
+        <label class="control-label" style="font-weight: bold;">Ticket Title : {{editTicketalldate?.Ticket_Title}}
+        </label>
+        &nbsp;|&nbsp;
+        <label class="control-label" style="font-weight: bold;">Ticket Type :{{editTicketalldate?.Ticket_Type}}</label>
+        &nbsp;|&nbsp;
+        <!-- <label class="control-label" style="font-weight: bold;">Insurance Name:{{editTicketalldate?.Payer_Name}}</label>
+        &nbsp;|&nbsp; -->
+        <label class="control-label" style="font-weight: bold;">Practice: {{editTicketalldate?.Practice_Code}}</label>
+        &nbsp;|&nbsp;
+        <label class="control-label" style="font-weight: bold;">Patient Name : {{ editTicketalldate?.Last_Name }} , {{
+          editTicketalldate?.First_Name }}</label>
+        &nbsp;|&nbsp;
+        <label class="control-label" style="font-weight: bold;">Patient Due :{{editTicketalldate?.Patient_Due}}</label>
+        &nbsp;|&nbsp;
+        <label class="control-label" style="font-weight: bold;">
+          Claim # :
+
+          <!-- Show link if Soft is false or not true -->
+          <ng-container *ngIf="!editTicketalldate?.Soft; else plainText">
+            <a [routerLink]="[
+      '/Patient/Demographics/ClaimDetail',
+      getEncodedUrl(
+        editTicketalldate?.Claim_No,
+        editTicketalldate?.Patient_Account,
+        editTicketalldate?.First_Name,
+        editTicketalldate?.Last_Name
+      )
+    ]">
+              {{ editTicketalldate?.Claim_No }}
+            </a>
+          </ng-container>
+
+          <!-- Show plain text if Soft is true -->
+          <ng-template #plainText>
+            {{ editTicketalldate?.Claim_No }}
+          </ng-template>
+        </label>
+        &nbsp;|&nbsp;
+        <label class="control-label" style="font-weight: bold;">Status: {{editTicketalldate?.Ticket_Status}} </label>
+        &nbsp;|&nbsp;
+        <br />
+        <label class="control-label" style="font-weight: bold;">Resp Dept : {{editTicketalldate?.DepartmentName}}
+        </label>
+        &nbsp;|&nbsp;
+        <label class="control-label" style="font-weight: bold;">Assigned User : {{editTicketalldate?.
+          AssignedUserName}}
+        </label>
+      </h3>
+    </div>
+    <hr style="margin-top: 12px; width: 100%; margin-left: auto; margin-right: auto;">
+
+    <div class="row">
+      <div class="form-group col-lg-9 col-md-9">
+        <textarea id="newMessage" class="form-control" maxlength="500" rows="5" [(ngModel)]="ticketMessage"
+          style="height: auto !important;"></textarea>
+      </div>
+      <div class="form-group col-lg-3 col-md-3">
+        <i class="fa fa-paperclip me-2" aria-hidden="true"></i>
+        <label class="mb-0">Attachments</label>
+      </div>
+    </div>
+    <div class="row mb-2" style="margin-top:-1%;margin-bottom: 2%;">
+      <div class="col-12 d-flex justify-content-between align-items-center" style="padding: 1%; width: 75.5%;">
+        <span style="font-weight: bold;">Response From : | Response Date :</span>
+        <!-- <button class="btn btn-sm btn-danger" style="float: right;" (click)="onEdit()">
+          <i class="fa fa-edit"></i> Delete
+        </button>
+        <button class="btn btn-sm btn-secondary me-2" style="float: right;" (click)="onEdit()">
+          <i class="fa fa-edit"></i> Edit
+        </button> -->
+
+      </div>
+    </div>
+
+
+    <!-- Second Textarea Row -->
+
+
+    <div *ngFor="let msg of ticketMessageArraya; let i = index" class="mb-3">
+      <!-- Message and Attachment -->
+      <div class="row">
+        <div class="form-group col-lg-9 col-md-9">
+          <textarea class="form-control" maxlength="500" rows="5" style="height: auto !important;"
+            [(ngModel)]="msg.Ticket_Message">
+</textarea>
+        </div>
+        <div class="form-group col-lg-3 col-md-3">
+          <i class="fa fa-paperclip me-2" aria-hidden="true"></i>
+          <label class="mb-0">Attachments</label>
+        </div>
+      </div>
+
+      <!-- Footer with Info + Action Buttons -->
+      <div class="row mb-2" style="margin-top:-1%; margin-bottom: 2%;">
+        <div class="col-12 d-flex justify-content-between align-items-center" style="padding: 1%; width: 75.5%;">
+          <span *ngIf="i != ticketMessageArraya.length - 1" style="font-weight: bold;">
+            Response From: {{ msg.Created_By_Name }} | Response Date: {{ msg.Created_Date | date: 'short' }}
+          </span>
+          <span *ngIf="i === ticketMessageArraya.length - 1" style="font-weight: bold;">
+            Created By: {{ msg.Created_By_Name }} | Created Date: {{ msg.Created_Date | date: 'short' }}
+          </span>
+          <button class="btn btn-sm btn-danger me-2" style="float: right;"
+            *ngIf="i === 0 && !ticketMessage?.trim() && !isOlderThan24Hours" (click)="onDeleteTicketTrack(msg)">
+            <i class="fa fa-trash"></i> Delete
+          </button>
+          <button class="btn btn-sm btn-secondary" style="float: right;"
+            *ngIf="i === 0 && !ticketMessage?.trim() && !isOlderThan24Hours" (click)="onEditTicketTrack(msg)">
+            <i class="fa fa-edit"></i> Edit
+          </button>
+
+
+
+        </div>
+      </div>
+    </div>
+    <div id="accordion">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center" id="headingTicket">
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTicket"
+              aria-expanded="false" aria-controls="collapseTicket">
+              <i class="fas fa-info-circle text-primary" data-toggle="tooltip" title="Details about ticket info"></i>
+
+              Ticket Details
+            </button>
+          </h5>
+        </div>
+
+        <div id="collapseTicket" class="collapse" aria-labelledby="headingTicket" data-parent="#accordion">
+          <div *ngIf="editTicketalldate && editTicketalldate.Ticket_Id > 0" class="card-body">
+            <app-create-ticket [CallerComponent]="CallerComponent" [TicketId]="editTicketalldate.Ticket_Id">
+            </app-create-ticket>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <button class="btn btn-danger btn-sm" style="float: right;" (click)="onCancel()">
+        Cancel
+      </button>
+      <button class="btn btn-sm btn-primary" style="float: right;" (click)="onSubmit()">
+        Save
+      </button>
+    </div>
+  </div>
+  <!-- Get date for insuracne call -->
+  <div class="modal-body" style="overflow: auto; max-height: 85vh;" *ngIf="ticket_Type == 'Insurance_Call'">
+    <div class="pull-left">
+      <h3>
+        <label class="control-label" style="font-weight: bold;">Ticket # :
+          {{editTicketalldate?.Ticket_Id}}</label>&nbsp;|&nbsp;
+        <label class="control-label" style="font-weight: bold;">Ticket Title : {{editTicketalldate?.Ticket_Title}}
+        </label>
+        &nbsp;|&nbsp;
+        <label class="control-label" style="font-weight: bold;">Ticket Type
+          :{{editTicketalldate?.Ticket_Type}}</label>
+        &nbsp;|&nbsp;
+        <label class="control-label" style="font-weight: bold;">Insurance
+          Name:{{editTicketalldate?.Payer_Name}}</label>
+        &nbsp;|&nbsp;
+        <label class="control-label" style="font-weight: bold;">Practice: {{editTicketalldate?.Practice_Code}}</label>
+        &nbsp;|&nbsp;
+        <label class="control-label" style="font-weight: bold;">Patient Name : {{ editTicketalldate?.Last_Name }} , {{
+          editTicketalldate?.First_Name }}</label>
+        &nbsp;|&nbsp;
+
+        <label class="control-label" style="font-weight: bold;">Total Billed
+          :{{editTicketalldate?.Total_Billed}}</label>
+        &nbsp;|&nbsp;
+        <label class="control-label" style="font-weight: bold;">
+          Claim # :
+
+          <!-- Show link if Soft is false or not true -->
+          <ng-container *ngIf="!editTicketalldate?.Soft; else plainText">
+            <a [routerLink]="[
+      '/Patient/Demographics/ClaimDetail',
+      getEncodedUrl(
+        editTicketalldate?.Claim_No,
+        editTicketalldate?.Patient_Account,
+        editTicketalldate?.First_Name,
+        editTicketalldate?.Last_Name
+      )
+    ]">
+              {{ editTicketalldate?.Claim_No }}
+            </a>
+          </ng-container>
+
+          <!-- Show plain text if Soft is true -->
+          <ng-template #plainText>
+            {{ editTicketalldate?.Claim_No }}
+          </ng-template>
+        </label>
+        &nbsp;|&nbsp;
+        <br />
+        <label class="control-label" style="font-weight: bold;">Status: {{editTicketalldate?.Ticket_Status}} </label>
+        &nbsp;|&nbsp;
+        <label class="control-label" style="font-weight: bold;">Resp Dept : {{editTicketalldate?.DepartmentName}}
+        </label>
+        &nbsp;|&nbsp;
+        <label class="control-label" style="font-weight: bold;">Assigned User : {{editTicketalldate?.
+          AssignedUserName}}
+        </label>
+      </h3>
+    </div>
+    <hr style="margin-top: 12px; width: 100%; margin-left: auto; margin-right: auto;">
+    <div class="row">
+      <div class="form-group col-lg-9 col-md-9">
+        <textarea id="newMessage" class="form-control" maxlength="500" rows="5" [(ngModel)]="ticketMessage"
+          style="height: auto !important;"></textarea>
+      </div>
+      <div class="form-group col-lg-3 col-md-3">
+        <i class="fa fa-paperclip me-2" aria-hidden="true"></i>
+        <label class="mb-0">Attachments</label>
+      </div>
+    </div>
+    <div class="row mb-2" style="margin-top:-1%;margin-bottom: 2%;">
+      <div class="col-12 d-flex justify-content-between align-items-center" style="padding: 1%; width: 75.5%;">
+        <span style="font-weight: bold;">Response From : | Response Date :</span>
+        <!-- <button class="btn btn-sm btn-danger" style="float: right;" (click)="onEdit()">
+          <i class="fa fa-edit"></i> Delete
+        </button>
+        <button class="btn btn-sm btn-secondary me-2" style="float: right;" (click)="onEdit()">
+          <i class="fa fa-edit"></i> Edit
+        </button> -->
+
+      </div>
+    </div>
+
+
+    <!-- Second Textarea Row -->
+    <div *ngFor="let msg of ticketMessageArraya; let i = index" class="mb-3">
+      <!-- Message and Attachment -->
+      <div class="row">
+        <div class="form-group col-lg-9 col-md-9">
+          <textarea class="form-control" maxlength="500" rows="5" style="height: auto !important;"
+            [(ngModel)]="msg.Ticket_Message">
+</textarea>
+        </div>
+        <div class="form-group col-lg-3 col-md-3">
+          <i class="fa fa-paperclip me-2" aria-hidden="true"></i>
+          <label class="mb-0">Attachments</label>
+        </div>
+      </div>
+
+      <!-- Footer with Info + Action Buttons -->
+      <div class="row mb-2" style="margin-top:-1%; margin-bottom: 2%;">
+        <div class="col-12 d-flex justify-content-between align-items-center" style="padding: 1%; width: 75.5%;">
+          <span *ngIf="i != ticketMessageArraya.length - 1" style="font-weight: bold;">
+            Response From: {{ msg.Created_By_Name }} | Response Date: {{ msg.Created_Date | date: 'short' }}
+          </span>
+          <span *ngIf="i === ticketMessageArraya.length - 1" style="font-weight: bold;">
+            Created By: {{ msg.Created_By_Name }} | Created Date: {{ msg.Created_Date | date: 'short' }}
+          </span>
+
+          <button class="btn btn-sm btn-danger me-2" style="float: right;"
+            *ngIf="i === 0 && !ticketMessage?.trim() && !isOlderThan24Hours" (click)="onDeleteTicketTrack(msg)">
+            <i class="fa fa-trash"></i> Delete
+          </button>
+          <button class="btn btn-sm btn-secondary" style="float: right;"
+            *ngIf="i === 0 && !ticketMessage?.trim() && !isOlderThan24Hours" (click)="onEditTicketTrack(msg)">
+            <i class="fa fa-edit"></i> Edit
+          </button>
+
+
+
+        </div>
+      </div>
+
+    </div>
+
+    <div id="accordion">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center" id="headingTicket">
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTicket"
+              aria-expanded="false" aria-controls="collapseTicket">
+              <i class="fas fa-info-circle text-primary" data-toggle="tooltip" title="Details about ticket info"></i>
+
+              Ticket Details
+            </button>
+          </h5>
+        </div>
+
+        <div id="collapseTicket" class="collapse" aria-labelledby="headingTicket" data-parent="#accordion">
+          <div *ngIf="editTicketalldate && editTicketalldate.Ticket_Id > 0" class="card-body">
+            <app-create-ticket [CallerComponent]="CallerComponent" [TicketId]="editTicketalldate.Ticket_Id">
+            </app-create-ticket>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn btn-danger btn-sm" style="float: right;" (click)="onCancel()">
+        Cancel
+      </button>
+      <button class="btn btn-sm btn-primary" style="float: right;" (click)="onSubmit()">
+        Save
+      </button>
+    </div>
+  </div>
+  <!-- add model for set user and department -->
+  <div class="modal fade" bsModal #userModal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel"
+    style="margin-top: 110px;">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header justify-content-center position-relative">
+          <div class="modal-header">
+            <button type="button" class="close" aria-label="Close" (click)="modelClose()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title w-100 text-center" style="font-size: 20px;">Set User</h4>
+          </div>
+          <div class="modal-body">
+            <div class="col-sm-9 col-md-9 col-lg-6">
+
+              <!-- Department Dropdown -->
+              <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                <label for="departmentSelect" style="white-space: nowrap; margin-right: 10px; min-width: 80px;">
+                  Department
+                </label>
+                <ngx-select [(ngModel)]="assignedDept" [items]="listDepartment" optionTextField="DisplayLabel"
+                  optionValueField="DepartmentId" [allowClear]="false" placeholder="Select" style="width: 300px;">
+                </ngx-select>
+              </div>
+              <!-- User Dropdown -->
+              <div style="display: flex; align-items: center;">
+                <label for="casecreated" style="white-space: nowrap; margin-right: 10px; min-width: 80px;">
+                  User
+                </label>
+                <ngx-select [(ngModel)]="assignedUser" name="casecreated" [items]="listUser"
+                  optionTextField="DisplayLabel" optionValueField="UserId" [allowClear]="false" placeholder="Select"
+                  style="width: 300px;">
+                </ngx-select>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <!-- <button class="btn btn-secondary" (click)="userModal.hide()">Cancel</button> -->
+          <button class="btn btn-primary" [disabled]="!assignedDept || !assignedUser"
+            (click)="userModal.hide()">Set</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- add model for closing remarks -->
+  <div class="modal fade" bsModal #cremarkModal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel"
+    style="margin-top: 110px;">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header justify-content-center position-relative">
+          <div class="modal-header">
+            <button type="button" class="close" aria-label="Close" (click)="closingRemrkModeClose()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title w-100 text-center" style="font-size: 20px;">Set Closing Remarks</h4>
+          </div>
+          <div class="modal-body">
+            <div class="col-sm-9 col-md-9 col-lg-6">
+
+              <!-- Closing Remarks Dropdown -->
+              <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                <label for="closingRemarksSelect" style="white-space: nowrap; margin-right: 10px; min-width: 120px;">
+                  Closing Remarks
+                </label>
+                <select id="closingRemarksSelect" class="form-control" [(ngModel)]="closingRemarks"
+                  style="width: 300px;">
+                  <option value="" disabled selected>Select</option>
+                  <option value="Issue_Resolved">Issue Resolved</option>
+                  <option value="Invalid_Request">Invalid Request</option>
+                  <option value="Duplicate_Ticket">Duplicate Ticket</option>
+                  <option value="Request_Cancelled">Request Cancelled</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <!-- <button class="btn btn-secondary" (click)="userModal.hide()">Cancel</button> -->
+          <button class="btn btn-primary" [disabled]="!closingRemarks" (click)="cremarkModal.hide()">Set</button>
+        </div>
+      </div>
+    </div>
+  </div>

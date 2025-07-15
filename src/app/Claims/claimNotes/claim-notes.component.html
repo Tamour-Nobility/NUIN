@@ -1,0 +1,334 @@
+<div class="modal inmodal" id="ClaimNotes" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" style="max-width: 1300px !important;width: auto;">
+    <div class="modal-content animated bounceInRight">
+      <div class="modal-header" style="padding-top:15px;padding-bottom:15px;">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+            class="sr-only">Close</span></button>
+        <h4 class="modal-title">Claim Notes</h4>
+      </div>
+      <div class="modal-body">
+        <div class="tabs-container">
+          <ul class="nav nav-tabs">
+
+            <li class="" [class.active]="numbtncheck==0"><a (click)="checkStatus(0)" data-toggle="tab"
+                href="#tabprn-1">Auto Claim Notes</a></li>
+            <li class="" [class.active]="numbtncheck==1"><a (click)="checkStatus(1)" data-toggle="tab"
+                href="#tabprn-2">EDI History</a></li>
+            <li class="active" [class.active]="numbtncheck==2"><a (click)="checkStatus(2)" data-toggle="tab"
+                [class.disabled]="isDisabled" href="#tabprn-3"> User Notes</a></li>
+          </ul>
+          <div class="tab-content">
+
+
+            <div id="tabprn-1" class="tab-pane" [class.active]="numbtncheck==0">
+              <div class="panel-body">
+                <strong>All Previous Notes</strong>
+                <div style="overflow: auto;">
+                  <table class="table table-striped table-hover table-bordered display nowrap dataTable myDataTable"
+                    style="table-layout: fixed; width: 100%;" *ngIf="this.temp_var">
+                    <thead>
+                      <tr>
+                        <th style="width: 60%">Notes Description</th>
+                        <th style="width: 60%">User Name</th>
+                        <th style="width: 20%; text-align:center">Created On</th>
+
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of Response.Response">
+                        <td>{{item.Note_Detail}}</td>
+                        <td>{{item.UserName}}</td>
+                        <td style="text-align:center">{{item.Created_Date| date: 'MM/dd/yyyy'}}
+
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div id="tabprn-2" class="tab-pane" [class.active]="numbtncheck==1">
+              <div class="panel-body">
+                <strong>All EDI History</strong>
+                <div style="overflow: auto;">
+                  <table class="table table-hover table-striped table-bordered dataTable ediTable"
+                    style="table-layout: fixed; width: 100%;">
+                    <thead>
+                      <tr>
+                        <th>Claim No</th>
+                        <th>Submit Date</th>
+                        <th>Insurance Name</th>
+                        <th>DOS</th>
+                        <th>Status Date</th>
+                        <th>Status</th>
+                        <th>File277CA</th>
+                        <th>Response Level</th>
+                        <th>Rejection Reason</th>
+                      </tr>
+                    </thead>
+
+
+                    <tbody>
+                      <tr *ngFor="let item of EDIHistory">
+                        <td>{{item.Claims}}</td>
+                        <td>{{item.Submit_Date}}</td>
+                        <td>{{item.Insurance_Name}}</td>
+                        <td>{{item.DOS}}</td>
+                        <td>{{item.Status_Date}}</td>
+                        <td>{{item.Status}}</td>
+                        <td>{{item.File277CA}}</td>
+                        <td>{{item.Status_Level}}</td>
+                        <td>{{item.Message}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+
+            <div id="tabprn-3" class="tab-pane active" [class.active]="numbtncheck==2">
+              <div class="panel-body">
+
+                <textarea rows="7" style="width: 100%; max-width: 100%;"
+                  [(ngModel)]="claimNotesModel.Response.Note_Detail"></textarea>
+
+                <button type="button" (click)="saveClaimNotes()" class="btn btn-w-m btn-primary"
+                  style="float:right">Save</button>
+              </div>
+            </div>
+            <div>
+            </div>
+
+
+          </div>
+        </div>
+
+        <div class="tabs-container" *ngIf="numbtncheck == 2" style="display: block;">
+
+          <ul class="nav nav-tabs">
+
+            <li class="" [class.active]="numbtncheck==2"><a data-toggle="tab" href="#tabprn-4">Manual Notes Details</a>
+            </li>
+          </ul>
+          <div class="tab-content">
+
+
+            <div id="tabprn-4" class="tab-pane" [class.active]="numbtncheck==2">
+              <div class="panel-body">
+                <strong>All Previous Notes</strong>
+                <div style="overflow: auto;">
+                  <table class="table table-striped table-hover table-bordered display nowrap dataTable myDataTable"
+                    style="table-layout: fixed; width: 100%;" *ngIf="this.temp_var">
+                    <thead>
+                      <tr>
+                        <th style="width: 60%">Notes Description</th>
+                        <th style="width: 60%">User Name</th>
+                        <th style="width: 20%; text-align:center">Created On</th>
+                        <th style="width: 20%; text-align:center">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of Response.Response">
+                        <td>{{item.Note_Detail}}</td>
+                        <td>{{item.UserName}}</td>
+                        <td style="text-align:center">{{item.Created_Date| date: 'MM/dd/yyyy'}}
+                        <td class="text-right footable-visible footable-last-column" style="text-align:center">
+                          <div class="btn-group">
+                            <button class="btn-white btn btn-xs gridbtn" id="editAddEditPractice" data-toggle="tab"
+                              href="#tabprn-3" (click)="getClaimNote(item.Claim_Notes_Id)"
+                              [disabled]="IsEditable(item.Note_Detail, item.IsAuto_Note,item.Created_Date,item.Created_By) || isDisabled">Edit</button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal inmodal" id="patientClaimNotes" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content animated bounceInRight">
+      <div class="modal-header" style="padding-top:15px;padding-bottom:15px;">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+            class="sr-only">Close</span></button>
+        <h4 class="modal-title">Claim Notes</h4>
+      </div>
+      <div class="modal-body">
+        <div class="tabs-container">
+          <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#tabprn-3"> Add Notes</a></li>
+            <li class=""><a data-toggle="tab" href="#tabprn-1">History</a></li>
+          </ul>
+          <div class="tab-content">
+            <div id="tabprn-1" class="tab-pane active">
+              <div class="panel-body">
+                <textarea rows="6" id="txtPracticesNotes" style="width:100%"></textarea>
+                <button type="button" class="btn btn-w-m btn-primary" style="float:right">Save Notes</button>
+              </div>
+            </div>
+            <div id="tabprn-2" class="tab-pane">
+              <div class="panel-body">
+                <strong>All Previous Notes</strong>
+                <div class="table-responsive left-full">
+                  <table class="table table-striped table-hover table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Notes</th>
+                        <th>Created On</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="gradeX">
+                        <td>Test Notes</td>
+                        <td>5 Jul 2018</td>
+                        <td class="text-right footable-visible footable-last-column">
+                          <div class="btn-group">
+                            <button class="btn-white btn btn-xs gridbtn">View</button>
+                            <button class="btn-white btn btn-xs gridbtn">Edit</button>
+                            <button class="btn-white btn btn-xs gridbtn">Delete</button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal inmodal" id="ClaimPayments" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content animated bounceInRight">
+      <div class="modal-header" style="padding-top:15px;padding-bottom:15px;">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+            class="sr-only">Close</span></button>
+        <h4 class="modal-title">Payments</h4>
+      </div>
+      <div class="modal-body">
+        <div class="panel-body">
+          <div class="form-group">
+            <div class="col-md-6">
+              <label>Payment Mode</label> <select id="ddlPaymentMode" class="form-control">
+                <option value="1">Primary</option>
+                <option value="2">Seconday</option>
+                <option value="3">Other</option>
+                <option value="4">Patient</option>
+                <option value="5">Copay</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label>Insurance Name</label>
+              <input type="text" placeholder="Enter Insurance Name" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-6">
+              <label>Payment Type</label> <select id="ddlPaymentMode" class="form-control">
+                <option value="1">Check</option>
+                <option value="2">Cash</option>
+                <option value="3">Credit & EFT</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label>Paid Proc Code</label>
+              <input type="text" placeholder="Enter Paid Proc Code" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-6">
+              <label>Modi Code1</label>
+              <input type="text" placeholder="Enter Modi Code1" class="form-control" />
+            </div>
+            <div class="col-md-6">
+              <label>Modi Code2</label>
+              <input type="text" placeholder="Enter Modi Code2" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-6">
+              <label>Charge Proc Code</label>
+              <input type="text" placeholder="Enter Charge Proc Code" class="form-control" />
+            </div>
+            <div class="col-md-6">
+              <label>Amount Charge</label>
+              <input type="text" placeholder="Enter Amount Charge" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-6">
+              <label>Amount Approved</label>
+              <input type="text" placeholder="Enter Amount Approved" class="form-control" />
+            </div>
+            <div class="col-md-6">
+              <label>Amount Paid</label>
+              <input type="text" placeholder="Enter Amount Paid" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-6">
+              <label>Amount Adjuct</label>
+              <input type="text" placeholder="Enter Amount Adjust" class="form-control" />
+            </div>
+            <div class="col-md-6">
+              <label>Check #</label>
+              <input type="text" placeholder="Enter Check Number" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-6">
+              <label>Check Date</label>
+              <input type="text" placeholder="Enter Check Date" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-6">
+              <label>Check Amount</label>
+              <input type="text" placeholder="Enter Check Amount" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-6">
+              <label>Units</label>
+              <input type="text" placeholder="Enter Units" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-6">
+              <label>Patient Responsibility</label>
+              <input type="text" placeholder="Enter Patient Responsibility" class="form-control" />
+            </div>
+          </div>
+          <button type="button" class="btn btn-w-m btn-primary" style="float:right">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <div class="modal-footer">
+    <button type="button" class="btn btn-green" data-dismiss="modal" (click)="insertClaim()" >Save</button>
+  <button type="button" class="btn btn-white" data-dismiss="modal" (click)="ClosePage()">Close</button>
+</div> -->

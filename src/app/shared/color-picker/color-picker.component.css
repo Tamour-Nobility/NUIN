@@ -1,0 +1,11 @@
+.color{
+    cursor: pointer;
+}
+
+.color.border{
+    border:solid 2px #12a45159;
+}
+
+.color.no-border{
+    border: none;
+}

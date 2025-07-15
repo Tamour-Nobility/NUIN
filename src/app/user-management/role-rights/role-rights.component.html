@@ -1,0 +1,37 @@
+<div class="row">
+  <div class="col-lg-8">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5><i class="fa fa-users"></i>&nbsp;User Management</h5>
+      </div>
+      <div class="ibox-content">
+        <div class="tabs-container">
+          <ul class="nav nav-tabs">
+            <li [routerLink]="['/users/module']"><a aria-expanded="false">Modules</a></li>
+            <li [routerLink]="['/users/submodule']"><a aria-expanded="false">Sub Modules</a></li>
+            <li [routerLink]="['/users/properties']"><a aria-expanded="true">Properties</a></li>
+            <li [routerLink]="['/users/role']"><a aria-expanded="false">Roles</a></li>
+            <li role="presentation" class="dropdown active">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                aria-expanded="false">
+                Role and Rights <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li class="nav-link" [routerLink]="['rolewise']"><a aria-expanded="false">Role Wise</a></li>
+                <li class="nav-link" [routerLink]="['userwise']"><a aria-expanded="false">User Wise</a></li>
+              </ul>
+            </li>
+            <li [routerLink]="['/users/users']"><a aria-expanded="false">Users</a></li>
+            <li [routerLink]="['/users/employees']"><a aria-expanded="false">Employees</a></li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active">
+              <div class="panel-body">
+                <router-outlet></router-outlet>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

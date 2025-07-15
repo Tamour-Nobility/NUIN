@@ -1,0 +1,160 @@
+<h3>ERA Summary</h3>
+<div class="row">
+  <form [formGroup]="ERASearchForm" role="form">
+    <div class="form-group col-sm-3 col-md-3 col-lg-3">
+      <label class="control-label">Check Number</label>
+      <input type="text" placeholder="Check Number" class="form-control" [(ngModel)]="eraSearchRequest.checkNo"
+        formControlName="checkNo" maxlength="50">
+    </div>
+    <div class="form-group col-sm-3 col-md-3 col-lg-3">
+      <label class="control-label" for="status">Date Type</label>
+      <select id="dateRangeType" class="form-control" name="dateRangeType" [(ngModel)]="eraSearchRequest.dateType"
+        formControlName="dateType" (change)="onChangeDateRangeType()">
+        <option [ngValue]="null" selected>Select Date Type</option>
+        <option value='check'>Check Date</option>
+        <option value='posted'>Posting Date</option>
+      </select>
+    </div>
+    <div class="form-group col-sm-3 col-md-3 col-lg-3">
+      <label class="control-label">From - To</label>
+      <my-date-range-picker [options]="myDateRangePickerOptions" [placeholder]="'MM/DD/YYYY'"
+        (dateRangeChanged)="onDateRangeChanged($event)" formControlName="dateRange">
+      </my-date-range-picker>
+    </div>
+    <div class="form-group col-sm-3 col-md-3 col-lg-3">
+      <label class="control-label">Check Amount</label>
+      <input type="text" placeholder="Check Amount" class="form-control" [(ngModel)]="eraSearchRequest.checkAmount"
+        formControlName="checkAmount" maxlength="10" onlyNumbers="true">
+    </div>
+    <div class="clearfix"></div>
+    <div class="form-group col-sm-3 col-md-3 col-lg-3">
+      <label class="control-label">Patient Account #</label>
+      <input type="text" placeholder="Patient Account" class="form-control"
+        [(ngModel)]="eraSearchRequest.patientAccount" formControlName="patientAccount" maxlength="25"
+        onlyNumbers="true">
+    </div>
+    <div class="form-group col-sm-3 col-md-3 col-lg-3">
+      <label class="control-label" for="status">Status</label>
+      <select class="form-control" formControlName="status" [(ngModel)]="eraSearchRequest.status">
+        <option value="all" selected title="All">All</option>
+        <option value="u" selected title="Unposted">U</option>
+        <option value="p" title="Posted">P</option>
+        <option value="a" title="Partially Posted">A</option>
+      </select>
+    </div>
+    <div class="form-group col-sm-3 col-md-3 col-lg-3">
+      <label class="control-label">ICN No</label>
+      <input type="text" placeholder="ICN No" class="form-control" [(ngModel)]="eraSearchRequest.icnNo"
+        formControlName="icnNo" maxlength="25">
+    </div>
+  </form>
+</div>
+<div class="row">
+  <div class="col-lg-12">
+    <button type="button" type="submit" class="btn btn-primary pull-right btn-sm" (click)="onSearch()">Search</button>
+    <button type="button" class="btn btn-white pull-right ml-2 btn-sm" (click)="onClear()">Clear</button>
+    <span [tooltip]="Gv.ERADownloadButtonTooltip" class="pull-right"   placement="top">
+      <button type="button" class="btn btn-primary pull-right btn-sm"    [ngClass]="{'':Gv.ERADownloadButton==false,'disabled':Gv.ERADownloadButton==true}" 
+    style="margin-right: 3px;"  (click)="downloadCustomERA()" >Download</button>
+  </span>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12 pt-20">
+    <div *ngIf="(eraSearchResponse && eraSearchResponse.length>0) || isSearchInitiated">
+      <table class="table table-hover table-striped table-bordered dataTable dataTableERA" width="100%">
+        <thead>
+          <tr>
+            <th>Check Number</th>
+            <th>Check Date</th>
+            <th>Payer Type</th>
+            <th width="30%">Payer</th>
+            <th>Type</th>
+            <th width="10%">Check Amount</th>
+            <th>Posting Date</th>
+            <th>Status</th>
+            <th>Apply</th>
+            <th title="View EOB/ERA Details">View</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let era of eraSearchResponse">
+            <td>{{era.CHECKNUMBER}}</td>
+            <td>{{era.CHECKDATE | date:'MM/dd/yyyy'}}</td>
+            <td>Insurance</td>
+            <td>{{era.PAYERNAME}}</td>
+            <td>{{era.PAYMENTMETHOD}}</td>
+            <td>${{era.CHECKAMOUNT}}</td>
+            <td>{{era.POSTEDDATE | date:'MM/dd/yyyy'}}</td>
+            <td>{{era.ERAPOSTEDSTATUS}}</td>
+            <td>
+              <a *ngIf="era.ERAPOSTEDSTATUS!=='P'" [routerLink]="['/era/claims/'+era.ERAID]">Apply</a>
+              <span *ngIf="era.ERAPOSTEDSTATUS==='P'">Applied</span>
+            </td>
+            <td>
+              <a title="View EOB/ERA Details" [routerLink]="['/era/view/'+era.ERAID]" target="_blank">View</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="ERAModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header ">
+        <div class="d-flex justify-content-between">
+          <h2 class="modal-title" style="color: black;font-weight: bold;" id="staticBackdropLabel">Manual ERA Download</h2>
+        <button type="button" class="close bg-gradient-primary" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="bg-gradient-primary">&times;</span>
+        </button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div>
+          <div class="d-flex justify-content-between">
+            <div class="d-flex">
+              <h3>User Name :&nbsp;</h3>
+            <h4> {{ Gv.ERAResponse.USER_NAME}}</h4>
+            </div>
+          </div>
+          <div class="d-flex">
+            <h3>Practice Code :&nbsp;</h3>
+          <h4> {{ Gv.ERAResponse.PracticeCode}}</h4>
+          </div>
+          <div class="d-flex justify-content-between">
+            <div class="d-flex">
+              <h3>Request Date :&nbsp;</h3>
+              <h4> {{   Gv.ERAResponse.ENTRY_DATE}}</h4>
+            <!-- <h4> {{   manvelERAResponse.ENTRY_DATE == '' ? manvelERAResponse.ENTRY_DATE:manvelERAResponse.ENTRY_DATE.substr(0, manvelERAResponse.ENTRY_DATE.indexOf('.')).replace('T', ' ')  }}</h4> -->
+            </div>
+          </div>
+          <div class="d-flex justify-content-between">
+            <div class="d-flex">
+              <h3>Download file Count :&nbsp;</h3>
+            <h4> {{ Gv.ERAResponse.DOWNLOADED_FILE_COUNT}}</h4>
+            </div>
+          </div>
+          <div class="d-flex">
+            <h3>Status :&nbsp;</h3>
+          <h4> {{ Gv.ERAResponse.STATUS=='Parsed' ? 'Completed' : Gv.ERAResponse.STATUS.split('_').join(' ')}}</h4>
+          </div>
+          <div class="d-flex">
+            <div class="d-flex">
+              <h3>Result :&nbsp;</h3>
+            <h4> {{ Gv.ERAResponse.FTP_EXCEPTION  }} </h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

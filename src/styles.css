@@ -1,0 +1,66 @@
+@import "~@ngx-share/button/styles/share-buttons.css";
+@import "~@ngx-share/button/styles/themes/circles/circles-dark-theme.css";
+@import "~@ngx-share/button/styles/themes/modern/modern-dark-theme.css";
+@import "~angular2-multiselect-dropdown/themes/default.theme.css";
+
+@import '~ngx-toastr/toastr';
+
+.block{display: inline-block;}
+.bold{font-weight: bold;}
+.center{text-align: center;}
+.fullwidth{width: 100%;}
+.pull-right{float: right !important;}
+.pull-left{float: left !important;}
+.noItems{text-align: center;font-size: 3em;color: rgb(141, 141, 141);}
+table.borderless td, .borderless th {border: none !important;}
+/*------------------------------------------*/
+ul.ng2-pagination a,li.current{font-size: 13px;border-radius: 20px !important;padding: 2px 12px  !important;border-radius: 4px;}
+/*----------------*/
+button.fileinput-upload-button{display: none !important;}
+button.btn-default,button.btn-default:focus, button.btn-default:hover{color: #333;}
+
+.progress_container{position: fixed;
+bottom: 0;
+right: 0;
+top: 0;
+left: 0;
+margin: auto;
+width: 500px;
+height: 0px;}
+.progress_bar {display: block;width: 100%;background-color: rgba(0, 0, 0, 0.26);}
+.progress_bar > div{display: block;height: 5px;background-color: rgb(30, 150, 120);}
+
+.droppable {
+    width: 420px;
+    height: 60px;
+    line-height: 100px;
+    vertical-align: middle;
+    text-align: center;
+  }
+  
+  .draggable {
+    width: 420px;
+    height: 60px;
+  }
+  
+  .droppable {
+    width: 420px;
+    height: 60px;
+    line-height: 100px;
+    vertical-align: middle;
+    text-align: center;
+  }
+  
+  .draggable {
+    width: 420px;
+    height: 60px;
+  
+  }
+h3 {
+    margin: 0 0 10px;
+}
+
+pre {
+    background-color: #f5f5f5;
+    padding: 15px;
+}

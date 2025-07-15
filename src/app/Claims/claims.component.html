@@ -1,0 +1,1596 @@
+<!-- Modal for Add New Panel Code -->
+<!-- <div class="modal fade" id="PanelCodeModal" tabindex="-1" aria-labelledby="PanelCodeModal" aria-hidden="true" data-backdrop="static" data-keyboard="false"> -->
+
+<div class="modal fade" bsModal #PanelCodeModal="bs-modal" tabindex="-1" role="dialog"
+    aria-labelledby="dialog-nested-name" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered d-flex align-items-center" style="margin-top: 20px;">
+        <div class="modal-content" style="margin-left: 70px;width: 500px;">
+            <div
+                style="padding-top: 0; padding-bottom: 15px;margin-right: 10px; display: flex; justify-content: space-between; align-items: center;">
+                <h1 class="modal-title bold" style="margin-top: 45px; flex: 1; text-align: center;">Panel Code</h1>
+                <button type="button" (click)="hidePanelCode()" class="close"
+                    style="font-size: 25px;padding-bottom: 53px;" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-between align-items-center" style="margin-left: 38px;">
+                    <label style="font-size: 15px;font-weight: 500;">Panel Code: &nbsp;&nbsp;&nbsp; </label>
+                    <input type="text" maxlength="8" [(ngModel)]="panelCodeInput" style="flex-grow: 1;"
+                        placeholder="Enter Panel Code" (keypress)="allowAlphanumericOnly($event)">
+                </div>
+                <br><br>
+                <button class="btn btn-primary" style="margin-left: 187px;width: 53px;" [disabled]="!panelCodeInput"
+                    (click)="getPanelCodeListClaim()">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- // Added by Pir Ubaid (USER STORY 204 : NPM ALERT ) -->
+<div class="modal fade" bsModal #modalWindow="bs-modal" tabindex="-1" role="dialog"
+    aria-labelledby="dialog-nested-name">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between;padding: 10px;">
+                <h2 style="font-weight: bold;">Alert</h2>
+                <button type="button" class="close" (click)="hide()">
+                    <span aria-hidden="true">X</span>
+                </button>
+            </div>
+
+            <div class="modal-body" style="padding: 0px 10px 20px 10px;">
+                <div style="display: flex; justify-content: space-between;">
+                    <div>
+                        <label>Priority:</label>
+                        <span *ngIf="firstAlert?.Priority === 'L'"> Low</span>
+                        <span *ngIf="firstAlert?.Priority === 'M'"> Medium</span>
+                        <span *ngIf="firstAlert?.Priority === 'H'"> High</span>
+                    </div>
+
+
+                    <div>
+                        <LABEL>Created by:</LABEL>
+
+                        {{ firstAlert?.Created_User | uppercase }}
+
+                    </div>
+                </div>
+
+                <hr style="border-top: 1px solid#676a6c; font-weight: bold; margin-top: 10px;
+        margin-bottom: 10px;">
+
+                <div style="font-size: 18px;">
+                    <p style="margin-bottom: 0; font-weight: bold;">Message</p>
+
+                    <div style="overflow-wrap: break-word; font-size: 14px;
+          color: #000000;
+          margin-top: 3px;">{{ firstAlert?.AlertMessage }}</div>
+                </div>
+
+                <div style="text-align: center;">
+                    <button type="button" class="btn btn-primary" style="width: 12%;" (click)="hide()">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Addded BY Hamza Akhlaq For Auto Claim Notes -->
+<div class="modal fade" bsModal #NoteModal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="cptModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-headern">
+                <button type="button" class="close" aria-label="Close" (click)="NoteModal.hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="modal-title" style="text-align: center; font-size: 24px; flex-grow: 1;">Claim Changes
+                    Confirmation</h3>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center; font-size: 15px; color: black;">
+                    The following updates have been made to the claim . Are you sure you want to save changes?
+                </p>
+                <div class="green-border p-3">
+                    <div style="width: 100%; text-align: left;">
+                        <p style="font-size: small; font-weight: bold; margin: 10px; padding: 0;">
+                            <!-- {{updatedNotes}} -->
+                            {{notesPopUpData}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" (click)="NoteModal.hide()">Close</button>
+                <button type="button" class="btn btn-primary btn-sm"
+                    (click)="ConfirmAutoNoteChanges()">Continue</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Addded BY Hamza Akhlaq For Negavtive Balance handling -->
+<div class="modal fade" bsModal #opModal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="cptModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-headern">
+                <button type="button" class="close" aria-label="Close" (click)="opModal.hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="modal-title" style="text-align: center; font-size: 24px; flex-grow: 1;">OverPayment
+                    Confirmation</h3>
+            </div>
+            <div class="modal-body">
+                <div class="green-border p-3">
+                    <div style="width: 100%; text-align: left;">
+                        <p style="font-size: small; font-weight: bold; margin: 10px; padding: 0;">
+                            The claim due amount is in a negative amount. Please confirm whether the negative balance is
+                            due to a patient credit balance
+                            or an insurance overpayment?
+                        </p>
+                    </div>
+                    <div class="row form-group align-items-center">
+                        <div style="padding: 2%;">
+                            <div class="col-sm-3 mb-0">
+                                <label class="control-label label-bold">OverPayment Responsible</label>
+                            </div>
+                            <div class="col-sm-4">
+                                <select class="form-control" id="responsibleDropdown"
+                                    [(ngModel)]="selectedResponsibleParty"
+                                    (change)="SelectedResponsibleParty($event.target.value)">
+                                    <option value="Select Responsible">Select Responsible</option>
+                                    <option value="creditbalance">Patient : Credit Balance</option>
+                                    <option value="overpaid">Insurance : Overpaid</option>
+                                    <option value="bothpatientinsurance">Both : Insurance/Patient</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4">
+                                <span class="amount-due label-bold" style="margin-left: 10px;">Total Amount Due:
+                                    {{TotaldueAmt}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="selectedResponsibleParty === 'bothpatientinsurance'">
+                        <p
+                            style="font-size: small; font-weight: bold; margin-top: 30px; margin-left: 35px; padding: 0;">
+                            Please confirm overpayment amount?
+                        </p>
+                    </div>
+                    <form [formGroup]="paymentResponsibilityForm">
+                        <div *ngIf="selectedResponsibleParty === 'bothpatientinsurance'">
+                            <div class="row" style="padding: 2%; margin-top: 5px;">
+                                <div class="form-group col-sm-3 mb-0" style="padding: 2%; margin-left: 15px;">
+                                    <label class="control-label label-bold">Patient Credit Balance<span
+                                            class="text-danger">*</span></label>
+                                    <input class="form-control mt-2" placeholder="Patient Credit Balance"
+                                        formControlName="creditbalance" (input)="onInputChange('creditbalance')">
+                                    <!-- Call onInputChange on input event -->
+                                    <div
+                                        *ngIf="paymentResponsibilityForm.get('creditbalance').invalid && (paymentResponsibilityForm.get('creditbalance').dirty || paymentResponsibilityForm.get('creditbalance').touched)">
+                                        <small class="text-danger"
+                                            *ngIf="paymentResponsibilityForm.get('creditbalance').errors?.required">Negative
+                                            sign is required.</small>
+                                        <small class="text-danger"
+                                            *ngIf="paymentResponsibilityForm.get('creditbalance').errors?.invalidValue">Only
+                                            negative value is allowed</small>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-3 mb-0" style="padding: 2%; margin-left: 30px;">
+                                    <label class="control-label label-bold">Insurance Overpaid<span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control mt-2" placeholder="Insurance Overpaid"
+                                        formControlName="overpaid" (input)="onInputChange('overpaid')">
+                                    <!-- Call onInputChange on input event -->
+                                    <div
+                                        *ngIf="paymentResponsibilityForm.get('overpaid').invalid && (paymentResponsibilityForm.get('overpaid').dirty || paymentResponsibilityForm.get('overpaid').touched)">
+                                        <small class="text-danger"
+                                            *ngIf="paymentResponsibilityForm.get('overpaid').errors?.required"> Negative
+                                            sign is required.</small>
+                                        <small class="text-danger"
+                                            *ngIf="paymentResponsibilityForm.get('overpaid').errors?.invalidValue">Only
+                                            negative value is allowed</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" (click)="onClose()">Close</button>
+                <button type="button" class="btn btn-primary btn-sm" (click)="onHidden()">Skip and Save Claim</button>
+                <button type="button" class="btn btn-primary btn-sm"
+                    (click)="SaveResponsbility(selectedResponsibleParty)">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Added By Hamza Akhlaq For Negavtive payment update  -->
+<div class="modal fade" bsModal #upModal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="cptModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-headern">
+                <button type="button" class="close" aria-label="Close" (click)="upModal.hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="modal-title" style="text-align: center; font-size: 24px; flex-grow: 1;">Update OverPayment
+                </h3>
+            </div>
+            <div class="modal-body">
+                <div class="green-border p-3">
+                    <div style="width: 100%; text-align: left;">
+                        <p style="font-size: small; font-weight: bold; margin: 10px; padding: 0;">
+                            The claim due amount is in a negative amount. Please confirm whether the negative balance is
+                            due to a patient credit balance
+                            or an insurance overpayment?
+                        </p>
+                    </div>
+                    <div class="row form-group align-items-center">
+                        <div style="padding: 2%;">
+                            <div class="col-sm-3 mb-0">
+                                <label class="control-label label-bold">OverPayment Responsible</label>
+                            </div>
+                            <div class="col-sm-4">
+                                <select class="form-control" id="responsibleDropdown"
+                                    [(ngModel)]="selectedResponsibleParty"
+                                    (change)="SelectedResponsibleParty($event.target.value)">
+                                    <option value="Select Responsible">Select Responsible</option>
+                                    <option value="creditbalance">Patient : Credit Balance</option>
+                                    <option value="overpaid">Insurance : Overpaid</option>
+                                    <option value="bothpatientinsurance">Both : Insurance/Patient</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4">
+                                <span class="amount-due label-bold" style="margin-left: 10px;">Total Amount Due:
+                                    {{this.TotaldueAmt}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="selectedResponsibleParty === 'bothpatientinsurance'">
+                        <p
+                            style="font-size: small; font-weight: bold; margin-top: 30px; margin-left: 35px; padding: 0;">
+                            Please confirm overpayment amount?
+                        </p>
+                    </div>
+                    <form [formGroup]="paymentResponsibilityForm">
+                        <div *ngIf="selectedResponsibleParty === 'bothpatientinsurance'">
+                            <div class="row" style="padding: 2%; margin-top: 5px;">
+                                <div class="form-group col-sm-3 mb-0" style="padding: 2%; margin-left: 15px;">
+                                    <label class="control-label label-bold">Patient Credit Balance<span
+                                            class="text-danger">*</span></label>
+                                    <input class="form-control mt-2" placeholder="Patient Credit Balance"
+                                        formControlName="creditbalance" (input)="onInputChange('creditbalance')">
+                                    <!-- Call onInputChange on input event -->
+                                    <div
+                                        *ngIf="paymentResponsibilityForm.get('creditbalance').invalid && (paymentResponsibilityForm.get('creditbalance').dirty || paymentResponsibilityForm.get('creditbalance').touched)">
+                                        <small class="text-danger"
+                                            *ngIf="paymentResponsibilityForm.get('creditbalance').errors?.required">Negative
+                                            sign is required.</small>
+                                        <small class="text-danger"
+                                            *ngIf="paymentResponsibilityForm.get('creditbalance').errors?.invalidValue">Only
+                                            negative value is allowed</small>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-3 mb-0" style="padding: 2%; margin-left: 30px;">
+                                    <label class="control-label label-bold">Insurance Overpaid<span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control mt-2" placeholder="Insurance Overpaid"
+                                        formControlName="overpaid" (input)="onInputChange('overpaid')">
+                                    <!-- Call onInputChange on input event -->
+                                    <div
+                                        *ngIf="paymentResponsibilityForm.get('overpaid').invalid && (paymentResponsibilityForm.get('overpaid').dirty || paymentResponsibilityForm.get('overpaid').touched)">
+                                        <small class="text-danger"
+                                            *ngIf="paymentResponsibilityForm.get('overpaid').errors?.required">Negative
+                                            sign is required.</small>
+                                        <small class="text-danger"
+                                            *ngIf="paymentResponsibilityForm.get('overpaid').errors?.invalidValue">Only
+                                            negative value is allowed</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-between p-0">
+                <button type="button" class="btn btn-default btn-sm" (click)="UpdatePaymentModelClose()">Close</button>
+                <button type="button" class="btn btn-primary btn-sm"
+                    (click)="UpdateResponseBility(selectedResponsibleParty)">Update & Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" bsModal #tcbModal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="cptModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-headern">
+                <button type="button" class="close" aria-label="Close" (click)="tcbModal.hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="modal-title" style="text-align: center; font-size: 24px; flex-grow: 1;">Transfer Credit Balance 
+                </h3>
+            </div>
+                <div class="modal-body">
+                    <div class="green-border p-3" >
+                        <div style="width: 100%; text-align: left;">
+                            <p style="font-size: small; font-weight: bold; margin: 10px; padding: 0;">
+                                You have entered credit amounts for transferring to other claims. Please choose the target claims for each entry.
+                            </p>
+                         
+                                <div class="table-horizontal-scroll" id="payments-section" style="min-height: 300px; max-height: 700px; overflow-y: auto;">
+                                        <table class="table table-bordered table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th >Pmt. Source</th>
+                                            
+                                                    <th>Amt.Paid</th>
+                                                    <th>Patient Due Claims</th>
+                                                    
+                                                </tr>
+                                            </thead>
+                                            <tbody class="row-selected">
+                                                <tr *ngFor="let p of transfercrditbalPayment; let ndx = index" 
+                                                >
+                                                <td width="100">
+                                                    {{ p.claimPayments.Payment_Source === 'T' ? 'Transfer Credit Balance' : p.claimPayments.Payment_Source }}
+                                                </td>
+                                                
+                                                <td  width="100">
+                                                    {{p.claimPayments.Amount_Paid}}
+                                                </td>
+                                            
+                                                    <td  width="200">
+                                                        <ngx-select
+                                                        [items]="claimswithPatientDue"
+                                                        optionValueField="Claim_No"
+                                                        optionTextField="displayText"
+                                                        [allowClear]="true"
+                                                        placeholder="Patient Due Claims"
+                                                        
+                                                        (selectionChanges)="onClaimChange(p, $event)">
+                                                      </ngx-select>
+                                                      
+                                                      
+                                                    
+                                                    </td>
+                                                
+                                                </tr>
+                                            
+                                            </tbody>
+                                        </table>
+                                </div>
+                       
+                        </div>
+                    
+                </div>
+                </div>
+            <div class="modal-footer d-flex justify-content-between p-0">
+                <button type="button" class="btn btn-default btn-sm" (click)="tcbModal.hide()"  >Close</button>
+                <button type="button" class="btn btn-primary btn-sm" (click)="validateAndPost()"
+                   >Post</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form [formGroup]="claimForm">
+    <div class="row" formGroupName="main">
+        <div class="col-lg-12">
+            <div class="pull-left">
+                <h3>
+                    <label class="control-label">Patient: <b>{{claimInfo.PatientLastName | titlecase}},
+                            {{claimInfo.PatientFirstName | titlecase}}</b></label>&nbsp;|&nbsp;<label
+                        class="control-label">Account
+                        #: <b>{{claimInfo.Patient_Account}}</b></label>&nbsp;|&nbsp;<label class="control-label">Claim
+                        #:
+                        <b>{{ClaimNumber}}</b></label>
+                </h3>
+            </div>
+            <div class="pull-right">
+
+                <a data-toggle="modal" data-target="#claimsassignment" [class.disabled-link]="isDisabled"><i
+                        class="fa fa-pencil-square"></i>&nbsp;Claim Assignment&nbsp;</a>
+
+                <!-- <button class="btn btn-primary btn-sm mr-3" type="button" >Add to Batch</button>
+                <button class="btn btn-primary btn-sm mr-3" type="button" (click)="addtoScrubber()">Add to Scrubber</button> -->
+
+                <a (click)="resetNotes()" data-toggle="modal" data-target="#ClaimNotes"><i
+                        class="fa fa-pencil-square"></i>&nbsp;Claim Notes</a>
+
+                <!-- <a *ngIf=" claimType=='Professional'"class="link" style="color: #2792ea; margin-left: 5px;" (click)="onGenerateHcfa(false)"  [class.disabled]="!ClaimNumber || ClaimNumber === 0"><i
+                        class="fa fa-file-o"></i>&nbsp;View HCFA</a> -->
+                <!-- <a class="link" style="color: #2792ea; margin-left: 5px;" (click)="onGenerateHcfa(true)"><i
+                            class="fa fa-file-o"></i>&nbsp;Print HCFA</a> -->
+
+                <!-- <div class="btn-group"> -->
+                <!-- <a class="link dropdown-toggle"
+                         style="color: #2792ea; margin-left: 5px;" 
+                         data-toggle="dropdown" 
+                         aria-haspopup="true"
+                         aria-expanded="false" 
+                        [class.disabled]="(claimViewModel.ClaimModel.Is_Self_Pay || !ClaimNumber || ClaimNumber === 0)" 
+                        [attr.aria-disabled]="(claimViewModel.ClaimModel.Is_Self_Pay ||!ClaimNumber || ClaimNumber === 0)">
+                           &nbsp; Print HCFA <i class="fa fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu custom-dropdown-menu" >
+                            <a class="dropdown-item custom-dropdown-item " (click)="onGenerateHcfa(false)"style="color: #7F7F7F;">Primary Red</a>
+                            <br>
+                            <a class="dropdown-item custom-dropdown-item" (click)="onGenerateHcfa(true)" style="color: #7F7F7F;">Primary White</a>
+                            </div> -->
+                <!-- </div> -->
+
+
+                <!-- <a *ngIf=" claimType=='Professional'"class="link" style="color: #2792ea; margin-left: 5px;" (click)="onGenerateHcfa(false)"><i
+                        class="fa fa-file-o"></i>&nbsp;View HCFA</a>
+                        <a class="link" style="color: #2792ea; margin-left: 5px;" (click)="onGenerateHcfa(true)"><i
+                            class="fa fa-file-o"></i>&nbsp;Print HCFA</a> -->
+
+                <a *ngIf=" claimType==='Institutional'" class="link" style="color: #2792ea; margin-left: 5px;"
+                    (click)="onGenerateUbForm(false)" [class.disabled]="!ClaimNumber || ClaimNumber === 0"><i
+                        class="fa fa-file-o"></i>&nbsp;View UB</a>
+                <a class="link" style="color: #2792ea; margin-left: 5px;" (click)="onGenerateHcfa(false,'P')"
+                    [class.disabled]="!ClaimNumber || ClaimNumber === 0 || claimType === 'Institutional'">
+                    <i class="fa fa-file-o"></i>&nbsp;View HCFA</a>
+                <!-- <a class="link" style="color: #2792ea; margin-left: 5px;" (click)="onGenerateHcfa(true)"><i
+                    class="fa fa-file-o"></i>&nbsp;Print HCFA</a> -->
+                <!-- <div class="btn-group"> -->
+                <a class="link dropdown-toggle" style="color: #2792ea; margin-left: 5px;" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false"
+                    [class.disabled]="(claimViewModel.ClaimModel.Is_Self_Pay || !ClaimNumber || ClaimNumber === 0) || claimType === 'Institutional'"
+                    [attr.aria-disabled]="(claimViewModel.ClaimModel.Is_Self_Pay ||!ClaimNumber || ClaimNumber === 0) || claimType === 'Institutional'">
+                    Print HCFA <i class="fa fa-chevron-down"></i>
+                </a>
+                <div class="dropdown-menu custom-dropdown-menu">
+                    <a class="dropdown-item custom-dropdown-item " (click)="onGenerateHcfa(false,'P')"
+                        style="color: #7F7F7F;">Primary Red</a>
+                    <br>
+                    <a class="dropdown-item custom-dropdown-item" (click)="onGenerateHcfa(true ,'P')"
+                        style="color: #7F7F7F;">Primary White</a>
+                    <br>
+                    <a class="dropdown-item custom-dropdown-item  " (click)="onGenerateHcfa(false,'S')"
+                        style="color: #7F7F7F;">Secondary Red</a>
+                    <br>
+                    <a class="dropdown-item custom-dropdown-item  " (click)="onGenerateHcfa(true,'S')"
+                        style="color: #7F7F7F;">Secondary White</a>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="checkbox m-r-xs pull-left" style="margin-top: 0px;">
+                <input type="checkbox" id="selfPay" [(ngModel)]="claimViewModel.ClaimModel.Is_Self_Pay"
+                    (click)="removeINS()" formControlName="selfPay" (blur)="AddAutoNotesForUpdateClaim()">
+                <label for="selfPay" data-placement="bottom">
+                    Self Pay
+                </label>
+            </div>
+            <div *ngIf="IsAutoFillEnable&&this.InsChild.isNewClaim" class="col-lg-3 checkbox pull-left"
+                style="margin-top: 0px;">
+                <input type="checkbox" id="autofill" [(ngModel)]="autofill" (change)="autofillchecked($event)"
+                    formControlName="autofill"
+                    tooltip="Auto-fill Location, Rendering Provider, Billing Provider and Diagnosis details in new claim from the most recent previous claim"
+                    placement="bottom">
+                <label for="autofill" data-placement="bottom">
+                    Auto-fill Info
+                </label>
+            </div>
+            <div class="pull-right claim-summary">
+                <span class="mr-10">Charges:&nbsp;${{claimViewModel.ClaimModel.Claim_Total}}</span>
+                <span class="mr-10"> Payments:&nbsp;${{claimViewModel.ClaimModel.Amt_Paid }}</span>
+                <!-- <span class="mr-10"> Pri. Ins.:&nbsp;${{claimViewModel.ClaimModel.Pri_Ins_Payment}}</span>
+                <span class="mr-10"> Sec. Ins.:&nbsp;${{claimViewModel.ClaimModel.Sec_Ins_Payment}}</span>
+                <span class="mr-10"> Other Ins.:&nbsp;${{claimViewModel.ClaimModel.Oth_Ins_Payment}}</span> -->
+                <span class="mr-10"> Insurance Paid:&nbsp;${{claimViewModel.ClaimModel.Pri_Ins_Payment +
+                    claimViewModel.ClaimModel.Sec_Ins_Payment + claimViewModel.ClaimModel.Oth_Ins_Payment}} </span>
+                <span class="mr-10"> Patient Paid:&nbsp;${{claimViewModel.ClaimModel.Patient_Payment}}</span>
+                <span class="mr-10"> Adjustments:&nbsp;${{claimViewModel.ClaimModel.Adjustment}}</span>
+                <span class="mr-10"> {{dueRespSide}}:&nbsp;${{this.claimViewModel.ClaimModel.Amt_Due}}</span>
+            </div>
+        </div>
+        <div class="pull-right claim-summary" style="margin-right: 14px; margin-bottom: 15px; ">
+            <span class="edit-icon">
+                <span class="edit-icon">
+                    <span class="edit-icon">
+                        <i class="fa fa-edit mr-10"
+                            [ngClass]="{ 'disabled': Claimview || (NewClaimtype !== null && NewClaimtype !== '' && NewClaimtype !== undefined) || TotalPIblaance }"
+                            (click)="EditPaymentResponsibility('UpdatePayment')"></i>
+                        <ng-template #disabledIcon>
+                            <i class="fa fa-edit mr-10 disabled"></i>
+                        </ng-template>
+                    </span>
+                </span>
+            </span>
+            <span class="mr-10">
+                Insurance Overpaid:&nbsp;
+                ${{
+                insuranceoverpaid
+                }}
+            </span>
+            <span class="mr-10">
+                Patient Credit Balance:&nbsp;
+                ${{
+                patientcreditbalance
+                }}
+            </span>
+
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="col-lg-3 from-group">
+            <label class="control-label">DOS<span class="text-danger">*</span></label>
+            <my-date-picker id="dos" [selDate]="selDOS" [placeholder]="placeholder"
+                (dateChanged)="onDateChanged($event,'DOS');checkDuplicateDOS();  AddAutoNotesForUpdateClaim();"
+                (blur)="formatDate($event)" [options]="dosDatePickerOptions" (keyup)="dateMask($event)"
+                formControlName="dos">
+            </my-date-picker>
+        </div>
+        <div class="col-lg-3 form-group">
+            <label class="control-label">Scan Date<span class="text-danger">*</span></label>
+            <my-date-picker id="dosScanD" [selDate]="selScanDate" [placeholder]="placeholder"
+                (dateChanged)="onDateChanged($event,'ScanDate'); AddAutoNotesForUpdateClaim()"
+                (blur)="formatDate($event)" (keyup)="dateMask($event)" [options]="scanDatePickerOptions"
+                formControlName="scanDate">
+            </my-date-picker>
+        </div>
+        <div class="col-lg-3 form-group">
+            <label class="control-label">Claim Date</label>
+            <my-date-picker id="dosBD" [selDate]="selBillDate" [placeholder]="placeholder"
+                (dateChanged)="onDateChanged($event,'BillDate')" (blur)="formatDate($event)" [options]="{
+                    dateFormat: 'mm/dd/yyyy', height: '25px', width: '100%',
+                    componentDisabled: true
+                }" formControlName="claimDate">
+            </my-date-picker>
+        </div>
+        <div class="col-lg-3 form-group">
+            <label class="control-label">Location<span class="text-danger">*</span></label>
+            <select class="form-control" [(ngModel)]="claimViewModel.ClaimModel.Location_Code" id="LocationDrop"
+                formControlName="location" (blur)=" AddAutoNotesForUpdateClaim()">
+                <option value=0 disabled>Select Location</option>
+                <option *ngFor="let p of claimViewModel.PracticeLocationsList" value="{{p.Id}}">
+                    {{p.Name}}
+                </option>
+            </select>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-lg-3 form-group">
+            <label class="control-label">Rendering Phy <span class="text-danger">*</span> </label>
+            <select class="form-control" [(ngModel)]="claimViewModel.ClaimModel.Attending_Physician"
+                formControlName="rendPhy" (blur)="AddAutoNotesForUpdateClaim()">
+                <option [ngValue]="null">Select Rendering Physician</option>
+                <option *ngFor="let p of claimViewModel.AttendingPhysiciansList" value="{{p.Id}}"
+                    [disabled]="!p.is_active"
+                    [ngStyle]="{'background-color':p.is_active === true ? 'none' : 'yellow' }">
+                    <span [ngStyle]="{'color':p.is_active === true ? 'while' : '#000000' }"> {{ p.Name }} </span> <span
+                        *ngIf="p.is_active == false"> &nbsp; inactive</span>
+                </option>
+            </select>
+        </div>
+        <div class="col-lg-3 form-group">
+            <label class="control-label">Billing Phy<span class="text-danger">*</span></label>
+            <select class="form-control" [(ngModel)]="claimViewModel.ClaimModel.Billing_Physician"
+                (change)="changeEvent($event.target.value);AddAutoNotesForUpdateClaim()" formControlName="billPhy">
+                <option [ngValue]="null" disabled>Select Billing Physician</option>
+                <option *ngFor="let p of claimViewModel.BillingPhysiciansList" value="{{p.Id}}"
+                    [disabled]="!p.is_active"
+                    [ngStyle]="{'background-color':p.is_active === true ? 'none' : 'yellow' }">
+                    <span [ngStyle]="{'color':p.is_active === true ? 'while' : '#000000' }"> {{ p.Name }} </span> <span
+                        *ngIf="p.is_active == false"> &nbsp; inactive</span>
+                </option>
+            </select>
+        </div>
+        <div class="col-lg-3 form-group">
+            <label class="control-label">Referring Physician</label>
+            <select class="form-control" [(ngModel)]="claimViewModel.ClaimModel.Referring_Physician"
+                (blur)="AddAutoNotesForUpdateClaim()" formControlName="refPhy">
+                <option [ngValue]="null">Select Referring Physician</option>
+                <option *ngFor="let p of claimViewModel.ReferralPhysiciansList" value="{{p.Id}}"
+                    [disabled]="p.In_Active == true"
+                    [ngStyle]="{'background-color':p.In_Active === true ? 'yellow' : 'none' }">
+                    <span [ngStyle]="{'color':p.In_Active == true ? 'red' : 'white' }"> {{ p.Name }} </span> <span
+                        *ngIf="p.In_Active == true"> &nbsp; inactive</span>
+                </option>
+            </select>
+        </div>
+        <div class="col-lg-3 form-group">
+            <label class="control-label">Supervising Physicians</label>
+            <select class="form-control" [(ngModel)]="claimViewModel.ClaimModel.Supervising_Physician"
+                (blur)="AddAutoNotesForUpdateClaim()" formControlName="supPhy">
+                <option [ngValue]="null">Select Supervising Physician</option>
+                <option *ngFor="let p of claimViewModel.AttendingPhysiciansList" value="{{p.Id}}"
+                    [disabled]="!p.is_active"
+                    [ngStyle]="{'background-color':p.is_active === true ? 'none' : 'yellow' }">
+                    <span [ngStyle]="{'color':p.is_active === true ? 'while' : '#000000' }"> {{ p.Name }} </span> <span
+                        *ngIf="p.is_active == false"> &nbsp; inactive</span>
+                </option>
+            </select>
+        </div>
+        <div class="col-lg-3 form-group">
+            <label class="control-label">Referral #</label>
+            <input type="text" class="form-control" id="inpReferal"
+                [(ngModel)]="claimViewModel.ClaimModel.Referral_Number" (blur)="AddAutoNotesForUpdateClaim()"
+                formControlName="referral" maxlength="50">
+        </div>
+        <div class="col-lg-3 form-group">
+            <label class="control-label">PA #</label>
+            <!-- Added By Pir Ubaid (USER STORY : 205 Prior Authorization) -->
+            <input list="paOptions" class="form-control" [(ngModel)]="claimViewModel.ClaimModel.PA_Number"
+                (blur)="AddAutoNotesForUpdateClaim()" formControlName="pa">
+            <datalist id="paOptions">
+                <option *ngFor="let option of PrirAuthorization" [value]="option"></option>
+            </datalist>
+        </div>
+        <div class="col-lg-3 form-group">
+            <label class="control-label">Additional Claim Info.(NCT) <span *ngIf="procedureCode"
+                    title="Additional info cannot be empty when CPT code is 0275T" class="text-danger"> *</span></label>
+            <input type="text" style="text-transform:uppercase" class="form-control" [ngClass]="{
+        'validationError': (procedureCode && (claimViewModel.ClaimModel.Additional_Claim_Info == null)) ||
+                           (CTValue && (claimViewModel.ClaimModel.Additional_Claim_Info != null ))
+      }" [(ngModel)]="claimViewModel.ClaimModel.Additional_Claim_Info" id="additionalClaimInfo"
+                (blur)="AddAutoNotesForUpdateClaim()" formControlName="additionalClaimInfo" maxlength="80"
+                autocomplete="off">
+        </div>
+        <div class="col-lg-3 form-group">
+            <label class="control-label">Resource Phy</label>
+            <select class="form-control" [(ngModel)]="claimViewModel.ClaimModel.Resource_Physician"
+                (blur)="AddAutoNotesForUpdateClaim()" formControlName="resourcePhy">
+                <option [ngValue]="null">Select Resource Physician</option>
+                <option *ngFor="let p of claimViewModel.AttendingPhysiciansList" value="{{p.Id}}"
+                    [disabled]="!p.is_active"
+                    [ngStyle]="{'background-color':p.is_active === true ? 'none' : 'yellow' }">
+                    <span [ngStyle]="{'color':p.is_active === true ? 'while' : '#000000' }"> {{ p.Name }} </span> <span
+                        *ngIf="p.is_active == false"> &nbsp; inactive</span>
+                </option>
+            </select>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="col-lg-3 form-group">
+            <label class="control-label">Patient Status</label>
+            <select class="form-control" name="account" [(ngModel)]="claimViewModel.ClaimModel.Pat_Status"
+                (change)="claimStatus_Changed('PA'); AddAutoNotesForUpdateClaim() ;"
+                (blur)="handlePatientStatusD($event);handlePatientStatusC($event);" formControlName="patientStatus">
+                <option>N</option>
+                <option>B</option>
+                <option>R</option>
+                <option>P</option>
+                <option>W</option>
+                <option>D</option>
+                <option>C</option>
+            </select>
+        </div>
+        <div class="col-lg-3 form-group">
+            <label class="control-label">Primary Status</label>
+            <select class="form-control" name="account" id="ddlPriStatus"
+                [(ngModel)]="claimViewModel.ClaimModel.Pri_Status"
+                (change)="claimStatus_Changed('P'); AddAutoNotesForUpdateClaim();" formControlName="priStatus">
+                <option>N</option>
+                <option>B</option>
+                <option>R</option>
+                <option>P</option>
+                <option>W</option>
+            </select>
+        </div>
+        <div class="col-lg-3 form-group">
+            <label class="control-label">Secondary Status</label>
+            <select class="form-control" name="account" id="ddlSecStatus"
+                [(ngModel)]="claimViewModel.ClaimModel.Sec_Status"
+                (change)="claimStatus_Changed('S'); AddAutoNotesForUpdateClaim(); " formControlName="secStatus">
+                <option>N</option>
+                <option>B</option>
+                <option>R</option>
+                <option>P</option>
+                <option>W</option>
+            </select>
+        </div>
+        <div class="col-lg-3 form-group">
+            <label class="control-label">Other Status</label>
+            <select class="form-control" name="account" id="ddlOthStatus"
+                [(ngModel)]="claimViewModel.ClaimModel.Oth_Status"
+                (change)="claimStatus_Changed('O'); AddAutoNotesForUpdateClaim(); " formControlName="othStatus">
+                <option>N</option>
+                <option>B</option>
+                <option>R</option>
+                <option>P</option>
+                <option>W</option>
+            </select>
+        </div>
+    </div>
+    <div class="row" formGroupName="correctedClaimGroup" *ngIf="!isNewClaim()">
+        <div class="col-lg-3">
+            <div class="checkbox m-r-xs pull-left">
+                <input type="checkbox" id="Is_Corrected" [(ngModel)]="claimViewModel.ClaimModel.Is_Corrected"
+                    formControlName="Is_Corrected" (change)="onChangeCorrectedClaim();AddAutoNotesForUpdateClaim()">
+                <label for="Is_Corrected" data-placement="bottom">
+                    Corrected Claim
+                </label>
+            </div>
+        </div>
+        <div class="col-lg-3 form-group" *ngIf="claimViewModel.ClaimModel.Is_Corrected">
+            <label class="control-label">ICN<span class="text-danger">*</span></label>
+            <input type="text" autocomplete="off" class="form-control" id="ICN_Number"
+                [(ngModel)]="claimViewModel.ClaimModel.ICN_Number" formControlName="ICN_Number" maxlength="100"
+                (blur)="AddAutoNotesForUpdateClaim();">
+        </div>
+        <div class="col-lg-3 form-group" *ngIf="claimViewModel.ClaimModel.Is_Corrected">
+            <label class="control-label">Resubmission Code<span class="text-danger">*</span></label>
+            <select class="form-control" name="RSCode" [(ngModel)]="claimViewModel.ClaimModel.RSCode"
+                formControlName="RSCode" (blur)="AddAutoNotesForUpdateClaim()">
+                <option *ngFor="let rsCodeObj of claimViewModel.ResubmissionCodes" value={{rsCodeObj.Id}}>
+                    {{rsCodeObj.Id+' | '+rsCodeObj.Name}}
+                </option>
+            </select>
+        </div>
+    </div>
+    <app-claim-insurances [patAccount]="claimInfo.Patient_Account"
+        [providerCode]="claimViewModel.ClaimModel.Attending_Physician" (newItemEvent)="addItem($event)"
+        (InsEvent)="addIns($event)"></app-claim-insurances>
+    <div class="row pt-10" formGroupName="hospitalization">
+        <div class="col-lg-12">
+            <h4 class="pull-left">
+                <i aria-hidden="true" class="fa fa-hospital-o"></i>&nbsp;<u>Hospitalization</u>
+            </h4>
+            <a class="link pull-right" data-toggle="modal" data-target="#wcInfo"
+                [class.disabled]="!disableForm ? null : '#'">Workers' Compensation</a>
+        </div>
+        <div class="form-group col-lg-3">
+            <label class="control-label" for="btnFacility">Facility</label>
+            <div class="input-group">
+                <input autocomplete="off" class="form-control" type="text"
+                    [(ngModel)]="claimViewModel.ClaimModel.Facility_Name" readonly
+                    placeholder="Find and Select Facility" formControlName="facility"
+                    (ngModelChange)="AddAutoNotesForUpdateClaim()">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary btn-sm lh-1_2" type="button" (click)="showFacility()"
+                        [attr.disabled]="disableForm ? true:null"><i class="fa fa-search"></i>
+                    </button>
+                    <button class="btn btn-default btn-sm lh-1_2" (click)="resetValues()"
+                        [style.display]="claimViewModel==undefined || claimViewModel.ClaimModel==undefined || claimViewModel.ClaimModel.Facility_Code==undefined || claimViewModel.ClaimModel.Facility_Code==null ? 'none' : 'inline'">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <!-- <div class="form-group col-lg-3"
+            *ngIf="claimViewModel.ClaimModel.Facility_Code!=undefined && claimViewModel.ClaimModel.Facility_Code!=null">
+            <label class="control-label">From - To
+                <span
+                    *ngIf="claimViewModel.ClaimModel.Facility_Code!=undefined && claimViewModel.ClaimModel.Facility_Code!=null"
+                    class="text-danger">*
+                </span>
+            </label>
+            <my-date-range-picker [options]="myDateRangePickerOptions" [placeholder]="'MM/DD/YYYY'"
+                (dateRangeChanged)="onDateRangeChanged($event)" formControlName="facilityDates">
+            </my-date-range-picker>
+        </div> -->
+        <div class="form-group col-lg-3"
+            *ngIf="claimViewModel.ClaimModel.Facility_Code!=undefined && claimViewModel.ClaimModel.Facility_Code!=null">
+            <label class="control-label">From
+                <span
+                    *ngIf="claimViewModel.ClaimModel.Facility_Code!=undefined && claimViewModel.ClaimModel.Facility_Code!=null"
+                    class="text-danger">*
+                </span>
+            </label>
+            <my-date-picker [options]="myDateRangePickerOptions" [placeholder]="'MM/DD/YYYY'"
+                (dateChanged)="onDateRangeChangedIns($event , 'From')" formControlName="DateFrom" [selDate]="DateFrom">
+            </my-date-picker>
+        </div>
+        <div class="form-group col-lg-3"
+            *ngIf="claimViewModel.ClaimModel.Facility_Code!=undefined && claimViewModel.ClaimModel.Facility_Code!=null">
+            <label class="control-label">To
+                <span
+                    *ngIf="claimViewModel.ClaimModel.Facility_Code!=undefined && claimViewModel.ClaimModel.Facility_Code!=null"
+                    class="text-danger">*
+                </span>
+            </label>
+            <my-date-picker [options]="myDateRangePickerOptions" [placeholder]="'MM/DD/YYYY'"
+                (dateChanged)="onDateRangeChangedIns($event , 'to')" formControlName="DateTo" [selDate]="DateTo">
+            </my-date-picker>
+
+        </div>
+
+
+
+
+        <div class="col-lg-12">
+            <div class="checkbox m-r-xs pull-left">
+                <input type="checkbox" id="chkClaimPTL" id="chkClaimPTL" class="form-control"
+                    [(ngModel)]="claimViewModel.ClaimModel.PTL_Status" formControlName="ptlStatus"
+                    (click)="dynamicValidationPTL()">
+                <label for="chkClaimPTL" data-placement="bottom">
+                    Draft
+                </label>
+            </div>
+        </div>
+        <div class="form-group col-lg-3"
+            *ngIf="this.claimViewModel.ClaimModel.PTL_Status!=undefined && this.claimViewModel.ClaimModel.PTL_Status ==true">
+            <label class=" control-label">Draft Reason</label>
+            <select class="form-control" name="account" [(ngModel)]="claimViewModel.ClaimModel.Delay_Reason_Code"
+                formControlName="ptlReason">
+                <option *ngFor="let addr of PTLReasons" value={{addr.id}}>
+                    {{addr.name }}
+                </option>
+            </select>
+        </div>
+        <div class="form-group col-lg-3"
+            *ngIf="this.claimViewModel.ClaimModel.PTL_Status!=undefined && this.claimViewModel.ClaimModel.PTL_Status ==true">
+            <label class=" control-label">Detail</label>
+            <textarea class="form-control" style="height: auto !important" rows="4"
+                [(ngModel)]="claimViewModel.PTLReasonDetail" formControlName="ptlReasonDetail"></textarea>
+        </div>
+        <div class="form-group col-lg-3"
+            *ngIf="this.claimViewModel.ClaimModel.PTL_Status!=undefined && this.claimViewModel.ClaimModel.PTL_Status ==true">
+            <label class=" control-label">Doc Feedback</label>
+            <textarea class="form-control" style="height: auto !important" rows="4"
+                [(ngModel)]="claimViewModel.PTLReasonDoctorFeedback" formControlName="docFeedback"></textarea>
+        </div>
+    </div>
+</form>
+
+
+<div class="row" *ngIf="claimType === 'Institutional'">
+    <div class="col-lg-12">
+        <label class="control-label" style="margin-left: 17px;">Type of Bill
+            <span class="text-danger">*</span>
+        </label>
+        <div>
+            <div class="col-lg-3 form-group">
+                <select [attr.disabled]="disableForm?true:null" class="form-control" name="Typefacility"
+                    id="Typefacility" [(ngModel)]="Type_of_Facility_Id">
+                    <option *ngFor="let c of AllDropdowns.Type_of_facilityList" value="{{c.Id}}">
+                        {{ c.Id }} | {{ c.Descriptions }}
+                    </option>
+                </select>
+            </div>
+            <div class="col-lg-3 form-group" style="margin-left: 16px;">
+                <select [attr.disabled]="disableForm?true:null" class="form-control" name="tyofcare" id="tyofcare"
+                    [(ngModel)]="Type_of_Care_Id">
+                    <option *ngFor="let c of AllDropdowns.Type_of_CareList" value="{{c.Id}}">
+                        {{ c.Id }} | {{ c.Descriptions }}
+                    </option>
+                </select>
+            </div>
+            <div class="col-lg-3 form-group">
+                <select [attr.disabled]="disableForm?true:null" class="form-control" name="seqcare" id="seqcare"
+                    [(ngModel)]="Sequence_of_care_Id">
+                    <option *ngFor="let c of AllDropdowns.sequence_of_careList" value="{{c.Id}}">
+                        {{ c.Id }} | {{ c.Descriptions }}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" *ngIf="claimType === 'Institutional'">
+    <div class=" form-group col-lg-3" style="margin-left: 17px;">
+        <label class="control-label">Admission Hour</label>
+        <div>
+            <div>
+                <select [attr.disabled]="disableForm?true:null" class="form-control" name="Admhour" id="Admhour"
+                    [(ngModel)]="Admissiondetails.Admhour">
+                    <option value="" selected disabled>Select an Hour</option>
+                    <option *ngFor="let hour of hours" [value]="hour">{{hour}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 form-group">
+        <label class="control-label">
+            Admission type
+            <span class="text-danger" *ngIf="claimType === 'Institutional'">*</span>
+        </label>
+        <div>
+            <select [attr.disabled]="disableForm ? true : null" class="form-control"
+                [(ngModel)]="Admissiondetails.Type_Of_Admission_Id" name="TypeAdmision">
+                <option *ngFor="let c of AllDropdowns.Type_Of_AdmissionList" [value]="c.Id">
+                    {{ c.Id }} | {{ c.Descriptions }}
+                </option>
+            </select>
+        </div>
+    </div>
+
+
+    <!-- <div class="col-lg-3 form-group">
+        <label class="control-label">Admission type</label>
+        <div> <select [attr.disabled]="disableForm?true:null" class="form-control" [(ngModel)]="Admissiondetails.Type_Of_Admission_Id" name="TypeAdmision">
+                <option *ngFor="let c of AllDropdowns.Type_Of_AdmissionList" [value]="c.Id">
+                    {{ c.Id }} | {{ c.Descriptions }}
+                </option>
+            </select>
+        </div>
+    </div> -->
+    <div class="col-lg-3 form-group">
+        <label class="control-label">Source of Admission</label>
+        <div> <select [attr.disabled]="disableForm?true:null" class="form-control"
+                [(ngModel)]="Admissiondetails.AdmSource" name="Sourcemission">
+                <option *ngFor="let c of AllDropdowns.Source_of_AdmissionList" [value]="c.Id">
+                    {{ c.Id }} | {{ c.Descriptions }}
+                </option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="claimType === 'Institutional'">
+
+    <div class="col-lg-3 form-group">
+        <label class="control-label">Discharge Hour</label>
+        <div>
+            <div>
+                <select [attr.disabled]="disableForm?true:null" [(ngModel)]="Admissiondetails.Dischargehour"
+                    name="Dischrgehor" class="form-control">
+                    <option *ngFor="let hour of hours" [value]="hour">{{hour}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 form-group" style="margin-left: 15px;">
+        <label class="control-label">Discharge Status</label>
+        <div> <select [attr.disabled]="disableForm?true:null" class="form-control"
+                [(ngModel)]="Admissiondetails.Discharge_status_Id" name="dischargeSttus">
+                <option *ngFor="let c of AllDropdowns.Discharge_StatusList" [value]="c.Id">
+                    {{ c.Id }} | {{ c.Descriptions }}
+                </option>
+            </select>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <h4 class="pull-left">
+            <i aria-hidden="true" class="fa fa-medkit"></i>&nbsp;<u>Diagnosis (ICD/DX)</u>
+        </h4>
+    </div>
+    <div class="col-lg-12 pt-10">
+        <app-diagnosis (OnAddDiagnosis)="SetDiagnosis($event)" (onRemoveDiagnosis)="RemoveDiagnosis($event)"
+            [claimDos]="claimDos">
+        </app-diagnosis>
+    </div>
+</div>
+
+<div *ngIf="claimType === 'Institutional'" class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-12">
+                <h4 class="pull-left">
+                    <!-- <i aria-hidden="true" class="fa fa-hospital-o"></i>&nbsp;<u>Ub FIelds</u> -->
+                </h4>
+            </div>
+            <div class="col-lg-12">
+                <app-ub04 (listEmitter)="receiveListFromChild($event)" [dataToChild]="claimViewModel.UbClaimDropdown">
+                </app-ub04>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <h4 class="pull-left">
+            <i aria-hidden="true" class="fa fa-money"></i>&nbsp;<u>Procedures (CPTs)</u>&nbsp;
+            <a title="Show All" (click)="chExp()" *ngIf="!isChargesExpand"><i class="fa fa-caret-square-o-right"
+                    aria-hidden="true"></i></a>
+            <a title="Hide All" (click)="chExp()" *ngIf="isChargesExpand"><i class="fa fa-caret-square-o-left"
+                    aria-hidden="true"></i> </a>
+        </h4>
+        <div class="pull-right">
+            <span class="checkbox checkbox-primary checkbox-inline">
+                <input class="styled" id="expand-cpt-table" type="checkbox">
+            </span>
+            <span class="checkbox checkbox-primary checkbox-inline">
+                <input type="checkbox" class="styled" id="Show-All">
+            </span>
+        </div>
+    </div>
+    <div class="col-lg-12 pt-10">
+        <div class="table-horizontal-scroll" id="procedure-section">
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center">Actions</th>
+                        <th *ngIf="isChargesExpand">Entry Date</th>
+                        <th>From Date</th>
+                        <th>To Date</th>
+                        <th>Seq.</th>
+                        <th>Proc Code</th>
+                        <th *ngIf="claimType === 'Institutional'">Revenue code</th>
+                        <th>Units</th>
+                        <th>Charges $</th>
+                        <th>Drug Code</th>
+                        <th>Quantity</th>
+                        <th>Qualifier</th>
+                        <th>POS</th>
+                        <th>M1</th>
+                        <th>M2</th>
+                        <th>M3</th>
+                        <th>M4</th>
+                        <th>Physical Modifier</th>
+                        <th colspan="4" style="text-align:center;">ICDs</th>
+                        <th *ngIf="isChargesExpand">Start Time</th>
+                        <th *ngIf="isChargesExpand">Stop Time</th>
+                        <th *ngIf="isChargesExpand">Include In EDI</th>
+                        <th *ngIf="isChargesExpand">Rectified</th>
+                        <!-- <th>Procedure  Description</th> -->
+                        <th *ngIf="isChargesExpand">Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="cursor:pointer" *ngFor="let p of claimCharges; let ndx=index"
+                        [hidden]="p.claimCharges.Deleted || (p.claimCharges.IsRectify == true && showAllCPTflag == false)"
+                        (keydown)="NewRowCharges($event, ndx)">
+                        <td class="text-center">
+                            <button class="btn btn-xs btn-default" (click)="DeleteCPT(ndx)" title="Delete"
+                                [attr.disabled]="disableForm?true:null">
+                                <i class="fa fa-remove text-danger" id="delbtn" title="Delete"></i>
+                            </button>
+                            <span class="margin-r5"><i title="Rectify" (click)="RectifyCPT(ndx)"
+                                    [ngStyle]="EnableDisable(p.claimCharges.IsRectify,p.claimCharges.Created_Date)"
+                                    aria-hidden="true" class="app-icon-Amazing-Fusion-61 text-blue"></i></span>
+
+                        </td>
+                        <td *ngIf="isChargesExpand">
+                            <input [attr.disabled]="disableForm?true:null" type="text" class="form-control"
+                                style="width:120px!important;" disabled
+                                [ngStyle]="setCursorStyle(p.claimCharges.IsRectify)" [(ngModel)]="p.claimCharges.DOE" />
+                        </td>
+                        <td>
+                            <input [attr.disabled]="disableForm?true:null" class="form-control" id="dFrom"
+                                style="width:120px!important;" type="text" [disabled]="p.claimCharges.IsRectify"
+                                name="chargesDateFrom" [(ngModel)]="p.claimCharges.Dos_From"
+                                (blur)="validateDate(p.claimCharges.Dos_From, p.claimCharges.Dos_To, ndx); AutoNotesForProc(ndx);"
+                                (keyup)="daysDiff(p.claimCharges.Dos_From,p.claimCharges.Dos_To,ndx,'FromDate', $event)"
+                                placeholder="MM/DD/YYYY" maxlength="10" />
+                        </td>
+                        <td>
+                            <input [attr.disabled]="disableForm?true:null" id="dTo" class="form-control" type="text"
+                                style="width:120px!important;" [disabled]="p.claimCharges.IsRectify"
+                                name="chargesDateTo" [(ngModel)]="p.claimCharges.Dos_To"
+                                (blur)="checkToDate(p.claimCharges.Dos_From,p.claimCharges.Dos_To,ndx); "
+                                (keydown)="daysDiff(p.claimCharges.Dos_From, p.claimCharges.Dos_To, ndx, 'ToDate', $event)"
+                                placeholder="MM/DD/YYYY" maxlength="10" />
+                        </td>
+                        <td>
+                            <input [attr.disabled]="disableForm?true:null" class="form-control"
+                                style="width:40px!important;" type="text" [(ngModel)]="p.claimCharges.Sequence_No"
+                                disabled />
+                        </td>
+                        <td>
+                            <input [attr.disabled]="disableForm?true:null" autocomplete="off" type="text"
+                                class="form-control" style="width:80px!important;" name="procCode"
+                                [(ngModel)]="p.claimCharges.Procedure_Code" title="{{p.Description}}" #CPTCode
+                                (keydown)="CPTKeyPressEvent($event, p.claimCharges.Procedure_Code, ndx)">
+                        </td>
+                        <td *ngIf="claimType === 'Institutional'">
+                            <input [disabled]="p.claimCharges.isRevenue_CodeDisabled" Revenue_Code type="text"
+                                class="form-control" [(ngModel)]="p.claimCharges.Revenue_Code" name="Revenue_Code"
+                                (keydown)="onKeypressRevenue($event, p.claimCharges.Revenue_Code, ndx)">
+                        </td>
+                        <td>
+                            <input [attr.disabled]="disableForm?true:null" type="text" onlyNumbers="true"
+                                [readonly]="p.IsAnesthesiaCpt" style="width:60px!important;" class="form-control"
+                                maxlength="4" [ngStyle]="setCursorStyle(p.claimCharges.IsRectify)"
+                                [disabled]="p.claimCharges.IsRectify" [(ngModel)]="p.claimCharges.Units" #CPTCode #Unit
+                                (input)="CPTKeyPressEventUnit($event,Unit.value, ndx)" (blur)="onBlurUnit(ndx);" />
+                        </td>
+
+                        <td>
+                            <input [attr.disabled]="disableForm?true:null" type="hidden" [(ngModel)]="p.amt" />
+                            <input [attr.disabled]="disableForm?true:null" type="text" class="form-control"
+                                style="width:80px!important;" maxlength="8" [(ngModel)]="p.claimCharges.Amount"
+                                [ngStyle]="setCursorStyle(p.claimCharges.IsRectify)"
+                                [disabled]="p.claimCharges.IsRectify" (blur)="AutoNotesForProc(ndx)" />
+                        </td>
+                        <!-- NDC -->
+                        <!-- Drug Code -->
+                        <td>
+                            <select [attr.disabled]="disableForm?true:null" #drugcode id="{{ndx+'drug_code'}}"
+                                class="form-control" style="width:160px!important;"
+                                [disabled]="p.claimCharges.IsRectify" [(ngModel)]="p.Drug_Code"
+                                (change)="onChangeDrugCode(ndx)">
+                                <option [ngValue]="code.Name"
+                                    *ngFor="let code of claimCharges[ndx].claimCharges.NDCList;">
+                                    {{code.Name}}</option>
+                            </select>
+                            <!-- <ngx-select id="{{ndx+'drug_code'}}" class="form-control" style="width:160px!important;"
+                                [disabled]="p.claimCharges.IsRectify" [items]="claimCharges[ndx].claimCharges.NDCList"
+                                optionTextField="Name" optionValueField="Name" [(ngModel)]="p.Drug_Code">
+                            </ngx-select> -->
+                        </td>
+                        <!-- Quantity -->
+                        <td>
+                            <input [attr.disabled]="disableForm?true:null" type="hidden"
+                                [(ngModel)]="claimCharges[ndx].claimCharges.NDC_Quantity" />
+                            <input [attr.disabled]="disableForm?true:null" type="text" class="form-control"
+                                style="width:80px!important;" maxlength="8"
+                                [ngStyle]="setCursorStyle(p.claimCharges.IsRectify)"
+                                [(ngModel)]="claimCharges[ndx].claimCharges.NDC_Quantity"
+                                (blur)="AutoNotesForProc(ndx)" />
+                        </td>
+                        <!-- Qualifier -->
+                        <td>
+                            <input [attr.disabled]="disableForm?true:null" type="hidden"
+                                [(ngModel)]="claimCharges[ndx].claimCharges.NDC_Qualifier" />
+                            <input [attr.disabled]="disableForm?true:null" type="text"
+                                [(ngModel)]="claimCharges[ndx].claimCharges.NDC_Qualifier" class="form-control"
+                                style="width:80px!important;" maxlength="8"
+                                [ngStyle]="setCursorStyle(p.claimCharges.IsRectify)" (blur)="AutoNotesForProc(ndx)"
+                                disabled readonly />
+                        </td>
+                        <!-- NDC -->
+                        <td>
+                            <select [attr.disabled]="disableForm?true:null" class="form-control" id="postdata"
+                                style="width:160px!important;" [disabled]="p.claimCharges.IsRectify"
+                                [(ngModel)]="+p.claimCharges.POS" (blur)="AutoNotesForProc(ndx)">
+                                <option value=""></option>
+                                <option *ngFor="let pof of claimViewModel.POSList" [ngValue]="+pof.POS_Code">
+                                    {{pof.POS_Code}}
+                                    | {{pof.POS_Name}}</option>
+
+                            </select>
+                        </td>
+                        <td>
+                            <select [attr.disabled]="disableForm ? true : null" class="form-control min-w-70px"
+                                id="Modifier_Code" [ngStyle]="setCursorStyle(p.claimCharges.IsRectify)"
+                                [disabled]="p.claimCharges.IsRectify" [(ngModel)]="p.claimCharges.Modi_Code1"
+                                (change)="AutoNotesForProc(ndx)" (blur)="UpdateCPTCharges(CPTCode.value, ndx)">
+                                <option value=""></option>
+                                <option *ngFor="let item of modifiers" [value]="item.Modifier_Code">
+                                    {{ item.Modifier_Code }}
+                                </option>
+                            </select>
+                        </td>
+
+                        <td>
+                            <select [attr.disabled]="disableForm?true:null" class="form-control min-w-70px"
+                                [ngStyle]="setCursorStyle(p.claimCharges.IsRectify)"
+                                [disabled]="p.claimCharges.IsRectify" [(ngModel)]="p.claimCharges.Modi_Code2"
+                                (change)=" AutoNotesForProc(ndx)">
+                                <option value=""></option>
+                                <option *ngFor="let item of modifiers" [value]="item.Modifier_Code">
+                                    {{item.Modifier_Code}}</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select [attr.disabled]="disableForm?true:null" class="form-control min-w-70px"
+                                [(ngModel)]="p.claimCharges.Modi_Code3"
+                                [ngStyle]="setCursorStyle(p.claimCharges.IsRectify)" (change)=" AutoNotesForProc(ndx)"
+                                [disabled]="p.claimCharges.IsRectify">
+                                <option value=""></option>
+                                <option *ngFor="let item of modifiers" [value]="item.Modifier_Code">
+                                    {{item.Modifier_Code}}</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select [attr.disabled]="disableForm?true:null" class="form-control min-w-70px"
+                                [ngStyle]="setCursorStyle(p.claimCharges.IsRectify)" (change)=" AutoNotesForProc(ndx)"
+                                [disabled]="p.claimCharges.IsRectify" [(ngModel)]="p.claimCharges.Modi_Code4">
+                                <option value=""></option>
+                                <option *ngFor="let item of modifiers" [value]="item.Modifier_Code">
+                                    {{item.Modifier_Code}}</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select [disabled]="!(p.IsAnesthesiaCpt)" class="form-control min-w-70px"
+                                [ngStyle]="setCursorStyle(p.claimCharges.IsRectify)"
+                                [disabled]="p.claimCharges.IsRectify" [ngModel]="p.claimCharges.Physical_Modifier"
+                                (change)="onPhysicalModifierChange($event.target.value,ndx)"
+                                (blur)="AutoNotesForProc(ndx);">
+                                <option value=""></option>
+                                <option *ngFor="let item of physicalMoifiersList" [value]="item.key">
+                                    {{item.key}}</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input class="form-control" style="width:40px!important;" maxlength="2"
+                                [ngStyle]="setCursorStyle(p.claimCharges.IsRectify)"
+                                [disabled]="p.claimCharges.IsRectify || disableForm?true:null" type="text"
+                                [(ngModel)]="p.claimCharges.DX_Pointer1" (blur)="AutoNotesForProc(ndx)" />
+                        </td>
+                        <td>
+                            <input class="form-control" style="width:40px!important;" maxlength="2"
+                                [ngStyle]="setCursorStyle(p.claimCharges.IsRectify)"
+                                [disabled]="p.claimCharges.IsRectify || disableForm?true:null" type="text"
+                                [(ngModel)]="p.claimCharges.DX_Pointer2" (blur)="AutoNotesForProc(ndx)" />
+                        </td>
+                        <td>
+                            <input class="form-control" style="width:40px!important;" maxlength="2"
+                                [ngStyle]="setCursorStyle(p.claimCharges.IsRectify)"
+                                [disabled]="p.claimCharges.IsRectify || disableForm?true:null" type="text"
+                                [(ngModel)]="p.claimCharges.DX_Pointer3" (blur)="AutoNotesForProc(ndx)" />
+                        </td>
+                        <td>
+                            <input class="form-control" style="width:40px!important;" maxlength="2"
+                                [ngStyle]="setCursorStyle(p.claimCharges.IsRectify)"
+                                [disabled]="p.claimCharges.IsRectify || disableForm?true:null" type="text"
+                                [(ngModel)]="p.claimCharges.DX_Pointer4" (blur)="AutoNotesForProc(ndx)" />
+                        </td>
+                        <td *ngIf="isChargesExpand">
+                            <div class="time-picker-container">
+                                <input type="time" [ngModel]="p.claimCharges.Start_Time"
+                                    (blur)="calculateTimeDifference(ndx,$event.target.value,'start'); AutoNotesForProc(ndx)"
+                                    [readonly]="!(p.IsAnesthesiaCpt)" class="time-picker-input">
+                                <button *ngIf="p.claimCharges.Start_Time" (click)="clearTime(ndx,'Start_Time','')"
+                                    class="clear-icon" [disabled]="!(p.IsAnesthesiaCpt)">✕</button>
+                            </div>
+                        </td>
+                        <td *ngIf="isChargesExpand">
+                            <div class="time-picker-container">
+                                <input type="time" [ngModel]="p.claimCharges.Stop_Time"
+                                    (blur)="calculateTimeDifference(ndx,$event.target.value,'stop')"
+                                    [readonly]="!(p.IsAnesthesiaCpt)" class="time-picker-input">
+                                <button *ngIf="p.claimCharges.Stop_Time" (click)="clearTime(ndx,'Stop_Time','')"
+                                    class="clear-icon" [disabled]="!(p.IsAnesthesiaCpt)">✕</button>
+                            </div>
+                        </td>
+                        <td align="center" *ngIf="isChargesExpand">
+                            <input type="checkbox" class="form-control"
+                                [ngStyle]="setCursorStyle(p.claimCharges.IsRectify)"
+                                [disabled]="p.claimCharges.IsRectify || disableForm?true:null"
+                                [(ngModel)]="p.claimCharges.Include_In_Edi"
+                                (change)="p.claimCharges.IncludedInEDI = !p.claimCharges.IncludedInEDI;AutoNotesForProc(ndx)"
+                                (blur)="AutoNotesForProc(ndx)" />
+                        </td>
+                        <td *ngIf="isChargesExpand">
+                            <input class="form-control" type="checkbox"
+                                [ngStyle]="setCursorStyle(p.claimCharges.IsRectify)"
+                                [disabled]="p.claimCharges.IsRectify || disableForm?true:null"
+                                [(ngModel)]="p.claimCharges.IsRectify" disabled="disabled"
+                                (change)="p.claimCharges.IsRectify = p.claimCharges.IsRectify" />
+                        </td>
+                        <!-- <td class="blue" *ngIf="isChargesExpand">
+                            <input [attr.disabled]="disableForm?true:null" type="text" class="form-control" [ngStyle]="setCursorStyle(p.claimCharges.IsRectify)"
+                                [(ngModel)]="p.claimCharges.NDC_Service_Description" />
+                        </td> -->
+                        <td *ngIf="isChargesExpand">
+                            <input [attr.disabled]="disableForm?true:null" type="text" class="form-control"
+                                [(ngModel)]="p.claimCharges.Notes" [ngStyle]="setCursorStyle(p.claimCharges.IsRectify)"
+                                (blur)="AutoNotesForProc(ndx)" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="38">
+                            <button [attr.disabled]="disableForm?true:null" (click)="AddNewCPT()" class="btn-white"
+                                style="border: 1px solid #ccc;" title="Add New Procedure (CPT)">
+                                Add New Procedure (CPT)
+                            </button>
+                            &nbsp;
+                            <button [attr.disabled]="disableForm?true:null" (click)="AddPanelCode()" class="btn-white"
+                                style="border: 1px solid #ccc;" title="Add Panel Code">
+                                Add Panel Code
+                            </button>
+                        </td>
+                        <!-- button for add panel code -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <app-payments [PatientCredit]="patientcreditbalance"></app-payments>
+    </div>
+</div>
+<div class="row pull-right">
+    <div class="col-lg-12">
+        <div class="btn-group">
+            <button class="btn btn-danger btn-sm" (click)="getSetStatus()">Cancel</button>
+            <button class=" btn btn-primary btn-sm" (click)="saveClaim('Draft')"
+                [disabled]="disableForm || isDisabled">Save as
+                Draft</button>
+            <button class="btn btn-primary btn-sm" (click)="saveClaim('Save')"
+                [disabled]="!claimForm.get('main').valid || disableForm || disableSave || isDisabled ">Save</button>
+        </div>
+    </div>
+</div>
+
+<!-- Search Subscriber Model -->
+<div class="modal fade modal-primary" id="AttachmentsModel" tabindex="-1" role="dialog" aria-labelledby=""
+    data-backdrop="static">
+    <div class="modal-dialog modal-xlg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" id="attachmentClose" data-dismiss="modal" class="close" aria-label="Close">Close<i
+                        class="app-icon-IconSet-1-12"></i></button>
+                <h4 class="modal-title">Claim Attachments</h4>
+            </div>
+            <div class="modal-body">
+                <app-claim-attachments (notifyParent)="getNotificationFacility()">
+                </app-claim-attachments>
+            </div>
+
+        </div>
+    </div>
+</div>
+<button id="Facilities" [hidden]="true" data-toggle="modal" data-target="#Facility">Open Modal</button>
+<!-- Search Subscriber Model -->
+<div class="modal fade modal-primary" id="Facility" tabindex="-1" role="dialog" aria-labelledby=""
+    data-backdrop="static">
+    <div class="modal-dialog modal-xlg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" id="facilityClose" data-dismiss="modal" class="close" aria-label="Close"
+                    (click)="resetPopup()">Close<i class="app-icon-IconSet-1-12"></i></button>
+                <h4 class="modal-title">Facilities</h4>
+            </div>
+            <div class="modal-body">
+                <app-facilities [facilityName]="selectedFacilityName"
+                    (notifyParent)="getNotificationFacility()"></app-facilities>
+                <!-- <app-facilities [isFromAnotherComponent]="dataFromParent" (notifyParent)="getNotificationFacility()" ></app-facilities> -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <button id="Attachments" [hidden]="true" data-toggle="modal" data-target="#AttachmentsModel">Open
+    Modal
+</button> -->
+<app-claim-notes [claimNo]="claimInfo.claimNo"></app-claim-notes>
+<app-claims-assignment></app-claims-assignment>
+
+<div class="modal fade" id="Confirmation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div *ngIf="scenario==1">
+                    <div class="swal2-icon swal2-warning pulse-warning" style="display: block;">!</div>
+                    <h2 style="text-align: center;font-weight: bolder;">Confirmation</h2>
+                    <h4 style="text-align: center;">Another insurance exists with Ins. Mode {{insuranceMode}} in
+                        demographics, do you want the existing insurance inactive in demographics?</h4>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-primary"
+                            style="background-color: #2792ea;border-color: #2792ea;" data-dismiss="modal"
+                            (click)="closeInsuranceModel(1,'Yes')">Yes!</button>
+                        <button type="button" class="btn btn-secondary" style="margin: 20px;" data-dismiss="modal"
+                            (click)="closeInsuranceModel(1,'No')">No</button>
+                        <button type="button" *ngIf="insuranceMode !='O'" class="btn btn-primary"
+                            style="background-color: #2792ea;border-color: #2792ea;" data-dismiss="modal"
+                            (click)="closeInsuranceModel(1,'Other')">Mark as 'Other'</button>
+                    </div>
+                </div>
+
+                <div *ngIf="scenario==2">
+                    <div class="swal2-icon swal2-warning pulse-warning" style="display: block;">!</div>
+                    <h2 style="text-align: center;font-weight: bolder;">Confirmation</h2>
+                    <h4 style="text-align: center;">This insurance exist with Ins. Mode {{insuranceMode}} in
+                        demographics with different information, do you want to update this insurance in demographics?
+                    </h4>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-primary"
+                            style="background-color: #2792ea;border-color: #2792ea;" data-dismiss="modal"
+                            (click)="closeInsuranceModel(2,'Yes')">Yes!</button>
+                        <button type="button" class="btn btn-secondary" style="margin: 20px;" data-dismiss="modal"
+                            (click)="closeInsuranceModel(2,'NO')">No</button>
+                    </div>
+                </div>
+
+                <div *ngIf="scenario==3">
+                    <div class="swal2-icon swal2-warning pulse-warning" style="display: block;">!</div>
+                    <h2 style="text-align: center;font-weight: bolder;">Confirmation</h2>
+                    <h4 style="text-align: center;">No insurance exist with Ins. Mode {{insuranceMode}} in demographics,
+                        do you want to update this insurance in demographics?</h4>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-primary"
+                            style="background-color: #2792ea;border-color: #2792ea;" data-dismiss="modal"
+                            (click)="closeInsuranceModel(3,'Yes')">Yes!</button>
+                        <button type="button" class="btn btn-secondary" style="margin: 20px;" data-dismiss="modal"
+                            (click)="closeInsuranceModel(3,'No')">No</button>
+                    </div>
+                </div>
+
+                <div *ngIf="scenario==4">
+                    <div class="swal2-icon swal2-warning pulse-warning" style="display: block;">!</div>
+                    <h2 style="text-align: center;font-weight: bolder;">Confirmation</h2>
+                    <h4 style="text-align: center;">This insurance exist in demographics with inactive status, do you
+                        want to active this insurance in demographics?</h4>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-primary"
+                            style="background-color: #2792ea;border-color: #2792ea;" data-dismiss="modal"
+                            (click)="closeInsuranceModel()">Yes!</button>
+                        <button type="button" class="btn btn-secondary" style="margin: 20px;" data-dismiss="modal"
+                            (click)="closeInsuranceModel()">No</button>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal inmodal fade" id="wcInfo" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title" style="color:black">Worker Com Information</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Date of Injury </label>
+                        <my-date-picker name="mydate" [selDate]="selDOI"
+                            (dateChanged)="onDateChanged($event,'injury_date')" (blur)="formatDate($event)" [options]="{
+                            dateFormat: 'mm/dd/yyyy', height: '25px', width: '100%'
+                      
+                        }"></my-date-picker>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <label>Employment Related</label>
+                        <div>
+                            <label>
+                                <input type="radio" value="1" [checked]="claimViewModel.ClaimModel.Employment"
+                                    id="empYes" name="emp" (change)="onEmpChange($event.target.value )"> Yes
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                <input type="radio" value="0" [checked]="!claimViewModel.ClaimModel.Employment"
+                                    id="empNo" name="emp" (change)="onEmpChange($event.target.value )"> No</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <label>Accident</label>
+                        <div>
+                            <label>
+                                <input type="radio" value="1" [checked]="claimViewModel.ClaimModel.Accident_Auto"
+                                    id="accidentAuto" name="Accident"
+                                    (change)="onChangeAccident($event.target.value ,'auto')">Auto
+                            </label>
+                        </div>
+
+                        <div>
+                            <label>
+
+                                <input type="radio" checked="" [checked]="claimViewModel.ClaimModel.Accident_Other"
+                                    value="0" id="accidentNo" name="Accident"
+                                    (change)="onChangeAccident($event.target.value,'noAuto')">
+                                Other</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <label>Accident State </label>
+
+                        <select class="form-control min-w-70px" [(ngModel)]="claimViewModel.ClaimModel.Accident_State">
+                            <option value=""></option>
+                            <option *ngFor="let item of states" [value]="item.State_Code">
+                                {{item.State_Name}}</option>
+                        </select>
+
+
+                    </div>
+                </div>
+                <!-- <div class="row">
+                    <div class="col-lg-3">
+                        <label>Time(Hr) </label>
+                        <input class="form-control" type="number"  [(ngModel)]="claimViewModel.ClaimModel.Accident_Time">
+                    </div>  
+                </div> -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-white" type="reset" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-sm btn-primary" type="submit" data-dismiss="modal">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Addded BY Anum Zulfiqar For  expiry and effective  date of Diagnosis code-->
+
+<div class="modal fade" bsModal #bsModal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="dialog-nested-name"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-headern">
+                <button type="button" class="close" aria-label="Close" (click)="bsModal.hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="modal-title" style="text-align: center; font-size: 24px; flex-grow: 1;">Error</h3>
+            </div>
+            <div class="modal-body">
+                <div class="green-border p-3">
+                    <label class="modal-title"
+                        style="font-size: 14px; border: 1px solid #ccc; background-color: #f1f1f1; padding: 10px; display: block; text-align: center;">
+                        The following issues were found with the diagnosis codes
+                    </label>
+
+                    <div style="max-height: 400px; overflow-y: auto;">
+                        <table class="table table-bordered table-responsive"
+                            style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center; padding: 8px; border-bottom: 1px solid #ddd;">Sr No.
+                                    </th>
+                                    <th style="text-align: center; padding: 8px; border-bottom: 1px solid #ddd;">Error
+                                        Message</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of dxList; let i = index">
+                                    <td
+                                        style="text-align: center; padding: 12px 12px 10px 10px; border-bottom: 1px solid #ddd;">
+                                        {{ i + 1 }}
+                                    </td>
+                                    <td
+                                        style="text-align: center; padding: 12px 12px 10px 10px; border-bottom: 1px solid #ddd;">
+                                        {{ item.name + (item.afterExpiry === true ? ' (This code is expired for entered
+                                        DOS)' : ' (This code is not Effective for entered DOS)') }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-sm" (click)="bsModal.hide()">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- below was developed by anum to show expire diagnosis codes,Tamour Ali committed this and revampe above popup wiht better UI,below will removed after approvel -->
+<!-- <div class="modal fade " bsModal #bsModal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="dialog-nested-name"
+ 
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg custom-top-modal">
+        <div class="modal-content" style="position: relative;">
+            <div class="modal-header"
+                style="padding-top: 10px; padding-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+                <h2 class="modal-title bold" style="margin: 0; flex: 1; text-align: center;">Error</h2>
+               
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="bsModal.hide();">
+                    <span aria-hidden="true" style="color: gray;font-size: 30px;">&times;</span>
+                </button>
+            </div>
+            <label class="modal-title"
+                style="font-size: 13px; flex: 1; text-align: center; border: 1px solid #ccc; background-color: #f1f1f1; padding: 10px; display: block;">
+                The following issues were found with the diagnosis codes
+            </label>
+
+            <div class="modal-body" style="padding: 0px 0px 0px 0px; max-height: 400px; overflow-y: auto;">
+
+                <table class="table table-bordered table-responsive" style="width: 100%; border-collapse: collapse;">
+
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; padding: 8px; border-bottom: 1px solid #ddd;">Sr No.
+                            </th>
+                            <th style="text-align: center; padding: 8px; border-bottom: 1px solid #ddd;">Error Message
+                            </th>
+                           
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of dxList; let i = index">
+                            <td
+                                style="text-align: center;padding: 12px 12px 10px 10px;  border-bottom: 1px solid #ddd;">
+                                {{ i + 1 }}</td>
+                            <td style="text-align: center;padding: 12px 12px 10px 10px; border-bottom: 1px solid #ddd;">
+                                {{ item.name+ (item.afterExpiry === true ? ' (This code is expired for entered DOS)' : '
+                                (This code is not Effective for entered DOS)') }}</td>
+                  
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="modal-footer" style="margin: 0; flex: 1; text-align: center;">
+                <button type="button" style="width: 60px; background-color: #2792ea; color: white;"
+                    class="btn btn-default btn-sm" (click)="bsModal.hide()">Ok</button>
+            </div>
+        </div>
+    </div>
+</div> -->

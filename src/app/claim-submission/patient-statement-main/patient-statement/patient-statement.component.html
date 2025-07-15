@@ -1,0 +1,51 @@
+<div class="row">
+  <div class="form-group col-sm-3 col-md-3 col-lg-3">
+    <label class="control-label">Practices<span class="text-danger">*</span></label>
+    <select class="form-control" [(ngModel)]="practiceCode" (change)="onSelectPractice($event)">
+      <option [ngValue]="null" disabled>Select Practice</option>
+      <option *ngFor="let c of listPracticesList" value={{c.Id}}>{{c.Name}}</option>
+    </select>
+  </div>
+  <div class="col-lg-3 pull-right">
+    <button class="btn btn-primary btn-sm pull-right" type="button" (click)="onGeneratePatientStatement('xml')"
+      [disabled]="patientStatementRequest.statementRequest.length===0"><i
+        class="fa fa-file-o"></i>&nbsp;Generate</button>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="table-responsive">
+      <table class="table table-hover datatable table-striped table-bordered dataTablePatientForStatement">
+        <thead>
+          <tr>
+            <th class="text-center">
+              <input type='checkbox' title="Select all" (change)="onToggleCheckAll($event.target.checked)"
+                [(ngModel)]="checkAll" *ngIf="patientList && patientList.length>0" />
+            </th>
+            <th>Patient Account #</th>
+            <th>Name</th>
+            <th class="text-center">Date of Birth</th>
+            <th class="text-center"><i class="fa fa-info-circle"
+                title="All claims of selected patient are by default selected."></i> Change Selection</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of patientList; let ndx=index">
+            <td></td>
+            <td>{{p.Patient_Account}}</td>
+            <td>{{p.Name | titlecase}}</td>
+            <td align="center">{{p.Date_Of_Birth | date:'MM/dd/yyyy'}}</td>
+            <td align="center">
+              <a (click)="showPatientClaims(p.Patient_Account,ndx)">
+                <i class="fa fa-pencil-square fa-lg"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<app-patient-statement-claims [PatientAccount]="PatientAccount" [ExcludedClaimsIds]="ExcludedClaimsIds"
+  [showDownloadBtn]="false" (onHidden)="onHidePatientStatement($event)">
+</app-patient-statement-claims>

@@ -1,0 +1,262 @@
+<h3>Insurance Aging Analysis</h3>
+<div class="row">
+  <form [formGroup]="CPDForm">
+    <div class="col-lg-3">
+      <label class="control-label">Practices</label>
+      <div style="display: flex; align-items: center;">
+        <ngx-select style="flex-grow: 1; margin-right: 0px;" (ngModelChange)="onchangePractice($event)"
+          formControlName="PracCode" [items]="listPracticesList" optionTextField="PracticeLabel" [allowClear]="false">
+        </ngx-select>
+        <span class="input-group-btn">
+          <button class="btn btn-primary btn-sm lh-1_2" type="button" [disabled]="this.CPDForm.value.PracCode ==0"
+            (click)="onchangePractice(0)"><i class="fa fa-refresh"></i></button>
+        </span>
+      </div>
+
+    </div>
+  </form>
+
+</div>
+
+<br>
+<br>
+<br>
+
+<!-- <div class="row" *ngIf="isSearchInitiated == true">
+
+  <div class="col-lg-12">
+    <h3>Insurance Aging Report</h3>
+  </div>
+  <div class="col-lg-12">
+    <table class="table table-striped table-hover table-bordered datatable dtInsuranceDetail">
+      <thead>
+        <tr>
+          <th> Practice Code </th>
+          <th>Practice Name</th>
+          <th>Patient Name </th>
+          <th> Patient account </th>
+          <th> Date Of Birth </th>
+          <th> Claim Entry Date</th>
+          <th> Claim No </th>
+          <th> DOS </th>
+          <th> Claim Total </th>
+          <th> Amount Paid </th>
+          <th> Adjustment </th>
+          <th> Amount Due </th>
+          <th>Primary Status </th>
+          <th> Primary Payer </th>
+          <th> Primary Policy Number </th>
+          <th> Secondary Status </th>
+          <th> Secondary Payer </th>
+          <th> Secondary Policy Number </th>
+          <th> Other Status </th>
+          <th> Aging Days </th>
+          <th> Patient Status </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cp of insuranceDetailReport">
+          <td>{{cp.PRACTICE_CODE}}</td>
+          <td>{{cp.Practice_name}}</td>
+          <td>{{cp.PATIENT_NAME}}</td>
+          <td>{{cp.PATIENT_ACCOUNT}}</td>
+          <td>{{cp.DATE_OF_BIRTH | date:'MM/dd/yyyy'}}</td>
+          <td>{{cp.CLAIM_ENTRY_DATE | date:'MM/dd/yyyy'}}</td>
+          <td>{{cp.CLAIM_NO}}</td>
+          <td>{{cp.DOS | date:'MM/dd/yyyy'}}</td>
+          <td>{{cp.CLAIM_TOTAL|currency:'USD':'symbol-narrow'}}</td>
+          <td>{{cp.Amount_Paid|currency:'USD':'symbol-narrow'}}</td>
+          <td>{{cp.Amount_Adjusted|currency:'USD':'symbol-narrow'}}</td>
+          <td>{{cp.Amount_Due|currency:'USD':'symbol-narrow'}}</td>
+          <td>{{cp.Primary_Status}}</td>
+          <td>{{cp.PRIMARY_PAYER}}</td>
+          <td>{{cp.PRIMARY_POLICY_NUMBER}}</td>
+          <td>{{cp.Secondary_Status}}</td>
+          <td>{{cp.SECONDARY_PAYER}}</td>
+          <td>{{cp.SECONDARY_POLICY_NUMBER}}</td>
+          <td>{{cp.Other_Status}}</td>
+          <td>{{cp.AGING_DAYS}}</td>
+          <td>{{cp.Patient_Status}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div> -->
+<div class="row justify-content-center" *ngIf="isSearchInitiated == true">
+  <div class="col-lg-12">
+    <h3> Insurance Aging Report</h3>
+  </div>
+  <div *ngIf="insuranceDetailReport.length > 0 || ddlPracticeCode != 0" class="col-lg-2 d-flex my-4"
+    style="display: flex; align-items: center; margin-top: 20px;">
+    <label style="font-weight: normal">Show</label>
+    <select (change)="countValueChanged($event)" class="form-control input-sm mx-2"
+      style="width: 3rem; margin-left: 5px; margin-right: 5px; max-width: 37% !important;">
+      <option [value]="10" [selected]="count === 10">10</option>
+      <option [value]="25" [selected]="count === 25">25</option>
+      <option [value]="50" [selected]="count === 50">50</option>
+      <option [value]="100" [selected]="count === 100">100</option>
+    </select>
+    <label style="font-weight: normal">entries</label>
+  </div>
+  <div class="col-lg-4  my-4" style="display: flex; align-items: center; margin-top: 20px;padding-left: 30%;"
+    *ngIf=" ddlPracticeCode != 0">
+    <button class="btn btn-default btn-sm" (click)="exportExcel()"><i
+        class="fa fa-file-excel-o"></i>&nbsp;Excel</button>
+
+  </div>
+
+  <div class="col-sm-6 d-flex my-4" style="display: flex; align-items: center; margin-top: 23px;padding-left: 33%;"
+    *ngIf="insuranceDetailReport.length > 0 || ddlPracticeCode != 0">
+    <span>Search:&nbsp;</span><input class="form-control" type="text" [(ngModel)]="searchText">
+  </div>
+
+
+</div>
+
+
+<div class="col-lg-12 pt-20  table-horizontal-scroll">
+  <div class="row d-flex justify-content-between" *ngIf="insuranceDetailReport.length > 0 || ddlPracticeCode != 0">
+
+    <table id="example" class="table table-striped table-hover table-bordered dataTableASR" width="100%"
+      *ngIf="(insuranceDetailReport | filter: searchText).length>0 || ddlPracticeCode!=0">
+      <thead>
+        <tr>
+          <th (click)="toggleSorting('PRACTICE_CODE')">Practice Code
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'PRACTICE_CODE' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Practice_name')">Practice Name
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Practice_name' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('PATIENT_NAME')">Patient Name
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'PATIENT_NAME' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('PATIENT_ACCOUNT')">Patient Account
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'PATIENT_ACCOUNT' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('DATE_OF_BIRTH')">Date of Birth
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'DATE_OF_BIRTH' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('CLAIM_ENTRY_DATE')">Claim Entry Date
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'CLAIM_ENTRY_DATE' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('CLAIM_NO')">Claim No
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'CLAIM_NO' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('DOS')">DOS
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'DOS' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('CLAIM_TOTAL')">Claim Total
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'CLAIM_TOTAL' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('AMOUNT_PAID')">Amount Paid
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'AMOUNT_PAID' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('AMOUNT_ADJUSTED')">Amount Adjusted
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'AMOUNT_ADJUSTED' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Amount_Due')">Amount Due
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Amount_Due' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Primary_Status')">Primary Status
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Primary_Status' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('PRIMARY_PAYER')">Primary Payer
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'PRIMARY_PAYER' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('PRIMARY_POLICY_NUMBER')">Primary Policy Number
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'PRIMARY_POLICY_NUMBER' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Secondary_Status')">Secondary Status
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Secondary_Status' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('SECONDARY_PAYER')">Secondary Payer
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'SECONDARY_PAYER' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('SECONDARY_POLICY_NUMBER')">Secondary Policy Number
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'SECONDARY_POLICY_NUMBER' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Other_Status')">Other Status
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Other_Status' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('AGING_DAYS')">Aging Days
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'AGING_DAYS' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Patient_Status')">Patient Status
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Patient_Status' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <ng-container *ngIf="insuranceDetailReport.length === 0 && ddlPracticeCode !== 0">
+          <tr>
+            <td colspan="24" style="padding-left: 70vh ;">No data available</td>
+          </tr>
+        </ng-container>
+
+
+
+        <tr *ngFor="let cp of insuranceDetailReport | filter: searchText;">
+          <td>{{cp.PRACTICE_CODE}}</td>
+          <td>{{cp.Practice_name}}</td>
+          <td>{{cp.PATIENT_NAME}}</td>
+          <td>{{cp.PATIENT_ACCOUNT}}</td>
+          <td>{{cp.DATE_OF_BIRTH | date:'MM/dd/yyyy'}}</td>
+          <td>{{cp.CLAIM_ENTRY_DATE | date:'MM/dd/yyyy'}}</td>
+          <td>{{cp.CLAIM_NO}}</td>
+          <td>{{cp.DOS | date:'MM/dd/yyyy'}}</td>
+          <td>{{cp.CLAIM_TOTAL|currency:'USD':'symbol-narrow'}}</td>
+          <td>{{cp.Amount_Paid|currency:'USD':'symbol-narrow'}}</td>
+          <td>{{cp.Amount_Adjusted|currency:'USD':'symbol-narrow'}}</td>
+          <td>{{cp.Amount_Due|currency:'USD':'symbol-narrow'}}</td>
+          <td>{{cp.Primary_Status}}</td>
+          <td>{{cp.PRIMARY_PAYER}}</td>
+          <td>{{cp.PRIMARY_POLICY_NUMBER}}</td>
+          <td>{{cp.Secondary_Status}}</td>
+          <td>{{cp.SECONDARY_PAYER}}</td>
+          <td>{{cp.SECONDARY_POLICY_NUMBER}}</td>
+          <td>{{cp.Other_Status}}</td>
+          <td>{{cp.AGING_DAYS}}</td>
+          <td>{{cp.Patient_Status}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+
+<div *ngIf="insuranceDetailReport.length > 0 || ddlPracticeCode != 0" class="row d-flex"
+  style="margin-left: 5px; margin-right: 5px; margin-top: 15px">
+  <span>Showing {{ (filteredRecords) }} of {{ totalResults }} entries</span>
+  <div style="float: right;margin-top: 0.5%;">
+    <button (click)="loadPreviousPage()" [disabled]="currentPage === 1">
+      Previous
+    </button>
+    {{ currentPage }}/{{ totalPages }}
+    <button (click)="loadNextPage()" [disabled]="currentPage === totalPages">
+      Next
+    </button>
+  </div>
+</div>

@@ -1,0 +1,105 @@
+<div class="loginColumns animated fadeInDown">
+  <div class="row">
+    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6 animated bounceInDown">
+      <div>
+        <h2 class="font-bold login-title">Welcome to NPM</h2>
+        <p class="login-p">
+          Nobility Practice Management (PM) system is ideal for practices of any size. Manages appointments & schedules,
+          streamlines billing, and stores demographic data.
+        </p>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6 animated bounceInRight">
+      <div id="GrandParent" class="ibox-content pb-10">
+        <div class="text-center">
+          <img src="assets/Images/logo-nobility-wotag.png" alt="Nobilty PM" width="70%" class="pt-20">
+        </div>
+        <form [formGroup]="loginForm" class="m-t" role="form" [hidden]="isLoginView">
+          <div class="form-group">
+            <input class="form-control input-sm" [(ngModel)]="loginViewModel.Username" placeholder="Email or Username"
+              formControlName="username">
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control input-sm" [(ngModel)]="loginViewModel.Password"
+              placeholder="Password" formControlName="password">
+              <div class="alert alert-danger" *ngIf="InvalidLogin">
+                <strong></strong> <a href="#" class="alert-link"> {{ errorMessage}}</a>.
+              </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-sm block full-width m-b" (click)="onClick()" [hidden]="isLoginView"
+            [disabled]="!loginForm.valid || clicked">
+            <ng-container [ngTemplateOutlet]="clicked?loader:noLoader"></ng-container>
+            <ng-template #noLoader>
+              Login
+            </ng-template>
+            <ng-template #loader>
+              <img src="assets/Images/ajax-loader.gif">
+            </ng-template>
+          </button>
+        </form>
+
+        <form [formGroup]="accesscode" class="m-t" role="form" [hidden]="isCodeView">
+          <div id="OTPform" class="form-group">
+            <h5 id="otpHead">Enter the OTP sent to your email {{email}}.</h5>
+            <ng-otp-input #ngOtpInput (onInputChange)="onOtpChange($event)" [config]="config"    ></ng-otp-input>
+           
+          </div>
+          <div class="alert alert-danger" *ngIf="InvalidLogin">
+            <strong></strong> <a href="#" class="alert-link"> {{ errorMessage}}</a>.
+          </div>
+          
+          <p><a id="linkre" (click)="onResendOTP()">Resend OTP</a></p>
+          <button type="submit" class="btn btn-primary btn-sm block full-width m-b" [hidden]="isCodeView" (click)="onLoginClick()"
+            [disabled]="!loginForm.valid || clicked">
+            <ng-container [ngTemplateOutlet]="clicked?loader1:noLoader1"></ng-container>
+            <ng-template #noLoader1>
+              Verify
+            </ng-template>
+            <ng-template #loader1>
+              <img src="assets/Images/ajax-loader.gif">
+            </ng-template>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row login-copyright animated bounceInUp">
+    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+      Copyright Nobility RCM
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6 text-right">
+      <small>© {{Year}}</small>
+    </div>
+  </div>
+</div>
+
+<!-- alert -->
+<!-- alert -->
+<div class="modal fade" bsModal #displayAlert="bs-modal" tabindex="-1" role="dialog" aria-labelledby="dialog-nested-name" data-backdrop="static" data-keyboard="false"> 
+  <div class="modal-dialog modal-md col-6 w-100" style="margin-top: 187px;float: center; width: 680px;">
+    <div class="modal-content animated bounceInUp">
+      <div class="modal-header" style="padding-top: 15px; padding-bottom: 15px;">
+       
+        <h2 class="modal-title bold">Alert</h2>
+       
+          <div style="margin-top: 20px;">
+            <div style="font-size: 18px;">
+       
+              <div style="overflow-wrap: break-word; font-size: 14px;
+              color: red;
+              margin-top: 3px;">{{ firstAlert?.AlertMessage }}
+              </div>
+            </div>
+            <div class="form-group col-lg-12" style="margin-bottom: 1px;text-align: center;margin-top: 51px;">
+              <button (click)="proceedToAssignedModule()" id="Savebutton" type="button" class="btn btn-w-m btn-primary">
+                Acknowledge
+              </button>
+            </div>
+            
+          </div>
+     
+      </div>
+    </div>
+  </div>
+</div>

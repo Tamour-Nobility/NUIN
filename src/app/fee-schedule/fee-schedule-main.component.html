@@ -1,0 +1,35 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5><i class="fa fa-credit-card"></i>&nbsp;Fee Schedule</h5>
+        <div class="ibox-tools">
+        </div>
+      </div>
+      <div class="ibox-content">
+        <div class="tabs-container">
+          <ul class="nav nav-tabs">
+            <li class="active" [routerLink]="['/FeeSchedule/Standard']"><a data-toggle="tab"
+                aria-expanded="true">Standard
+                CPT</a></li>
+            <li [routerLink]="['/FeeSchedule/NobilityCPT']"><a data-toggle="tab" aria-expanded="true">Custom CPT</a>
+            </li>
+            <li [routerLink]="['/FeeSchedule/ProviderCPT']"><a data-toggle="tab" aria-expanded="false">Provider CPT</a>
+            </li>
+              <li [routerLink]="['/FeeSchedule/PanelBilling']"><a data-toggle="tab" aria-expanded="false">Panel Billing</a>
+            </li>
+       
+           
+          </ul>
+          <div class="tab-content">
+            <div id="tab-1" class="tab-pane active">
+              <div class="panel-body">
+                <router-outlet></router-outlet>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

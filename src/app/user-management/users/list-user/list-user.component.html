@@ -1,0 +1,43 @@
+<table class="table table-striped table-hover table-bordered dataTableUser">
+  <thead>
+    <tr>
+      <!-- <th>ID</th> -->
+      <th>Username</th>
+      <!-- <th>First Name</th> -->
+      <th>Name</th>
+      <!-- <th>MI</th> -->
+      <!-- <th>Last Name</th> -->
+      <th>Email</th>
+      <!-- <th>Created By</th> -->
+      <!-- <th>Created Date</th> -->
+      <th>Company</th>
+      <th style="text-align:center">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let u of listUser let ndx=index" [class.selected]="ndx === selectedRow">
+      <!-- <td>{{u.UserId}}</td> -->
+      <td>{{u.UserName | uppercase}}</td>
+      <!-- <td>{{u.FirstName | titlecase }}</td> -->
+      <!-- <td>{{u.MiddleInitial | titlecase }}</td> -->
+      <!-- <td>{{u.LastName | titlecase }}</td> -->
+      <td>{{u.LastName | titlecase}}, {{u.FirstName | titlecase}}</td>
+      <td>{{u.Email}}</td>
+      <!-- <td>{{u.CreatedByString | uppercase}}</td> -->
+      <!-- <td>{{u.CreatedDate | date:'MM/dd/yyyy'}}</td> -->
+      <td>{{u.CompanyName | titlecase }}</td>
+      <td class="text-center footable-visible footable-last-column" style="white-space: nowrap;">
+        <!-- <div class="btn-group"> -->
+          <button class="btn-default btn btn-xs gridbtn" (click)="onViewClick(ndx)">View</button>
+          <button class="btn-default btn btn-xs gridbtn" (click)="onEditClick(ndx)">Edit</button>
+          <button class="btn btn-xs gridbtn" [ngClass]="{'btn-danger':!u.IsActive,'btn-primary':u.IsActive}"
+            (click)="onActiveDeactive(ndx,u.IsActive)">{{u.IsActive?'Active':'Inactive'}}</button>
+          <button class="btn-success btn btn-xs gridbtn" data-toggle="modal" data-target="#passwordResetModal"
+            (click)="onResetPasswordClick(ndx)">Reset
+            Password</button>
+        <!-- </div> -->
+      </td>
+    </tr>
+  </tbody>
+</table>
+<app-reset-password #passwordReset></app-reset-password>

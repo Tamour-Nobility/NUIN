@@ -1,0 +1,40 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5><i class="fa fa-clock-o"></i>&nbsp;Scheduler</h5>
+        <div class="ibox-tools">
+        </div>
+      </div>
+      <div class="ibox-content">
+        <div class="tabs-container">
+          <ul class="nav nav-tabs">
+            <li [routerLinkActive]="['active']" [routerLink]="['/appointments/scheduler']"><a data-toggle="tab">
+                Scheduler</a>
+            </li>
+            <li [routerLinkActive]="['active']" [routerLink]="['/appointments/officeTiming']"><a data-toggle="tab">
+                Office Timing</a>
+            </li>
+            <li [routerLinkActive]="['active']" [routerLink]="['/appointments/block-appointments']"><a
+                data-toggle="tab">
+                Appointment Rules</a>
+            </li>
+            <li [routerLinkActive]="['active']" [routerLink]="['/appointments/statuses']"><a data-toggle="tab">
+                Appointment Status</a>
+            </li>
+            <li [routerLinkActive]="['active']" [routerLink]="['/appointments/reasons']"><a data-toggle="tab">
+                Appointment Reasons</a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div id="tab-1" class="tab-pane active">
+              <div class="panel-body">
+                <router-outlet></router-outlet>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

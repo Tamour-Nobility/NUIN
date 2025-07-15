@@ -1,0 +1,267 @@
+<div class="row">
+  <div class="col-lg-12">
+    <h4 class="pull-left">
+      <i aria-hidden="true" class="fa fa-medkit"></i>&nbsp;<u>Condition Codes</u>
+    </h4>
+  </div>
+
+
+
+  <div class="col-lg-12 pt-10">
+    <div >
+      <table class="table table-bordered table-striped table-hover">
+        <thead>
+          <tr>
+            <!-- <th width="5%" >Sr. #</th> -->
+            <th width="8%">Actions</th>
+            <th  >
+            </th>
+          
+          </tr>
+        </thead>
+        <tbody class="row-selected">
+          <tr *ngFor="let code of responseConditionCodeModel let i = index">
+<!-- <td >{{i+1}}</td> -->
+            <td >
+              <button class="btn btn-xs btn-default"  
+              (click)="deleteConditionCode(i)" >
+              <i class="fa fa-remove text-danger" ></i>
+          </button>
+            
+            </td>
+            <td >
+              <select class="form-control"  name="Ccodelist" [ngModel]="code.ConditionCode"
+              (ngModelChange)="onCCOdeValueChange('Description', $event, i)" >
+                <!-- <option value="">Select an option</option>  -->
+                <option *ngFor="let code of combinedCodeViewModel.condition_Codes_List" [value]="code.Condition_Code">
+                  {{ code.Condition_Code }} | {{ code.Description }} 
+                </option>
+              </select>
+            </td>
+           
+          </tr>
+
+
+
+          <tr>
+            <td colspan="44">
+              <button class="btn-white" (click)="AddNewConditionCode()"  style="border: none;">
+                Add New Condition Code
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+
+
+</div>
+
+
+<div class="row">
+  <div class="col-lg-12">
+    <h4 class="pull-left">
+      <i aria-hidden="true" class="fa fa-medkit"></i>&nbsp;<u>Occurrence Codes</u>
+    </h4>
+  </div>
+
+
+
+  <div class="col-lg-12 pt-10">
+    <div>
+      <table class="table table-bordered table-striped table-hover">
+        <thead>
+          <tr>
+            <th>Actions</th>
+            <th>Code</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody class="row-selected">
+          <tr *ngFor="let oc of responseOccurrenceCodeModel let i = index">
+            <td>
+              <button class="btn btn-xs btn-default" (click)="deleteOccurrenceCodePair(i)">
+                <i class="fa fa-remove text-danger"></i>
+              </button>
+            </td>
+            <td>
+              <select class="form-control" name="Occcodelist" [ngModel]="oc.OccCode"
+              (ngModelChange)="onOccCOdeValueChange('Description', $event, i)">
+                <option *ngFor="let c of combinedCodeViewModel.occurrence_Codes_List" [value]="c.Occ_Code">
+                  {{c.Occ_Code}} |   {{ c.Description }}
+                </option>
+              </select>
+            </td>
+            <td class="col-lg-3">
+              <my-date-picker name="OccDate" id="occdate"  [selDate]=" OccDate[i] " 
+               (dateChanged)="onOccCOdeValueChange('OccDate', $event, i)"
+               [options]="{
+                 height: '25px', width: '100%'}"
+              >
+              </my-date-picker>
+
+              
+            </td>
+
+            <!-- //   <my-date-picker name="mydate" [selDate]="selDOI"  
+            //   (dateChanged)="onDateChanged($event,'injury_date')" (blur)="formatDate($event)" [options]="{
+            //     dateFormat: 'mm/dd/yyyy', height: '25px', width: '100%'
+          
+            // }" ></my-date-picker> -->
+          </tr>
+          <tr>
+            <td colspan="3">
+              <button class="btn-white" (click)="AddNewOccurrenceCode()" style="border: none;">
+                Add New Occurrence Code
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+  <div class="row">
+    <div class="col-lg-12">
+      <h4 class="pull-left">
+        <i aria-hidden="true" class="fa fa-medkit"></i>&nbsp;<u>Occurrence Span </u>
+      </h4>
+    </div>
+    <div class="col-lg-12 pt-10">
+      <div>
+        <table class="table table-bordered table-striped table-hover">
+
+          <thead>
+            <tr>
+              <th>Actions</th>
+              <th width="40" *ngFor="let label of labels">
+                Code
+              </th>
+              <th>
+                From
+              </th>
+              <th>Through</th>
+            </tr>
+          </thead>
+          <tbody class="row-selected">
+            <tr *ngFor="let os of responseOccurenceSpanModel let i = index">
+
+
+              <td class="col-lg-1">
+
+                <button  class="btn btn-xs btn-default"  
+                (click)="deleteOccSpanCodePair(i)" >
+                <i class="fa fa-remove text-danger" ></i>
+            </button>
+           
+              </td>
+              <!-- <tr *ngFor="let p of OccurenceSpanModel; let ndx = index" > -->
+              <td class="col-lg-3">
+
+                <select  class="form-control" name="Occcodelist" [ngModel]="os.OccSpanCode"
+                (ngModelChange)="onOccSpanValueChange('Description', $event, i)">
+                  <option *ngFor="let c of combinedCodeViewModel.occurrence_Span_Codes_List" [value]="c.Occurrence_Span_Code">
+                    {{ c.Occurrence_Span_Code}} |  {{ c.Description }} 
+                  </option>
+                </select>
+              </td>
+              <td class="col-lg-3">
+                <div >
+                  <my-date-picker id="dateFrom" [selDate]=" OccSpanDatefrom[i] "
+                  (dateChanged)="onOccSpanValueChange('DateFrom', $event, i)"
+                  [options]="{
+                    height: '25px', width: '100%'}"
+                    
+                     >
+                  </my-date-picker>
+                </div>
+              </td>
+              <td class="col-lg-3">
+                <div >
+                  <my-date-picker id="dateThrough" [selDate]=" OccSpanDateThrough[i] " (dateChanged)="onOccSpanValueChange('DateThrough', $event, i)"
+                  [options]="{
+                    height: '25px', width: '100%'}"
+                     >
+                  </my-date-picker>
+                </div>
+              </td>
+
+
+            </tr>
+
+
+            <tr>
+              <td colspan="44">
+                <button class="btn-white" (click)="AddNewOccSpanCode()" style="border: none;">
+                  Add New Occurrence Span Code
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+
+  </div>
+
+
+
+  <div class="row">
+    <div class="col-lg-12">
+      <h4 class="pull-left">
+        <i aria-hidden="true" class="fa fa-medkit"></i>&nbsp;<u>Value Codes</u>
+      </h4>
+    </div>
+  
+  
+  
+    <div class="col-lg-12 pt-10">
+      <div>
+        <table class="table table-bordered table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Actions</th>
+              <th>Code</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody class="row-selected">
+            <tr *ngFor="let oc of resValueCodeModel let i = index">
+              <td >
+                <button class="btn btn-xs btn-default" (click)="deleteValueCodeRange(i)">
+                  <i class="fa fa-remove text-danger"></i>
+                </button>
+              </td>
+              <td>
+                <select class="form-control" name="Valcodelist" [ngModel]="oc.Value_Codes_Id"
+                (ngModelChange)="ChangeValueCode('Description', $event, i)">
+                  <option *ngFor="let c of combinedCodeViewModel.Value_CodesList" [value]="c.Id">
+                    {{ c.Id }} |  {{ c.Descriptions }}
+                  </option>
+                </select>
+              </td>
+              <td class="col-lg-3">
+               <input onlyNumbers="true" [ngModel]="oc.Amount" (ngModelChange)="ChangeValueCode('Amount', $event, i)"
+                class="form-control" >
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3">
+                <button class="btn-white" (click)="AddNewValueCode()" style="border: none;">
+                  Add New value Code
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>

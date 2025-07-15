@@ -1,0 +1,51 @@
+<div class="col-lg-12">
+  <div class="ibox float-e-margins">
+    <div class="ibox-title">
+      <h5><i class="fa fa-universal-access"></i>&nbsp;Insurance Setup</h5>
+      <div class="ibox-tools">
+        <a class="link" (click)="openModal('Add New Insurance Group')">
+          <i class="fa fa-plus"></i>&nbsp;Add New Group
+        </a>
+      </div>
+    </div>
+    <div class="ibox-content">
+      <div class="tabs-container">
+        <ul class="nav nav-tabs">
+          <li class="active" [routerLink]="['/InsuranceSetup/insGroup']"><a aria-expanded="true">Groups</a></li>
+          <li [routerLink]="['/InsuranceSetup/insSetup']"><a aria-expanded="false">Insurances</a></li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active">
+            <div class="panel-body">
+              <app-list-ins-group-setup></app-list-ins-group-setup>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" bsModal #addEditGroupModal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="dialog-nested-name">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div style="display: flex; justify-content: space-between; padding: 10px;">
+        <h3>{{ modalTitle }}</h3>
+        <button type="button" class="close" (click)="closeModal()">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      
+      <!-- Pass Group ID and Modal Close Event -->
+      <app-add-edit-ins-group-setup 
+        [groupId]="selectedGroupId" 
+        (onSave)="onSaveGroup($event)"
+        (onCancel)="closeModal()">
+      </app-add-edit-ins-group-setup>
+    </div>
+  </div>
+</div>
+

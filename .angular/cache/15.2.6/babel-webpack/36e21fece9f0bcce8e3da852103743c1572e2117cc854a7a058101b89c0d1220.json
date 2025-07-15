@@ -1,0 +1,1 @@
+{"ast":null,"code":"export class RequestGuarantor {\n  constructor() {\n    this.Response = new Response();\n  }\n}\nexport class Response {}\nexport class SearchCriteria {\n  constructor() {\n    this.Response = new Response();\n  }\n}","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

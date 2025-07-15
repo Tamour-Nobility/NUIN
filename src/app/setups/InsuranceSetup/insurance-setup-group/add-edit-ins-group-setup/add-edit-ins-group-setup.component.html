@@ -1,0 +1,28 @@
+<div class="ibox float-e-margins">
+  <!-- <div class="ibox-title">
+    <h5>{{strAddEditTitle}}</h5>
+  </div> -->
+  <div class="ibox-content">
+    <form [formGroup]="addeditForm" >
+      <div class="row">
+        <div class="col-lg-6 form-group">
+          <label>Group Name<span class="text-danger">*</span></label>
+          <input type="text" maxlength="50" class="form-control" [(ngModel)]="objInsGroupRsp.Response.Insgroup_Name"
+            formControlName="groupName">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <button 
+          class="btn btn-primary btn-sm pull-right mr-2" 
+          (click)="onSaveClick()" 
+          [disabled]="!addeditForm.valid">
+          {{ objInsGroupRsp.Response.Insgroup_Id > 0 ? 'Update' : 'Save' }}
+        </button>
+                  <button class="btn btn-default btn-sm pull-right" (click)="onCancelClick()">Cancel
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

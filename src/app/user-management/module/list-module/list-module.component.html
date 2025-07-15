@@ -1,0 +1,26 @@
+<table class="table table-striped table-hover table-bordered dataTableModule">
+  <thead>
+    <tr>
+      <!-- <th>ID </th> -->
+      <th>Name</th>
+      <th>Created By</th>
+      <th>Created Date</th>
+      <th style="text-align:center">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let m of listModule let ndx=index" [class.selected]="ndx === selectedRow">
+      <!-- <td>{{m.Module_Id}}</td> -->
+      <td>{{m.Module_Name | titlecase }}</td>
+      <td>{{m.CreatedByString}}</td>
+      <td>{{m.CreatedDate | date:'MM/dd/yyyy'}}</td>
+      <td class="text-center footable-visible footable-last-column" width="20%">
+        <div class="btn-group">
+          <button class="btn-default btn btn-xs gridbtn" (click)="onViewClick(ndx)">View</button>
+          <button class="btn-default btn btn-xs gridbtn" (click)="onEditClick(ndx)">Edit</button>
+          <button class="btn-danger btn btn-xs gridbtn" (click)="onDeleteClick(ndx)">Delete</button>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

@@ -1,0 +1,91 @@
+
+<div class="modal inmodal" id="accountassigneenotes">
+  <div class="modal-dialog modal-md col-6 w-100" style="float: right; width: 400px; height: 100%;">
+    <div class="modal-content animated bounceInRight">
+      <div class="modal-header " style="padding-top:15px;padding-bottom:15px;">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+            class="sr-only">Close</span></button>
+        <h4 class="modal-title">Account Assignment Notes</h4>
+        <form >
+          <div style="margin-top: 50px;">
+
+
+            <div class="form-group col-12" style="text-align: left;">
+              <h4>Notes</h4>
+              <div class="overflow-auto" *ngFor="let v of accountassigneenotes"
+              style="text-align: left; margin-top: 10px;">
+                <div>
+                  <label >Created By </label>
+                  {{v.Name}} <label > on</label> {{v.Created_Date |date }}
+                </div>
+                <div>
+                  <label >Assigned Notes </label>
+                   {{v.Account_notes}}
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </form>
+
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" >
+    <div class="col-sm-5 col-md-5 col-lg-5">
+      <div class="col-12">
+        <div style="display: flex; align-items: center;">
+           <label >Check By User</label> 
+           <select (change)="onSelected($event.target.value)" style="margin-left: 10px;">
+            <option disabled>Select User</option>
+            <option value="All">All</option>
+            <option *ngFor="let v of selecteduserslist; let i=index" value="{{v.Id}}">{{v.FullName}} -{{v.UserName}}</option>
+           </select>
+        </div>
+      </div>
+  </div>
+</div>
+
+<table class="table table-hover table-striped table-bordered dataTable AccountlevelTable"
+width="100%">
+
+<thead>
+    <tr>
+        <th>Account# </th>
+        <th>Priority </th>
+        <th>Assigned By </th>
+        <th>Start Date</th>
+        <th>Due Date</th>
+        <th>Patient Name</th>
+        <th >Task Status</th>
+        <th >Assigned To</th>
+        <th >Actions</th>
+    </tr>
+</thead>
+<tbody>
+ 
+    <tr *ngFor="let assigned of accountusers; let i=index" 
+    id="box">
+
+    <td > <a  (click)="movetoclaim(assigned.PatientFullName, 
+      assigned.PatientAccount, assigned.Account_AssigneeID)">{{assigned.PatientAccount}}</a></td>
+        <td>{{assigned.Priority | titlecase }}</td>
+        <td>{{assigned.AssignedBy_FullName}}</td>
+        <td>{{assigned.Start_Date | date}}</td>
+        <td>{{assigned.Due_Date | date}} </td>
+        <td>{{assigned.PatientFullName}} </td>
+        <td >{{assigned.Status}}</td>
+        <td >{{assigned.Assignedto_FullName}}</td>
+        <td >
+          <div class="btn-group">
+              <button class="btn-white btn btn-xs gridbtn " 
+              data-toggle="modal" data-target="#accountassigneenotes" (click)="viewclaimassigneenotes(assigned.Account_AssigneeID)" >View Notes</button>
+          </div>
+        </td>
+    </tr>
+</tbody>
+</table>

@@ -1,0 +1,690 @@
+
+<!-- working for selected button color for odentification -->
+<div class="date-range-selection">
+  <button [ngClass]="{'active': selectedRange === 'MTD'}" (click)="selectDateRange('MTD')">MTD</button>
+  <button [ngClass]="{'active': selectedRange === 'YTD'}" (click)="selectDateRange('YTD')">YTD</button>
+  <button [ngClass]="{'active': selectedRange === 'LastMonth'}" (click)="selectDateRange('LastMonth')">Last Month</button>
+  <button [ngClass]="{'active': selectedRange === 'Custom'}" (click)="selectDateRange('Custom');resetDateRange() ">Date Range</button>
+
+  <div *ngIf="isCustomDateRange" style="display: flex;  justify-content: space-between;" >
+    <div style="display: flex ;align-items:center; justify-content: space-around;  margin-left: 7px">
+      <div class="date-label">
+        From:
+      </div>
+      <input  [max]="today" type="date" [(ngModel)]="fromDate"  (change)="onDateChange($event)" placeholder="From: MM/DD/YYYY" style="margin-left: 10px;">
+    </div>
+    <div style="display: flex; align-items: center; margin-left: 10px; justify-content: center;">
+      <div class="date-label" style="background-color: white;  height: 32px; width: 40px; border-radius: 5px; align-items: center;justify-content: center;">
+        To:
+      </div>    
+        <input  [max]="today" type="date" [(ngModel)]="toDate" (change)="onDateChange($event)" placeholder="To: MM/DD/YYYY" style="margin-left: 10px;">
+    </div>
+  </div>
+</div>
+
+<!-- ended here btn-color -->
+
+<!-- <div class="row" *ngIf="data">
+  <div class="col-sm-12 col-md-6" *ngIf="data && data.recentAgingSummary">
+    <canvas baseChart [datasets]="barChartData2" [labels]="barChartLabels2" [options]="barChartOptions2"
+      [legend]="barChartLegend2" [chartType]="barChartType2">
+    </canvas>
+    <div class="col-md-12" style="margin-top:20px">
+      <div class="panel panel-default">
+        <div class="panel-heading" (click)='onClickAgingByInsRow()' style="cursor: pointer;">
+          Aging by Insurance
+        </div>
+        <div class="panel-body">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover table-bordered" style="margin-top:16px">
+              <thead>
+                <tr>
+                  <th>Insurance Name</th>
+                  <th>0-30</th>
+                  <th>31-60</th>
+                  <th>61-90</th>
+                  <th>91-120</th>
+                  <th>121-150</th>
+                  <th>151-180</th>
+                  <th>180 Plus</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let p of data.recentAgingSummary">
+                  <td> {{p.Insurance}}</td>
+                  <td>${{p.C_0_30__Days_Balance_by_Claim_Date| number: '2.1-2'}}</td>
+                  <td>${{p.C_31_60__Days_Balance_by_Claim_Date | number: '2.1-2'}}</td>
+                  <td>${{p.C_61_90__Days_Balance_by_Claim_Date | number: '2.1-2'}}</td>
+                  <td>${{p.C_91_120__Days_Balance_by_Claim_Date | number: '2.1-2'}}</td>
+                  <td>${{p.C_121_150__Days_Balance_by_Claim_Date | number: '2.1-2'}}</td>
+                  <td>${{p.C_151_180__Days_Balance_by_Claim_Date | number: '2.1-2'}}</td>
+                  <td>${{p.C___180__Days_Balance_by_Claim_Date | number: '2.1-2'}}</td>
+                  <td>${{p.Total_Balance | number: '2.1-2'}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="col-sm-12 col-md-6" *ngIf="data && data.recentChargesPayment">
+    <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions"
+      [legend]="lineChartLegend" [colors]="lineChartColors" [chartType]="lineChartType"></canvas>
+    <div class="col-md-12" style="margin-top:20px">
+      <div class="panel panel-default">
+        <div class="panel-heading" (click)='onClickCPAsRow()' style="cursor: pointer;">
+          CPA
+        </div>
+        <div class="panel-body">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover table-bordered" style="margin-top:16px">
+              <thead>
+                <tr>
+                  <th *ngFor="let column of cpaColumns">{{column}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of data.recentChargesPayment">
+                  <td *ngFor="let value of getObjectValues(row)">{{value}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  -->
+
+<!--   
+  <div class="cards-container">
+    <div class="row">
+      <div class="col-md-4" style=" margin-top: 1rem !important;margin-bottom: 1rem !important;"
+        *ngFor="let card of cardData">{{this.cardData.value}}
+        <div class="card h-100 d-flex flex-column my-3">
+          <p [style.font-weight]="'bold'" [style.color]="getTitleColor(card.title)">{{ card.title }}</p>
+          <p class="flex-grow-1">{{ card.value }}</p>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+
+<div class="row">
+  <!-- <div class="cards-container">
+    <div class="row">
+      <div class="col-md-4" style="margin-top: 1rem !important; margin-bottom: 1rem !important;" *ngFor="let card of cardData">
+        <div class="card h-100 d-flex flex-column my-3" style="height: 200px;">
+          <div class="card-body d-flex flex-column justify-content-center">
+           
+            <h5 class="card-title" [style.font-weight]="'bold'" [style.color]="getTitleColor(card.title)">{{ card.title }}</h5>
+           
+            <p class="card-text">{{ card.value }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> 
+-->
+
+<div class="col-lg-4 col-md-4 col-sm-12" style="margin-top: 3px;">
+<div class="row" style="padding-top: 2px;padding-bottom: 1px;">
+  <div class="col-lg-4 col-md-4 col-sm-12 col-12 mb-3 center" style="padding-right: 2px; padding-left: 2px;">
+    <div class="ibox" style="border-radius: 5px; overflow: hidden;">
+      <div class="ibox-title ibox-title-background text-center" style="border-style: none;">
+        <h5 class="heading-color responsive-text">Claim Submitted</h5>
+      </div>
+      <div class="ibox-content text-center">
+        <h1 class="no-margins" style="font-weight: bold;">{{ this.ClaimsSubmitted | number: '1.0-2' }}</h1>
+      </div>
+    </div>
+  </div>
+    
+  <div class="col-lg-4 col-md-4 col-sm-12 col-12 mb-3 center" style="padding-right: 2px; padding-left: 2px;">
+    <div class="ibox" style="
+       overflow: hidden; border-radius: 5px;">
+      <div class="ibox-title ibox-title-background text-center" style="border-style: none;">
+        <h5 class="heading-color responsive-text">Pending Claims</h5>
+      </div>
+      <div class="ibox-content text-center">
+        <h1 class="no-margins" style="font-weight: bold; color: #F4B183;">{{this.PendingClaims | number: '1.0-2'}}</h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4 col-md-4 col-sm-12 col-12 mb-3 center" style="padding-right: 2px; padding-left: 2px;">
+    <div class="ibox" style="overflow: hidden; border-radius: 5px;">
+      <div class="ibox-title ibox-title-background text-center" style="border-style: none;">
+        <h5 class="heading-color responsive-text">Total Visits</h5>
+      </div>
+      <div class="ibox-content text-center">
+        <h1 class="no-margins" style="font-weight: bold;">{{this.TotalVisits | number: '1.0-2'}}</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row" style="padding-top: 2px;padding-bottom: 1px;">
+  <div class="col-lg-4 col-md-4 col-sm-12 col-12 center mb-3" style="padding-right: 2px; padding-left: 2px;">
+    <div class="ibox" style="overflow: hidden; border-radius: 5px;">
+      <div class="ibox-title ibox-title-background text-center" style="border-style: none;">
+        <h5 class="heading-color responsive-text">Posted ERAs</h5>
+      </div>
+      <div class="ibox-content text-center">
+        <h1 class="no-margins" style="font-weight: bold;">{{this.PostedERA | number: '1.0-2'}}</h1>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 col-md-4 col-sm-12 col-12 center mb-3" style="padding-right: 2px; padding-left: 2px;">
+    <div class="ibox" style="overflow: hidden; border-radius: 5px;">
+      <div class="ibox-title ibox-title-background text-center" style="border-style: none;">
+        <h5 class="heading-color responsive-text">Unposted ERAs</h5>
+      </div>
+      <div class="ibox-content text-center">
+        <h1 class="no-margins" style="font-weight: bold; color: #F4B183;">{{this.UnpostedERAs | number: '1.0-2'}}</h1>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 col-md-4 col-sm-12 col-12 center mb-3" style="padding-right: 2px; padding-left: 2px;">
+    <div class="ibox" style="overflow: hidden; border-radius: 5px;">
+      <div class="ibox-title ibox-title-background text-center" style="border-style: none;">
+        <h5 class="heading-color responsive-text">Patient Count</h5>
+      </div>
+      <div class="ibox-content text-center">
+        <h1 class="no-margins" style="font-weight: bold;">{{this.PatientCount | number: '1.0-2'}}</h1>
+      </div>
+    </div>
+  </div>
+</div> 
+<div class="row" style="padding-top: 2px;padding-top: 2px;padding-bottom: 1px;">
+  <div class="col-lg-4 col-md-4 col-sm-12 col-12 center mb-3" style="padding-right: 2px; padding-left: 2px;">
+    <div class="ibox" style="overflow: hidden; border-radius: 5px;">
+      <div class="ibox-title ibox-title-background text-center" style="border-style: none;">
+        <h5 class="heading-color responsive-text">Statement Count</h5>
+      </div>
+      <div class="ibox-content text-center" style="height: 100px;">
+        <h1 class="no-margins" style="font-weight: bold;">{{this.StatementCount | number: '1.0-2'}}</h1>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-8 col-md-8 col-sm-12 center mb-3" style="padding-right: 2px; padding-left: 2px;">
+    <div class="chart" >
+      <div style="display: flex; justify-content: space-between;" class="ibox-title-color">
+        <div style="margin-top: 8px; margin-left: 4px;" class="ibox-title-color">
+          <h3 style="font-weight: bold;">PC Ratio</h3>
+        </div>
+        <div>
+          <button type="button" class="btn" style="background: transparent; font-size: 22px; padding: 5px;" data-toggle="tooltip" data-placement="top" title="Table View" (click)="showChartPC()">
+            <i class="fa fa-table"></i>
+          </button>
+          <button    #chartButton type="button" class="btn" style="background: transparent; font-size: 20px; padding: 5px;" data-toggle="tooltip" data-placement="top" title="Chart View" (click)="showTablePC()">
+            <i class="fa fa-line-chart"></i>
+          </button>
+          <button  type="button" class="btn" style="background: transparent; font-size: 20px; padding-left: 5px;padding-right: 5px;padding-top: 5px;padding-bottom: 5px;" data-toggle="tooltip" data-placement="top" title="Full Screen View" (click)="openFullscreen(fullscreenModalPC)">
+            <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="viewModePC === 'PC'" class="chart-container" style="display: flex; justify-content: center;">
+            <div class="panel-body">
+          <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+              <thead>
+                <tr>
+                  <th>Charges</th>
+                  <th>Payments</th>
+                  <th>P/C Ratio</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="tableDataPC && tableDataPC.length > 0">
+                  <td>$ {{ tableDataPC[0]?.charges | number: '1.1-2' }}</td>
+                  <td>$ {{ tableDataPC[1]?.payments | number: '1.1-2' }}</td>
+                  <td>{{ tableDataPC[0]?.pcRatio }}</td>
+                </tr>
+                <tr *ngIf="!(tableDataPC && tableDataPC.length > 0)">
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0 %</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <!-- </div> -->                 
+      </div>
+
+      <div *ngIf="viewModePC === 'PCtable'" class="chart-container" style="display: flex; justify-content: center;">
+        <div class="chart-wrapper" style="padding: 2px; box-sizing: border-box;">
+        <canvas baseChart [data]="doughnutChartDataPC" [labels]="doughnutChartLabelsPC" [chartType]="'doughnut'" [options]="chartOptionsPC" [colors]="chartColorsPC" style="display: block; width: 100%; height: auto;"></canvas>
+        <h3 class="chart-value" style="margin-top: -5px;"> {{ PCChartValue !== null && PCChartValue !== undefined ? PCChartValue + '%' : '0%' }}</h3>
+      </div>
+      </div>
+
+      <!-- Fullscreen Modal -->
+      <ng-template #fullscreenModalPC>
+        <div class="modal-content modal-lg">
+          <div class="modal-dialog modal-lg">
+            <div style="display: flex; justify-content: space-between; margin: 15px;">
+              <div class="col-11">
+                <h3 class="modal-title ibox-title-color">PC Ratio</h3>
+              </div>
+              <div class="col-1 text-right">
+                <button type="button" class="close" aria-label="Close" (click)="modalRef?.hide()">
+                  <span aria-hidden="true" class="ibox-title-color">X</span>
+                </button>
+              </div>
+            </div>
+            <div style="padding: 5px;">
+              <hr>
+            </div>
+            <div class="modal-body">
+              <canvas baseChart [data]="doughnutChartDataPC" [labels]="doughnutChartLabelsPC" [chartType]="'doughnut'" [options]="chartOptionsPC" [colors]="chartColorsPC" style="width: 100%; height: 100%;"></canvas>
+              <h1 style="text-align: center; font-weight: 450"> {{ PCChartValue !== null && PCChartValue !== undefined ? PCChartValue + '%' : '0%' }}</h1>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+</div>
+
+
+  </div>
+
+
+
+
+<!-- chatregs & payments trends chart strted -->
+
+<div class="col-lg-8 col-md-8 col-sm-12" style="margin-top: 3px; padding-right: 2px; padding-left: 2px;padding-top: 2px;padding-bottom: 1px;">
+  <div class="chart-1">
+    <div style="display: flex; justify-content: space-between;" class="ibox-title-color">
+      <div style="margin-top: 8px; margin-left: 4px;">
+        <h3 class="ibox-title-color" style="font-weight: bold;">Charges & Payments Trend</h3>
+      </div>
+      <div>
+        <button type="button" class="btn" style="background: transparent; font-size: 22px; padding: 5px;"
+          data-toggle="tooltip" data-placement="top" title="Table View" (click)="showTableChargesAndPaymentsTrend()">
+          <i class="fa fa-table"></i>
+        </button>
+
+        <button type="button" class="btn" style="background: transparent; font-size: 20px; padding: 5px;"
+          data-toggle="tooltip" data-placement="top" title="Chart View" (click)="showChartviewModeChargesAndPaymentsTrend()">
+          <i class="fa fa-line-chart"></i>
+        </button>
+
+        <button type="button" class="btn" style="background: transparent; font-size: 20px; padding: 5px;"
+          data-toggle="tooltip" data-placement="top" title="Full Screen View"
+          (click)="openFullscreen(fullscreenModalChargesAndPaymentsTrend)">
+          <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+    <div *ngIf="viewModeChargesAndPaymentsTrend === 'chart'">
+      <canvas baseChart
+              [datasets]="chartData"
+              [labels]="chartLabels"
+              [options]="chartOptions"
+              [colors]="chartColors"
+              [legend]="true"
+              [chartType]="'line'"
+              style="height: 320px; padding: 20px;">
+      </canvas>
+    </div>
+    <div *ngIf="viewModeChargesAndPaymentsTrend === 'ChargesAndPaymentsTrendtable'">
+      <table class="table table-hover table-bordered table-responsive">
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Charges</th>
+            <th>Payments</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let datalabel of tableData">
+            <td>{{datalabel.month}}</td>
+            <td>$ {{datalabel.charges | number: '1.1-2'}}</td>
+            <td>$ {{datalabel.payments | number: '1.1-2'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Fullscreen Modal -->
+    <ng-template #fullscreenModalChargesAndPaymentsTrend>
+      <div class="modal-content modal-lg">
+        <div class="modal-dialog modal-lg">
+          <div style="display: flex; justify-content: space-between; margin: 15px;">
+            <div class="col-11">
+              <h3 class="modal-title ibox-title-color">Charges & Payments Trend</h3>
+            </div>
+            <div class="col-1 text-right">
+              <button type="button" class="close" aria-label="Close" (click)="modalRef?.hide()">
+                <span aria-hidden="true" class="ibox-title-color">X</span>
+              </button>
+            </div>
+          </div>
+          <div style="padding: 5px;">
+              
+            <hr>
+          </div>
+          <div class="modal-body">
+            <canvas baseChart
+                    [datasets]="chartData"
+                    [labels]="chartLabels"
+                    [options]="chartOptions"
+                    [colors]="chartColors"
+                    [legend]="true"
+                    [chartType]="'line'"
+                    style="height: 520px; padding: 20px;">
+            </canvas>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+  <!-- charges and payments trends chart ended -->
+
+</div>
+<!-- </div> -->
+
+<!-- <div class="container charts-container mt-3 mb-3"> -->
+  <div class="row" >
+    <!-- CPA Analysis Chart started-->
+
+  <div class="col-lg-4 col-md-4 col-sm-12" style="margin-top: 3px; padding-right: 2px; padding-left: 2px;">
+    <div class="chart-2">
+      <div style="display: flex; justify-content: space-between;" class="ibox-title-color">
+        <div style="margin-top: 8px;margin-left: 4px;">
+
+          <h3 style="font-weight: bold;" class="ibox-title-color">CPA Analysis</h3>
+        </div>
+        <div>
+          <button type="button" class="btn" style="background: transparent;font-size: 22px; padding: 5px;"
+            data-toggle="tooltip" data-placement="top" title="Table View" (click)="showTableCPA()">
+            <i class="fa fa-table"></i>
+          </button>
+
+          <button type="button" class="btn" style="background: transparent;font-size: 20px; padding: 5px;"
+            data-toggle="tooltip" data-placement="top" title="Chart View" (click)="showChartCPA()">
+            <i class="fa fa-line-chart"></i>
+          </button>
+
+          <button type="button" class="btn" style="background: transparent;font-size: 20px; padding: 5px;"
+            data-toggle="tooltip" data-placement="top" title="Full Screen View"
+            (click)="openFullscreen(fullscreenModalCPA)">
+            <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+      
+     <div *ngIf="viewModeCPA === 'chart'" style="margin-right: 10px;">
+      <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+        [legend]="barChartLegend" chartType="horizontalBar"   [colors]="barchartColors" >
+      </canvas>
+    </div>
+
+    <div class="col-md-12" style="margin-top:20px" *ngIf="viewModeCPA === 'CPAtable'">
+        <div class="panel-body">
+          <div class="table-responsive">
+            <table class="table table-hover table-bordered" style="margin-top:16px">
+              <thead>
+                <tr>
+                  <th>Charges</th>
+                  <th>Payments</th>
+                  <th>Adjustments</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>$ {{ getAmount(data.CPAAnalysis, 'Charges') | number: '1.1-2' }}</td>
+                  <td>$ {{ getAmount(data.CPAAnalysis, 'Payments') | number: '1.1-2' }}</td>
+                  <td>$ {{ getAmount(data.CPAAnalysis, 'Adjustments') | number: '1.1-2' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #fullscreenModalCPA>
+    <div class="modal-content modal-lg" >
+    <div class="modal-dialog modal-lg">
+     
+        <div  style="display: flex; justify-content: space-between; margin: 15px;">
+          <div class="col-11">
+            <h3 class="modal-title ibox-title-color">CPA Analysis</h3>
+          </div>
+          <div class="col-1 text-right">
+            <button type="button" class="close" aria-label="Close" (click)="modalRef?.hide()">
+              <span aria-hidden="true" class="ibox-title-color">X</span>
+            </button>
+          </div>
+        </div>
+        <div style="padding: 5px;">
+              
+          <hr>
+        </div>
+    
+      <div class="modal-body"  style="margin-right: 10px;">
+        <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+          [legend]="barChartLegend" chartType="horizontalBar"  [colors]="barchartColors">
+        </canvas>
+      </div>
+    </div>
+    </div>
+  </ng-template>
+    </div>
+ <!-- cpa analysis chart ended -->
+
+  <!-- Insurance Aging Chart started -->
+  <div class="col-lg-4 col-md-4 col-sm-12 mb-3"  style="margin-top: 3px;padding-right: 2px;padding-left: 2px;">
+      <div class="chart-2">
+        <div style="display: flex; justify-content: space-between;" class="ibox-title-color">
+          <div style="margin-top: 8px;margin-left: 4px;">
+  
+            <h3 class="ibox-title-color" style="font-weight: bold;">Insurance Aging</h3>
+          </div>
+          <div>
+            <button type="button" class="btn" style="background: transparent;font-size: 22px; padding: 5px;"
+              data-toggle="tooltip" data-placement="top" title="Table View" (click)="showTable()">
+              <i class="fa fa-table"></i>
+            </button>
+  
+            <button type="button" class="btn" style="background: transparent;font-size: 20px; padding: 5px;"
+              data-toggle="tooltip" data-placement="top" title="Chart View" (click)="showChart()">
+              <i class="fa fa-line-chart"></i>
+            </button>
+  
+            <button type="button" class="btn" style="background: transparent;font-size: 20px; padding: 5px;"
+              data-toggle="tooltip" data-placement="top" title="Full Screen View"
+              (click)="openFullscreen(fullscreenModal)">
+              <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+        <div *ngIf="viewMode === 'chart'">
+           
+          <canvas baseChart
+                  [data]="doughnutChartData"
+                  [labels]="doughnutChartLabels"
+                  [chartType]="doughnutChartType"
+                  [options]="doughnutChartOptions"
+                  [colors]="pieChartColors"
+                  style="height: 250px;padding: 10px;">
+          </canvas>
+        </div>
+          <div *ngIf="viewMode === 'table'">
+          <div class="panel"> 
+            <div class="table-responsive">
+              <div>
+                <table class="table table-hover table-bordered table-responsive">
+                  <thead>
+                    <tr>
+                      <th>Bucket</th>
+                      <th>Amount</th>
+                      <th>Percentage</th>
+                   
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of tableDataInsuarance">
+                      <td> {{ item.agingSlot }}</td>
+                      <td>$ {{ item.insuranceAging | number: '1.1-2' }}</td>
+                      <td>{{item.percentage | number: '1.1-2'}} %</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+         <ng-template #fullscreenModal> <!-- Fullscreen Modal -->
+          <div class="modal-content modal-lg" >
+          <div class="modal-dialog modal-lg">
+           
+              <div  style="display: flex; justify-content: space-between; margin: 15px;">
+                <div class="col-11">
+                  <h3 class="modal-title ibox-title-color">Insurance Aging</h3>
+                </div>
+                <div class="col-1 text-right">
+                  <button type="button" class="close" aria-label="Close" (click)="modalRef?.hide()">
+                    <span aria-hidden="true" class="ibox-title-color">X</span>
+                  </button>
+                </div>
+              </div>
+              <div style="padding: 5px;">
+              
+                <hr>
+              </div>
+            <div class="modal-body">
+              
+              <canvas baseChart
+                  [data]="doughnutChartData"
+                  [labels]="doughnutChartLabels"
+                  [chartType]="doughnutChartType"
+                  [options]="doughnutChartOptions"
+                  [colors]="pieChartColors"
+                  style="height: 550px;padding: 10px;">
+          </canvas>
+            </div>
+          </div>
+          </div>
+        </ng-template>
+      </div>
+  </div>
+  <!-- Insurance Aging Chart end -->
+
+
+  <!-- Patient Aging Chart Started-->
+  <div class="col-lg-4 col-md-4 col-sm-12 mb-3"  style="margin-top: 3px; padding-right: 2px;padding-left: 2px;">
+    <div class="chart-2">
+      <div style="display: flex; justify-content: space-between;" class="ibox-title-color">
+        <div style="margin-top: 8px;margin-left: 4px;">
+
+          <h3 class="ibox-title-color" style="font-weight: bold;">Patient Aging</h3>
+        </div>
+        <div>
+          <button type="button" class="btn" style="background: transparent;font-size: 22px; padding: 5px;"
+            data-toggle="tooltip" data-placement="top" title="Table View" (click)="showTablePA()">
+            <i class="fa fa-table"></i>
+          </button>
+
+          <button type="button" class="btn" style="background: transparent;font-size: 20px; padding: 5px;"
+            data-toggle="tooltip" data-placement="top" title="Chart View" (click)="showChartPA()">
+            <i class="fa fa-line-chart"></i>
+          </button>
+
+          <button type="button" class="btn" style="background: transparent;font-size: 20px; padding: 5px;"
+            data-toggle="tooltip" data-placement="top" title="Full Screen View"
+            (click)="openFullscreen(fullscreenModalPA)">
+            <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+      <div *ngIf="viewModePA === 'chart'"  style="display: flex; justify-content: center;">
+         
+               <canvas baseChart
+        [data]="doughnutChartDataPA"
+        [labels]="doughnutChartLabelsPA"
+        [chartType]="doughnutChartTypePA"
+        [options]="doughnutChartOptionsPA"
+        [colors]="pieChartColors"
+        style="height: 250px; padding: 10px;">
+</canvas>
+             
+      </div>
+      
+      <div *ngIf="viewModePA === 'tablePA'">
+        <div class="panel"> 
+          <div class="table-responsive">
+            <div>
+              <table class="table table-hover table-bordered table-responsive">
+                <thead>
+                  <tr>
+                    <th>Bucket</th>
+                    <th>Amount</th>
+                    <th>Percentage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of tableDataPA">
+                    <td>{{ item.agingSlot }}</td>
+                    <td>$ {{ item.patientAging | number: '1.1-2' }}</td>
+                    <td>{{item.percentage | number: '1.1-2'}} %</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>   
+        <ng-template #fullscreenModalPA>  <!-- Fullscreen Modal -->
+          <div class="modal-content modal-lg" >
+            <!-- <div class="modal-dialog modal-lg">
+              -->
+                <div  style="display: flex; justify-content: space-between; margin: 15px;">
+                <div class="col-11">
+                  <h3 class="modal-title ibox-title-color">Patient Aging</h3>
+                </div>
+                <div class="col-1 text-right">
+                  <button type="button" class="close" aria-label="Close" (click)="modalRef?.hide()">
+                    <span aria-hidden="true" class="ibox-title-color">X</span>
+                  </button>
+                </div>
+              </div>
+              <div style="padding: 5px;">
+                
+                <hr>
+              </div>
+          
+            <div class="modal-body">
+              
+              <canvas baseChart
+                  [data]="doughnutChartDataPA"
+                  [labels]="doughnutChartLabelsPA"
+                  [chartType]="doughnutChartTypePA"
+                  [options]="doughnutChartOptionsPA"
+                  [colors]="pieChartColors"
+                  style="height:700px;padding-top: 20px;">
+          </canvas>
+            <!-- </div> -->
+        </div>
+            <!-- </div> -->
+          </div>
+      </ng-template>
+    </div>
+  </div>
+  <!-- Patient Aging Chart End -->
+</div>

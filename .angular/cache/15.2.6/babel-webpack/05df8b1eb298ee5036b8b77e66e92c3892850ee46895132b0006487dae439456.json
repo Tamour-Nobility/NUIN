@@ -1,0 +1,1 @@
+{"ast":null,"code":"export class TokenRequestModel {}\nexport class TokenResponse {\n  constructor() {\n    this.Roles = [];\n  }\n}","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

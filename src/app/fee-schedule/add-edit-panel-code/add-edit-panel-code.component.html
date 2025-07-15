@@ -1,0 +1,186 @@
+<!-- UI for add and edit new panel code -->
+<div class="container">
+  <div class="ibox-title">
+    <h5>
+      <i></i>&nbsp;Panel Billing
+    </h5>
+  </div>
+  <div class="ibox-content">
+    <div class="tab-container">
+      <ul class="nav nav-tabs">
+        <li class="active green-tab"><a data-toggle="tab">Panel Billing</a></li>
+      </ul>
+      <div class="tab-content">
+        <div id="tab-1" class="tab-pane active">
+          <div class="panel-body">
+            <div class="row">
+              <form [formGroup]="PanelBilling">
+                <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                  <label>Practices<span class="text-danger">*</span></label>
+                  <!-- <select class="form-control" formControlName="practice" (change)="onPracticeChange($event)">
+                    <option value="0" disabled>Select Practice</option>
+                    <option *ngFor="let c of listPracticesList" [value]="c.Id">{{c.Name}}</option>
+                  </select> -->
+                  <select class="form-control" formControlName="practice" (change)="onPracticeChange($event)">
+                    <option value="" disabled>Select Practice</option>
+                    <option *ngFor="let c of listPracticesList" [value]="c.Id">{{ c.Name }}</option>
+                  </select>
+                  
+                </div>
+
+                <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                  <label>Providers<span class="text-danger">*</span></label>
+                  <!-- <select class="form-control" formControlName="provideId" (change)="onprovideChange($event)">
+                    <option>Select Provider</option>
+                    <option *ngFor="let c of providerList" [value]="c.ProviderId">{{ c.ProviderFullName }}</option>
+
+                  </select> -->
+                  <select class="form-control" formControlName="provideId" (change)="onprovideChange($event)">
+                    <option value="" disabled>Select Provider</option>
+                    <option *ngFor="let c of providerList" [value]="c.ProviderId">{{ c.ProviderFullName }}</option>
+                  </select>
+                </div>
+
+                <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                  <label>Locations</label>
+                  <span style="color:red;">*</span>
+                  <!-- <select class="form-control" formControlName="Location" (change)="onLocationChange($event)">
+                    <option>Select Location</option>
+                    <option *ngFor="let location of locationList" [value]="location.Id">{{ location.Name }}</option>
+                  </select> -->
+                  <select class="form-control" formControlName="Location" (change)="onLocationChange($event)">
+                    <option value="" disabled>Select Location</option>
+                    <option *ngFor="let location of locationList" [value]="location.Id">{{ location.Name }}</option>
+                  </select>
+
+                </div>
+
+                <div class="col-sm-3 col-md-3 col-lg-3 form-group">
+                  <label>Panel Code</label>
+                  <span style="color:red;">*</span>
+                  <!-- <input type="text" class="form-control" [(ngModel)]="panelCode" placeholder="Enter Panel code" maxlength="8" (keypress)="allowAlphanumericOnly($event)" required> -->
+                  <input type="text" class="form-control" formControlName="PanelCode" placeholder="Enter Panel code"
+                    maxlength="8" (keypress)="allowAlphanumericOnly($event)">
+
+                </div>
+              </form>
+            </div>
+            <hr>
+
+            <div class="row">
+              <div class="col-lg-12">
+                <h4 class="pull-left">
+                  <i aria-hidden="true"></i>&nbsp;<u>Create Panel Code</u>&nbsp;
+                </h4>
+                <div class="pull-right">
+                  <span class="checkbox checkbox-primary checkbox-inline">
+                    <input [attr.disabled]="isViewMode ? true : null" class="styled" id="expand-payment-table"
+                      type="checkbox">
+                  </span>
+                </div>
+              </div>
+
+              <div class="col-lg-12 pt-10">
+                <div class="table-horizontal-scroll" id="payments-section">
+                  <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th width="40">Action</th>
+                        <th>CPT Code</th>
+                        <th>CPT Description</th>
+                        <th>Alternate Code</th>
+                        <th>Units</th>
+                        <th>M1</th>
+                        <th>M2</th>
+                        <th>M3</th>
+                        <th>M4</th>
+                        <th>Charges$</th>
+                      </tr>
+                    </thead>
+                    <tbody class="row-selected">
+                      <tr *ngFor="let c of panelBilling; let i = index">
+                        <td align="center" width="50">
+                          <button [disabled]="isViewMode" class="btn btn-xs btn-default" title="Delete"
+                            (click)="DeleteRowOfCustomRule(i)">
+                            <i class="fa fa-remove text-danger" id="delbtn" title="Delete"></i>
+                          </button>
+                        </td>
+                        <td width="130">
+                          <input type="text" class="form-control" [(ngModel)]="c.CPTCode"
+                            (keydown)="onKeypressPanelCodeCpt($event, i)" (keypress)="allowAlphanumericOnly($event)"
+                            (blur)="onBlurUnit(i)" maxlength="5" [disabled]="isViewMode">
+                        </td>
+                        <td width="130">
+                          <input type="text" class="form-control" [(ngModel)]="c.CPTDescription" readonly>
+                        </td>
+                        <td width="100">
+                          <input type="text" class="form-control" [(ngModel)]="c.AlternateCode" maxlength="5"
+                            (keydown)="onKeyPressPanelAlternateCode($event, i)"
+                            (keypress)="allowAlphanumericOnly($event)" [disabled]="isViewMode">
+                        </td>
+                        <td width="100">
+                          <input type="text" class="form-control" [(ngModel)]="c.Units"
+                            (input)="CPTKeyPressEventUnit($event, c.Units, i)" onlyNumbers="true" maxlength="4"
+                           (blur)="onBlurUnit(i)" [disabled]="isViewMode" />
+                        </td>
+
+
+                        <td width="100">
+                          <select class="form-control" [(ngModel)]="c.M_1" [disabled]="isViewMode">
+                            <option *ngFor="let item of modifiers" [value]="item.Modifier_Code">{{ item.Modifier_Code }}
+                            </option>
+                          </select>
+                        </td>
+                        <td width="100">
+                          <select class="form-control" [(ngModel)]="c.M_2" [disabled]="isViewMode">
+                            <option *ngFor="let item of modifiers" [value]="item.Modifier_Code">{{ item.Modifier_Code }}
+                            </option>
+                          </select>
+                        </td>
+                        <td width="100">
+                          <select class="form-control" [(ngModel)]="c.M_3" [disabled]="isViewMode">
+                            <option *ngFor="let item of modifiers" [value]="item.Modifier_Code">{{ item.Modifier_Code }}
+                            </option>
+                          </select>
+                        </td>
+                        <td width="100">
+                          <select class="form-control" [(ngModel)]="c.M_4" [disabled]="isViewMode">
+                            <option *ngFor="let item of modifiers" [value]="item.Modifier_Code">{{ item.Modifier_Code }}
+                            </option>
+                          </select>
+                        </td>
+                        <td width="100">
+                          <input type="text" class="form-control" [(ngModel)]="c.Charges" readonly>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="10">
+                          <button [attr.disabled]="isViewMode ? true : null"
+                            class="btn-primary" style="border: none;" title="ADD" (click)="AddRowForPanelCode()"
+                            [disabled]="isViewMode">
+                            ADD
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+              </div>
+            </div>
+
+            <hr>
+
+            <div class="row">
+              <div class="col-lg-12">
+                <button class="btn btn-primary btn-sm pull-right" type="submit" [disabled]="isViewMode"
+                  (click)="savePanelCode()"> {{ isEditMode ? 'Update' : 'Save' }}</button>
+                <button class="btn btn-primary btn-sm pull-right" type="submit" [disabled]="isViewMode"
+                  (click)="resetFields()">Reset</button>
+                <button class="btn btn-primary btn-sm pull-right" type="button" (click)="showConfirmationDialog()"
+               >Cancel</button>
+                <button class="btn btn-primary btn-sm pull-right" type="submit" (click)="onEditClick()"
+                  [disabled]="!isViewMode">Edit</button>
+            
+              </div>
+            </div>

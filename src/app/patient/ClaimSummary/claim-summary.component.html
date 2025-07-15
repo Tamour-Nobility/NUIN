@@ -1,0 +1,421 @@
+<!-- Added by Pir Ubaid - start changes for claim summary - cpt-description -->
+<div class="modal fade" id="cptModal" tabindex="-1" aria-labelledby="cptModalLabel" aria-hidden="true"
+  data-backdrop="static" data-keyboard="false" style=" display: none;
+  position: fixed;
+  z-index: 9999;
+    left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);">
+  <div class="modal-dialog" style="margin-left: auto; margin-right: 0;">
+    <div class="modal-content" style=" position: relative;
+  margin: auto;
+  top: 10%;
+  background-color: white;
+  border-radius: 5px;
+  padding: 20px;
+  width: 80%;">
+      <div
+        style="padding-top: 0; padding-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+        <h2 class="modal-title bold" style="margin: 0; flex: 1; text-align: center;">Claim Details</h2>
+        <button type="button" (click)="hideCPT()" class="close" data-dismiss="modal" style="margin-left: auto;margin-top: -40px;
+      margin-right: -8px;">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <div class="modal-body" style="padding: 0px 10px 20px 10px; max-height: 500px; overflow-y: auto;">
+        <table class="table table-bordered table-responsive" style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr>
+              <th style="text-align: center; padding: 8px; border-bottom: 1px solid #ddd;">Sq.</th>
+              <th style="text-align: center; padding: 8px; border-bottom: 1px solid #ddd;">CPT</th>
+              <th style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">CPT Description</th>
+              <th style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Charged Amount $</th>
+              <th style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Amount Paid $</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of messageModelCPT">
+              <td style="padding: 8px; border-bottom: 1px solid #ddd;text-align: center;">{{ item.Sequence_No }}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #ddd;text-align: center;">{{ item.PROCEDURE_CODE }}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #ddd;">{{ item.ProcedureDescription }}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #ddd;">{{ item.Charged_Amount || 0.00 | currency}}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #ddd;">{{ item.Amt_Paid || 0.00 | currency}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End -->
+
+<!--  Added by Pir Ubaid (USER STORY 204 : NPM ALERT ) -->
+<div class="modal fade" bsModal #modalWindow="bs-modal" tabindex="-1" role="dialog"
+  aria-labelledby="dialog-nested-name">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div style="display: flex; justify-content: space-between;padding: 10px;">
+        <h2 style="font-weight: bold;">Alert</h2>
+        <button type="button" class="close" (click)="hide()">
+          <span aria-hidden="true">X</span>
+        </button>
+      </div>
+
+      <div class="modal-body" style="padding: 0px 10px 20px 10px;">
+        <div style="display: flex; justify-content: space-between;">
+          <div>
+            <label>Priority:</label>
+            <span *ngIf="firstAlert?.Priority === 'L'"> Low</span>
+            <span *ngIf="firstAlert?.Priority === 'M'"> Medium</span>
+            <span *ngIf="firstAlert?.Priority === 'H'"> High</span>
+          </div>
+
+
+          <div>
+            <LABEL>Created by:</LABEL>
+
+            {{ firstAlert?.Created_User | uppercase }}
+
+          </div>
+        </div>
+
+        <hr style="border-top: 1px solid#676a6c; font-weight: bold; margin-top: 10px;
+        margin-bottom: 10px;">
+
+        <div style="font-size: 18px;">
+          <p style="margin-bottom: 0; font-weight: bold;">Message</p>
+
+          <div style="overflow-wrap: break-word; font-size: 14px;
+          color: #000000;
+          margin-top: 3px;">{{ firstAlert?.AlertMessage }}</div>
+        </div>
+
+        <br>
+        <div style="text-align: center;">
+          <button type="button" class="btn btn-primary" style="width: 12%;" (click)="hide()">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" bsModal #modalWindowNewClaim="bs-modal" tabindex="-1" role="dialog"
+  aria-labelledby="dialog-nested-name">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div style="display: flex; justify-content: space-between;padding: 10px;">
+        <h2 style="font-weight: bold;">Alert</h2>
+        <button type="button" class="close" (click)="hideAddNewClaim()">
+          <span aria-hidden="true">X</span>
+        </button>
+      </div>
+
+      <div class="modal-body" style="padding: 0px 10px 20px 10px;">
+        <div style="display: flex; justify-content: space-between;">
+          <div>
+            <label>Priority:</label>
+            <span *ngIf="firstAlert?.Priority === 'L'"> Low</span>
+            <span *ngIf="firstAlert?.Priority === 'M'"> Medium</span>
+            <span *ngIf="firstAlert?.Priority === 'H'"> High</span>
+          </div>
+
+
+          <div>
+            <LABEL>Created by:</LABEL>
+
+            {{ firstAlert?.Created_User | uppercase }}
+
+          </div>
+        </div>
+
+        <hr style="border-top: 1px solid#676a6c; font-weight: bold; margin-top: 10px;
+        margin-bottom: 10px;">
+
+        <div style="font-size: 18px;">
+          <p style="margin-bottom: 0; font-weight: bold;">Message</p>
+
+          <div style="overflow-wrap: break-word; font-size: 14px;
+          color: #000000;
+          margin-top: 3px;">{{ firstAlert?.AlertMessage }}</div>
+        </div>
+
+        <br>
+        <div style="text-align: center;">
+          <button type="button" class="btn btn-primary" style="width: 12%;" (click)="newClaim()">OK </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="pull-left">
+      <h3>
+        <label class="control-label">Patient: <b>{{patientInfo.PatientLastName | titlecase}},
+            {{patientInfo.PatientFirstName | titlecase}}</b></label>&nbsp;|&nbsp;<label class="control-label">Account #:
+          <b>{{patientInfo.Patient_Account}}</b></label>
+      </h3>
+    </div>
+    <div class="pull-right">
+      <!-- <a class="link" (click)="callShowforNewClaim()"><i class="fa fa-plus"></i>&nbsp;Add New Claim 
+      <a *ngIf="!BillingTypeCheck" class="link" (click)="newClaim('Professional')"><i class="fa fa-plus"></i>&nbsp;Add New Claim
+      </a> -->
+      <a *ngIf="BillingTypeCheck=='p'" class="link" (click)="callShowforNewClaim('Professional')"
+        [class.disabled-link]="isDisabled"><i class="fa fa-plus"></i>&nbsp;Add New Claim
+        <!-- <a class="link" (click)="callShowforNewClaim()"
+      [class.disabled-link]="isDisabled"><i class="fa fa-plus"></i>&nbsp;Add New Claim  -->
+      </a>
+
+      <a *ngIf="BillingTypeCheck=='i'" class="link" (click)="callShowforNewClaim('Institutional')"
+        [class.disabled-link]="isDisabled"><i class="fa fa-plus"></i>&nbsp;Add New Claim
+      </a>
+
+      <div *ngIf="BillingTypeCheck=='p&i'" class="btn-group">
+        <a type="link" class="link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+          [class.disabled-link]="isDisabled">
+          <i class="fa fa-plus"></i>&nbsp;Add New Claim &nbsp;&nbsp;
+        </a>
+
+
+        <div class="dropdown-menu">
+          <option value="Institutional" (click)="newClaim('Institutional')" style="cursor: pointer;"
+            onmouseover="this.style.backgroundColor='#f0f0f0';" onmouseout="this.style.backgroundColor='transparent';">
+            Institutional </option>
+          <option value="Professional" (click)="newClaim('Professional')" style="cursor: pointer;"
+            onmouseover="this.style.backgroundColor='#f0f0f0';" onmouseout="this.style.backgroundColor='transparent';">
+            Professional </option>
+
+        </div>
+        <!-- <div class="dropdown-menu">
+        <option   value="Institutional" (click)="newClaim('Institutional')"> Institutional </option>
+        <option value="Professional" (click)="newClaim('Professional')"> Professional </option>
+
+        </div> -->
+        <!-- </div> -->
+        <!-- <a class="link" style="color: #2792ea; margin-left: 5px;" (click)="showPatientClaims()"><i
+          class="fa fa-download"></i>&nbsp;Download
+        Statement</a> -->
+
+      </div>
+      <a class="link" data-toggle="modal" data-target="#messagemodal" (click)="selectFirstOption()"
+        style="color: #2792ea; margin-left: 5px;"><i class="fa fa-download"></i>&nbsp;Download
+        Statement</a>
+      <a class="link" data-toggle="modal" data-target="#messagemodal" (click)="selectFirstOption1()"
+        style="color: #2792ea; margin-left: 5px;"><i class="fa fa-print"></i>&nbsp;Print
+        Statement</a>
+
+    </div>
+    <div class="col-lg-12 pb-10">
+      <div class="pull-right claim-summary">
+        <i class="fa fa-refresh mr-10" title="Refresh" style="cursor:pointer" (click)="getSummary()"></i>
+        <span class="mr-10"> Total Charges:&nbsp;${{objClaimSummaryModel.TOTAL_CHARGES}}
+        </span>
+        <span class="mr-10"> Total Payment:&nbsp;${{objClaimSummaryModel.TOTAL_PAYMENT}}
+        </span>
+        <span class="mr-10"> Insurance Due:&nbsp;${{objClaimSummaryModel.INSURANCE_DUE }}
+        </span>
+        <span class="mr-10"> Patient Due:&nbsp;${{objClaimSummaryModel.PAT_DUE}}
+        </span>
+        <span class="mr-10"> Insurance Paid:&nbsp;${{objClaimSummaryModel.INS_TOTAL_PAYMENT}}
+        </span>
+        <span class="mr-10"> Patient Paid:&nbsp;${{objClaimSummaryModel.PATIENT_PAYMENTS}}
+        </span>
+        <span class="mr-10"> Unposted Amount:&nbsp;${{objClaimSummaryModel.InboxPaymnet}}
+        </span>
+        <span class="mr-10"> Collection:&nbsp;${{objClaimSummaryModel.COLLECTION_DUE}}
+        </span>
+      </div>
+    </div>
+
+    <div class="pull-right claim-summary" style="margin-right: 14px; margin-top: -5px; ">
+      <span class="mr-10">Over Payment:</span> <!-- Font Awesome edit icon -->
+      <span class="mr-10">Total Insurance:&nbsp;${{ objClaimSummaryModel.Insurance_over_paid}}</span>
+      <span class="mr-10"> Total Patient:&nbsp;${{objClaimSummaryModel.Patient_credit_balance}}</span>
+    </div>
+    <div class="col-lg-3">
+      <div class="checkbox m-r-xs">
+        <input type="checkbox" title="Filter by amount due." id="filterChk" [(ngModel)]="isAmountDueGreaterThanZero"
+          (change)="onChangeAmountDue()">
+        <label for="filterChk" data-placement="bottom">
+          Due Amount > $0.00
+        </label>
+      </div>
+    </div>
+    <div class="col-lg-12">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered dataTableClaimsSummary " width="100%">
+          <thead>
+            <tr>
+              <th>Claim #</th>
+              <th>Bill Date</th>
+              <th>DOS</th>
+              <th>Total</th>
+              <th>Amt. Paid</th>
+              <th>Due Amount</th>
+              <th>Overpayment Responsible</th>
+              <th>Insurance Payment</th>
+              <th>Patient Payment</th>
+              <th>Responsible Party</th>
+              <th width="80">Claim Type</th>
+              <th class="all text-center" width="100%">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let pt of objClaimSummaryModel.claimlistdetails" [ngStyle]="{'color':(pt.Deleted?'red':'')}">
+              <td>{{pt.Claim_No}}</td>
+              <td>{{pt.Bill_Date|date:'MM/dd/yyyy'}}</td>
+              <td>{{pt.DOS|date:'MM/dd/yyyy'}}</td>
+              <td>${{pt.Claim_Total | number : '1.2' | noComma}}</td>
+              <td>${{pt.Amt_Paid | number : '1.2' | noComma}}</td>
+              <td>${{pt.Amt_Due | number : '1.2' | noComma}}</td>
+              <td>{{pt.OverPaymentResponsebleParty}}</td>
+              <td>${{pt.Pri_Ins_Payment + pt.Sec_Ins_Payment + pt.Oth_Ins_Payment | number : '1.2' | noComma}}</td>
+              <td>${{pt.Patient_Payment | number : '1.2' | noComma}}</td>
+              <td>{{pt.ResponsibleParty}}</td>
+              <td>{{ pt.Claim_Type === 'P' ? 'Professional' : pt.Claim_Type === 'I' ? 'Institutional' : '' }}</td>
+              <td class="text-center footable-visible footable-last-column">
+                <div *ngIf="!pt.Deleted" class="btn-group">
+                  <button class="btn-white btn btn-xs gridbtn" (click)="showClaimCPTDetails(pt.Claim_No)">
+                    <i class="fa fa-eye"></i>
+                  </button>
+                  <button class="btn-white btn btn-xs gridbtn"
+                    (click)="viewClaim(pt.Claim_No,pt.Patient_Account)">View</button>
+                  <button class="btn-white btn btn-xs gridbtn" [disabled]="isDisabled"
+                    (click)="editClaim(pt.Claim_No,pt.Patient_Account)">Edit</button>
+
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <app-patient-statement-claims [PatientAccount]="patientInfo.Patient_Account" [showDownloadBtn]="true"
+    (onHidden)="onDownloadItemizedPatientStatement($event)">
+  </app-patient-statement-claims>
+  <!-- Additiion of canned messages option in patient and download statement -->
+  <!-- Created by Umer Tariq -->
+  <div style="z-index: 100;" *ngIf="showModal" data-backdrop="false" data-keyboard="false" class="modal inmodal"
+    id="messagemodal" style="display: flex; align-items: flex-start; 
+justify-content: center; position: fixed;  left: 0; width: 100%; height: 100%; 
+ background: rgba(0, 0, 0, 0.3);">
+    <div class="modal-dialog modal-md" style=" width: auto; position: fixed; min-width: 550px; top: 108px; min-height: 650px;
+   max-height: 80vh;  ">
+      <div class="modal-content animated bounceInUp">
+        <div class="modal-header " style="padding-top:15px;padding-bottom:15px;">
+          <button type="button" #closebutton class="close" data-dismiss="modal"><span
+              aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title">Patient Messages</h4>
+        </div>
+        <div style="margin-top: 9px; text-align: left; ">
+
+          <!-- <label *ngIf="compareResult" > &nbsp; -->
+          <label> &nbsp;
+            <input type="checkbox" (change)="onCheckboxChange($event.target.checked)" [checked]="isChecked"> &nbsp; Not
+            Required &nbsp;
+          </label>
+          <select [(ngModel)]="selectedOption" *ngIf="!isChecked" [disabled]="isChecked"
+            [ngStyle]="{'margin-left.px': compareResult ? 5 : 65}">
+            <option disabled value="option1"> Select Message</option>
+            <option class="dropd" value="{{assigned}}" *ngFor="let assigned of messagesArray; let index = index;"
+              title="{{assigned}}">
+              {{ assigned | slice:0:50 }}{{ assigned.length > 50 ? '...' : '' }}</option>
+          </select>
+          <a class="link" *ngIf="selectedOption!='option1' && showAddPrint " (click)="onPrintItemizedPatientStatement()"
+            [ngStyle]="{'margin-left.px': compareResult ? 5 : 85, 'color': '#2792ea'}"><i
+              class="fa fa-print"></i>&nbsp;Print Statement</a>
+
+          <a class="link" *ngIf="selectedOption!='option1' && showDownload" (click)="showPatientClaims()"
+            [ngStyle]="{'margin-left.px': compareResult ? 5 : 85, 'color': '#2792ea'}"><i
+              class="fa fa-print"></i>&nbsp;Download Statement</a>
+
+          <div style="float: right; margin-left: 5px; margin-right: 5px;">
+
+            <button class="btn-white btn btn-xs gridbtn" (click)="SHowaddmessage()" *ngIf="compareResult"
+              data-toggle="modal" data-target="#addnewModel">Add New Message</button>
+
+          </div>
+
+
+
+          <!-- <button (click)="onPrintItemizedPatientStatement()"    > PRint</button> -->
+        </div>
+
+
+
+        <div style="margin-top: 25px;" class="table-responsive">
+          <table *ngIf="compareResult" class="table table-striped table-hover table-bordered dataTableStatement"
+            width="100%">
+            <thead>
+              <tr>
+
+                <th style="text-align: left;">Message</th>
+                <th *ngIf="compareResult" style="text-align: center; width:100px">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let assigned of messageModel; let id=index">
+
+                <td style="text-align: left; max-width: 60ch;">{{assigned.Messages}}</td>
+                <td style="text-align: center;">
+                  <div class="btn-group" *ngIf="compareResult">
+                    <button class="btn-white btn btn-xs gridbtn" data-toggle="modal" data-keyboard="false"
+                      data-backdrop="false" data-target="#addnewModel" (click)="onEdit(id)">Edit</button>
+                    <button class="btn-white btn btn-xs gridbtn" (click)="ondelete(id)">Delete</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- </div> -->
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div *ngIf="showaddmessageModal" data-backdrop="false" data-keyboard="false" class="modal inmodal my-custom-modal"
+    id="addnewModel" style="display: flex; align-items: center; padding-bottom: 15%; justify-content: center;
+        position: fixed;left: 0; width: 100%; height: 100%; background: rgba(41, 40, 40, 0.233);">
+    <div class="modal-dialog modal-md" style="max-width: 450px; width: 100%; ">
+      <div class="modal-content animated bounceInUp" style="overflow-y: auto;">
+        <div class="modal-header" style="padding-top: 15px; padding-bottom: 15px;">
+          <button type="button" #closebutton class="close" (click)="closeModal()"><span
+              aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title">{{statementModelText}}</h4>
+        </div>
+
+        <div style="margin-top: 20px; margin-bottom: 20px;">
+          <label style="padding-left: 8px;"> Message &nbsp;&nbsp; : &nbsp;&nbsp; </label>
+          <input placeholder="Enter Message" [(ngModel)]="EnteredMesages" type="text"
+            style="width: 70%; height: 40px;  " maxlength="230">
+
+        </div>
+
+
+
+        <div class="center" style="margin-bottom: 20px;">
+          <button type="button" class="btn-white btn btn-xs gridbtn" data-dismiss="[close]"
+            (click)="saveclaimassignee()">{{buttonname}}</button>
+
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>

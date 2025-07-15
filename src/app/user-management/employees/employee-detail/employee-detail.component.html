@@ -1,0 +1,39 @@
+<div class="ibox float-e-margins">
+  <div class="ibox-title">
+    <h3>Employee detail</h3>
+  </div>
+  <div class="ibox-content">
+    <div class="row">
+      <!-- <div class="col-sm-6 col-md-4">
+            <img src="http://placehold.it/380x500" alt="" class="img-rounded img-responsive" />
+          </div> -->
+      <div class="col-sm-6 col-md-8">
+        <h4>{{objEmployee.LastName+', ' | titlecase}}{{objEmployee.FirstName | titlecase}}</h4>
+        <small>
+          <cite title="{{objEmployee.Permanent_Address}}"
+            *ngIf="objEmployee.Permanent_Address">{{objEmployee.Permanent_Address}}
+            <br /> {{objEmployee.Permanent_City+', ' | titlecase}}
+            {{objEmployee.Permanent_State+' ' | uppercase}} {{objEmployee.Permanent_Postal_Code |
+            mask:'00000-0000'}}&nbsp;<i class="fa fa-map-marker"></i>
+          </cite>
+        </small>
+        <p>
+          <i class="fa fa-envelope"></i><a href="mailto:{{objEmployee.Email_Personal}}}"
+            target="_top">{{objEmployee.Email_Personal}}</a>
+          <br />
+          <i class="fa fa-id-card-o" *ngIf="objEmployee.Nic_Number"></i>{{objEmployee.Nic_Number}}
+          <br />
+          <i class="fa fa-phone"
+            *ngIf="objEmployee.Personal_Contact_Number"></i>{{objEmployee.Personal_Contact_Number | mask:'(000) 0000-000'}}
+          <br />
+          <i class="fa fa-home"
+            *ngIf="objEmployee.Home_Contact_Number"></i>{{objEmployee.Home_Contact_Number | mask:'(000) 0000-000'}}
+          <br />
+          <i class="fa fa-ambulance"
+            *ngIf="objEmployee.Emergency_Contact_Number"></i>{{objEmployee.Emergency_Contact_Number | mask:'(000) 0000-000'}}
+          <br />
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+<div class="tabs-container">
+  <ul class="nav nav-tabs">
+    <li [routerLink]="['claimlevel']" [routerLinkActive]="['active']">
+      <a aria-expanded="true">Claim Level</a></li>
+    <li [routerLink]="['accountlevel']" [routerLinkActive]="['active']">
+      <a aria-expanded="true">Account Level</a>
+    </li>
+  </ul>
+  <div class="tab-content">
+    <div id="tab-1" class="tab-pane active">
+      <div class="panel-body">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</div>
+

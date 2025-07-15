@@ -1,0 +1,185 @@
+<div>
+  
+    <div class="row">
+      <div class="form-group col-sm-3 col-md-3 col-lg-5">
+        <h3 style="color: black;"> 
+            <span  *ngIf="!onHideLabel"> Details Of Scrubbers</span>
+             {{showScruberTable}}
+             <span  *ngIf="!onHideLabel"> Claims</span>
+              </h3>
+           <h5 *ngIf="showScruberTable=='Clear'" style="color: black;"><u>This bucket will clear after 24 hours</u></h5>
+      </div>
+      <div class="col-lg-7 pull-right ">
+        <div class="pull-right"> 
+        <!-- Added By Hamza Akhlaq For Custom_Edits -->
+        <!-- <button class="btn btn-primary btn-sm mr-3 " type="button"  (click)="showscrubbertable('Custom Edits')"
+        [routerLinkActive]="['active']"><i class="fa fa-edit" style="font-size: 15px;margin-right: 2px;"></i>Custom Edits <span class="badge badge-light">{{customValues.length}} </span></button> -->
+         
+        <button class="btn btn-primary btn-sm mr-3 " type="button" [ngClass]="{'active' : customedits}" (click)="VlidateCustomEdit('Custom Edits')" [disabled]="!ViewMode"
+        >Custom Edits <span class="badge badge-light"> </span></button>
+
+        <button class="btn btn-primary btn-sm mr-3 " type="button" [ngClass]="{'active' : Clear}" (click)="showscrubbertable('Clear')"
+        >Scrubber Clear Claims <span class="badge badge-light">{{scrubberAllCleanClaims.length}} </span></button>
+        <button class="btn btn-primary btn-sm mr-3 ml-3" type="button" [ngClass]="{'active' : Error}" (click)="showscrubbertable('Error');"
+        >Scrubber Error Claims <span class="badge badge-light">{{scrubberAllErrorClaims.length}} </span></button>
+        <button class="btn btn-primary btn-sm mr-3  " [ngClass]="{'active' : All}" type="button" (click)="showscrubbertable('All')"
+          >Scrubber All Claims <span class="badge badge-light">{{scrubberAllClaims.length}} </span></button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+  
+        <div class="row"  *ngIf="showScruberTable=='All'" >
+          <div class="col-lg-12 pt-20">
+              <div>
+                  <table class="table table-hover table-striped table-bordered dataTable allTable"
+                      width="100%">
+                      <thead>
+                          <tr>
+                            <th>Claim No</th>
+                            <th>Patient Name</th>
+                            <th>Provider Name</th>
+                            <th>DOS</th>
+                            <th>Claim Amount</th>
+                            <th>Status</th>
+                            <th>Message</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let prac of scrubberAllClaims"
+                              >
+                              <td>{{prac.ClaimNo}}</td>
+                              <td>{{prac.PatientFirstName | titlecase}} {{prac.PatientLastName | titlecase}}</td>
+                              <td>{{prac.ProviderName}}</td>
+                              <td>{{formatDate(prac.DOS)}}</td>
+                              <td>${{prac.ClaimTotal}}</td>
+                              <td>{{prac.status}}</td>
+                              <td>{{prac.ErrorMessage}}</td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+        
+        
+  
+          <div class="row"  *ngIf="showScruberTable=='Clear'" >
+            <div class="col-lg-12 pt-20">
+                <div>
+                    <table class="table table-hover table-striped table-bordered dataTable clearTable"
+                        width="100%">
+                        <thead>
+                            <tr>
+                              <th>Claim No</th>
+                              <th>Patient Name</th>
+                              <th>Provider Name</th>
+                              <th>DOS</th>
+                              <th>Claim Amount</th>
+                              <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let prac of scrubberAllCleanClaims"
+                                >
+                                <td>{{prac.ClaimNo}}</td>
+                                <td>{{prac.PatientFirstName | titlecase}} {{prac.PatientLastName | titlecase}}</td>
+                                <td>{{prac.ProviderName}}</td>
+                                <td>{{formatDate(prac.DOS)}}</td>
+                                <td>${{prac.ClaimTotal}}</td>
+                                <td>{{prac.status}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+  
+        <div class="row"  *ngIf="showScruberTable=='Error'" >
+          <div class="col-lg-12 pt-20">
+              <div>
+                  <table class="table table-hover table-striped table-bordered dataTable errorTable"
+                      width="100%">
+                      <thead>
+                          <tr>
+                              <th>Claim No</th>
+                              <th>Patient Name</th>
+                              <th>Provider Name</th>
+                              <th>DOS</th>
+                              <th>Claim Amount</th>
+                              <th>Status</th>
+                              <th>Message</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let prac of scrubberAllErrorClaims"
+                              >
+                              <td><a (click)="editClaim(prac.ClaimNo,prac.PatientAccount,prac.PatientFirstName,prac.PatientLastName)">{{prac.ClaimNo}}</a></td>
+                              <td>{{prac.PatientFirstName | titlecase}} {{prac.PatientLastName | titlecase}}</td>
+                              <td>{{prac.ProviderName}}</td>
+                              <td>{{formatDate(prac.DOS)}}</td>
+                              <td>${{prac.ClaimTotal}}</td>
+                              <td>{{prac.status}}</td>
+                              <td>{{prac.ErrorMessage}}</td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+  
+
+      <!-- Added by Hamza Akhlaq For Custom_Edits -->
+<h4
+  *ngIf="showScruberTable=='Custom Edits'"
+  style="float: right; background-color: white; color: green; cursor: pointer;"
+  (click)="onAddCustomEdits()"
+>
+  <i class="fa fa-plus" style="font-size: 12px; margin-right: 2px; color: green;"></i>Add New Edit
+</h4>
+       <div class="row"  *ngIf="showScruberTable=='Custom Edits'" >
+        <div class="col-lg-12 pt-20">
+            <div>
+                <table class="table table-hover table-striped table-bordered dataTable customTable dataTableASR" width="100%">
+                    <thead>
+                        <tr>
+                            <th style="width: max-width">Edit ID</th>
+                            <th style="width: max-width">Edit Name</th>
+                            <th style="width: max-width">Edit Description</th>
+                            <th style="width: max-width">Edit Error Message</th>
+                            <th style="width: max-width">Created By</th>
+                            <th style="width: max-width">Created Date</th>
+                            <th style="width: max-width">Modified By</th>
+                            <th style="width: max-width">Modified Date</th>
+                            <th style="width: max-width">Status</th>
+                            <th style="width: max-width">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let value of customvaluesortedarray">
+                            <td style="width: max-width">{{ value.Gc_id }}</td>
+                            <td style="width: max-width" class="error-message-cell">{{ value.Edit_Name }}</td>
+                            <td style="width: max-width" class="error-message-cell">{{ value.Edit_Description }}</td>
+                            <td style="width: max-width" class="error-message-cell">{{ value.ErrorMessage }}</td>
+                            <td style="width: max-width">{{ value.Created_By }}</td>
+                            <td style="width: max-width">{{ value.Created_Date }}</td>
+                            <td style="width: max-width">{{ value.Modified_By }}</td>
+                            <td style="width: max-width">{{ value.Modified_Date }}</td>
+                            <td style="width: max-width">{{ value.Status }}</td>
+                            <td style="width: 30%" >
+                                <button *ngIf="value.Status=='Active'" (click)="onEditCustomEdits(value.Gc_id)">Edit</button>
+                                <button *ngIf="value.Status=='Active'" style="margin-left: 3px; margin-right: 3px;" (click)="onViewCustomEdits(value.Gc_id)">View</button>
+                                <button *ngIf="value.Status=='Active'" (click)="CustomEditsStatus(value.Gc_id)">InActive</button>
+                                <button *ngIf="value.Status !=='Active'" (click)="CustomEditsStatus(value.Gc_id) " class="btn btn-danger btn-sm">Active</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table> 
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+  </div>
+  

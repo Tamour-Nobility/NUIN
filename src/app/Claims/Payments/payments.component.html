@@ -1,0 +1,1232 @@
+<!-- // Added by Pir Ubaid (USER STORY 204 : NPM ALERT ) -->
+<div class="modal fade" bsModal #modalWindow="bs-modal" tabindex="-1" role="dialog"
+    aria-labelledby="dialog-nested-name">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between;padding: 10px;">
+                <h2 style="font-weight: bold;">Alert</h2>
+                <button type="button" class="close" (click)="hide()">
+                    <span aria-hidden="true">X</span>
+                </button>
+            </div>
+
+            <div class="modal-body" style="padding: 0px 10px 20px 10px;">
+                <div style="display: flex; justify-content: space-between;">
+                    <div>
+                        <label>Priority:</label>
+                        <span *ngIf="firstAlert?.Priority === 'L'"> Low</span>
+                        <span *ngIf="firstAlert?.Priority === 'M'"> Medium</span>
+                        <span *ngIf="firstAlert?.Priority === 'H'"> High</span>
+                    </div>
+
+
+                    <div>
+                        <LABEL>Created by:</LABEL>
+
+                        {{ firstAlert?.Created_User | uppercase }}
+
+                    </div>
+                </div>
+
+                <hr style="border-top: 1px solid#676a6c; font-weight: bold; margin-top: 10px;
+        margin-bottom: 10px;">
+
+                <div style="font-size: 18px;">
+                    <p style="margin-bottom: 0; font-weight: bold;">Message</p>
+                    <div style="overflow-wrap: break-word; font-size: 14px;
+          color: #000000;
+          margin-top: 3px;">{{ firstAlert?.AlertMessage }}</div>
+                </div>
+
+                <br>
+                <div style="text-align: center;">
+                    <button type="button" class="btn btn-primary" style="width: 12%;" (click)="hide()">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <h4 class="pull-left">
+            <i aria-hidden="true" class="fa fa-money"></i>&nbsp;<u>Payments</u>&nbsp;
+            <a title="Show All" (click)="payExpand()" *ngIf="!isPayExpand"><i class="fa fa-caret-square-o-right"
+                    aria-hidden="true"></i> </a>
+            <a title="Hide All" (click)="payExpand()" *ngIf="isPayExpand"><i class="fa fa-caret-square-o-left"
+                    aria-hidden="true"></i> </a>
+        </h4>
+        <div class="pull-right">
+            <span class="checkbox checkbox-primary checkbox-inline">
+                <input [attr.disabled]="isViewMode?true:null" class="styled" id="expand-payment-table" type="checkbox">
+            </span>
+        </div>
+    </div>
+    <div class="col-lg-12 pt-10">
+        <div class="table-horizontal-scroll" id="payments-section">
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th width="40">Actions</th>
+                        <!-- <th>ERA Pmt.</th> -->
+                        <th>Pmt. Source</th>
+                        <th>Payer Description</th>
+                        <th>Pmt. Type
+                            <!-- <span class="text-danger"> *</span> -->
+                        </th>
+                        <th>Entered From</th>
+                        <th *ngIf="isPayExpand">Entry Date</th>
+                        <th>Sr.</th>
+                        <th>Charged Proc.</th>
+                        <th>From Date</th>
+                        <th>To Date</th>
+                        <th>Paid Proc.</th>
+                        <th>Units</th>
+                        <!-- <th *ngIf="isPayExpand">Mod 1</th>
+                      <th *ngIf="isPayExpand">Mod 2</th> -->
+                        <th>Amt. Appr. $</th>
+                        <th>Amt. Paid $</th>
+                        <th>Adj. Amt. $</th>
+                        <th *ngIf="isPayExpand">Contractual Rate</th>
+                        <th *ngIf="isPayExpand">Deposit Slip ID</th>
+                        <th *ngIf="isPayExpand">Batch No.</th>
+                        <th *ngIf="isPayExpand">Batch Date</th>
+                        <th *ngIf="isPayExpand">Check No.</th>
+                        <th *ngIf="isPayExpand">Check Date</th>
+                        <th *ngIf="isPayExpand">Deposit Date</th>
+                        <th *ngIf="isPayExpand">Rej. Type</th>
+                        <th *ngIf="isPayExpand">Rej. Amt. $</th>
+                        <th *ngIf="isPayExpand">Adj. Code</th>
+                        <th *ngIf="isPayExpand">Rej. Code</th>
+                        <th *ngIf="isPayExpand">Details</th>
+                        <th *ngIf="isPayExpand">View ERA</th>
+                    </tr>
+                </thead>
+                <tbody class="row-selected">
+                    <tr *ngFor="let p of claimPaymentModel; let ndx = index" [hidden]="p.claimPayments.Deleted"
+                        (keydown)="NewRowPayments($event, ndx)">
+                        <td align="center" width="50">
+                            <button
+                                [attr.disabled]="isViewMode?true:null ||p.claimPayments.hoursSinceAdded >24?true:null || p.claimPayments.isfromPosting ?false:null  || isFromposting?false:null ||p.claimPayments.T_payment_id != null ? true : null"
+                                class="btn btn-xs btn-default" (click)="DeletePayment(ndx)" title="Delete">
+                                <i class="fa fa-remove text-danger" id="delbtn" title="Delete"></i>
+                            </button>
+                        </td>
+                        <td>
+                            <select
+                                [attr.disabled]="isViewMode?true:null  || p.claimPayments.isfromPosting ?false:null||p.claimPayments.T_payment_id != null ? true : null ||disableFields(p)== true ? true :null"
+                                class="form-control dark-disabled-color" id="Pmtsrc" name="paymentsource"
+                                (mouseover)="Tooltip('paymentsource',ndx)" style="width: 100px!important;"
+                                [(ngModel)]="p.claimPayments.Payment_Source"
+                                (ngModelChange)="PaymentSourceSelectionChangeEvent(ndx);">
+                                <option value=""></option>
+                                <option value="1">Pri Pay</option>
+                                <option value="2">Sec Pay</option>
+                                <option value="3">Oth Pay</option>
+                                <option value="P">Patient Pay</option>
+                                <option value="I">Inbox Patient Pay</option>
+                                <option value="L">Coll Adj</option>
+                                <!-- <option value="L">Attorney Pay</option> -->
+                                <option value="K">Collection Pay</option>
+                                <option value="A">Insurance Adj.</option>
+                                <option value="W">Write Off/Adj.</option>
+                                <option value="C">Copay</option>
+                                <option value="Z">Other Adjustment</option>
+                                <option value="D">Dormant Adj.</option>
+                                <!-- Added By Pir Ubaid USER STORY 165 -->
+                                <option value="Q">Patient Refund</option>
+                                <option value="O">Refund Requested From Office</option>
+                                  <!-- Added By Sami ullah USER STORY 6760 -->
+                                  <option [disabled]="PatientCredit == 0||PatientCredit == undefined ||PatientCredit == null" value="T">Transfer Credit Balance</option>
+                                
+                            </select>
+                        </td>
+                        <td><input type="text" class="form-control dark-disabled-color"
+                                [(ngModel)]="p.InsurancePayerName" disabled />
+                        </td>
+                        <td>
+                            <select
+                                [attr.disabled]="isViewMode?true:null  || p.claimPayments.isfromPosting ?false:null ||p.claimPayments.T_payment_id != null ? true : null||disableFields(p)== true ? true :null "
+                                class="form-control dark-disabled-color" style="width: 80px;"
+                                [(ngModel)]="p.claimPayments.Payment_Type">
+                                <option value=""></option>
+                                <option value="C">Cash</option>
+                                <option value="K">Check</option>
+                                <option value="R">Credit</option>
+                                <option value="O">Other</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select
+                                [attr.disabled]="isViewMode?true:null || p.claimPayments.isfromPosting ?false:null || p.claimPayments.T_payment_id != null ? true : null ||disableFields(p)== true ? true :null"
+                                class="form-control dark-disabled-color" name="enterfrom" [title]="tempVariable"
+                                *ngIf="p.claimPayments.Payment_Source != 'P' && p.claimPayments.Payment_Source != 'C' && p.claimPayments.Payment_Source != 'I'  && p.claimPayments.Payment_Source != 'Q'  && p.claimPayments.Payment_Source != 'O'&& p.claimPayments.Payment_Source != 'T'"
+                                 (mouseover)="Tooltip('enterfrom',ndx)" style="width: 140px!important;"
+                                [(ngModel)]="p.claimPayments.ENTERED_FROM">
+                                <option value=""></option>
+                                <option *ngFor="let e of filteredEnteredFromListInsurance" [value]="e.EfId">{{ e.EfName
+                                    }}
+                                </option>
+                            </select>
+                            <select
+                                [attr.disabled]="p.claimPayments.T_payment_id != null ? true : null||isViewMode?true:null  || p.claimPayments.isfromPosting ?false:null||disableFields(p)== true ? true :null "
+                                class="form-control dark-disabled-color" name="enterfrom" [title]="tempVariable"
+                                *ngIf="p.claimPayments.Payment_Source == 'P' || p.claimPayments.Payment_Source == 'C' || p.claimPayments.Payment_Source == 'T'  && p.claimPayments.Payment_Source != 'Q'  && p.claimPayments.Payment_Source != 'O' "
+                                 (mouseover)="Tooltip('enterfrom',ndx)" style="width: 140px!important;"
+                                [(ngModel)]="p.claimPayments.ENTERED_FROM">
+                                <option value=""></option>
+                                <ng-container *ngFor="let e of filteredEnteredFromListPatient">
+                                    <option 
+                                      [value]="e.EfId" 
+                                      *ngIf="!(p.claimPayments.Payment_Source == 'T' && e.EfId == 60)">
+                                      {{ e.EfName }}
+                                    </option>
+                                  </ng-container>
+                                  
+                            </select>
+                            <select
+                                [attr.disabled]="p.claimPayments.T_payment_id != null ? true : null||isViewMode?true:null  || p.claimPayments.isfromPosting ?false:null||disableFields(p)== true ? true :null "
+                                class="form-control dark-disabled-color" name="enterfrom" [title]="tempVariable"
+                                *ngIf="p.claimPayments.Payment_Source != 'P' && p.claimPayments.Payment_Source != 'C' && p.claimPayments.Payment_Source == 'I'  && p.claimPayments.Payment_Source != 'Q'  && p.claimPayments.Payment_Source != 'O'"
+                                 (mouseover)="Tooltip('enterfrom',ndx)" style="width: 140px!important;"
+                                [(ngModel)]="p.claimPayments.ENTERED_FROM">
+                                <option value=""></option>
+                                <option *ngFor="let e of enteredFromInboxpay" value={{e.EfId}}>{{e.EfName}}</option>
+                            </select>
+                            <!-- added by Pir Ubaid User Story 165 (Refund payment source addition) -->
+                            <select
+                                [attr.disabled]="isViewMode ? true : null || p.claimPayments.isfromPosting ? false : null||disableFields(p)== true ? true :null ||p.claimPayments.T_payment_id != null ? true : null"
+                                class="form-control dark-disabled-color" name="enterfrom" [title]="tempVariable"
+                                *ngIf="p.claimPayments.Payment_Source == 'Q' || p.claimPayments.Payment_Source == 'O'"
+                                (mouseover)="Tooltip('enterfrom', ndx)" style="width: 140px!important;"
+                                [(ngModel)]="p.claimPayments.ENTERED_FROM">
+                                <option value=""></option>
+                                <option *ngFor="let e of filteredEnteredFromListRefund" value={{e.EfId}}>{{e.EfName}}
+                                </option>
+                            </select>
+                        </td>
+                        <td *ngIf="isPayExpand">
+                            <input
+                                [type]="(isPaymentAvailable && p.claimPayments.ENTERED_FROM === '60') ? 'text' : 'text'"
+                                class="form-control dark-disabled-color" style="width: 100px!important;"
+                                [(ngModel)]="p.claimPayments.Date_Entry"
+                                [disabled]="!(isPaymentAvailable && p.claimPayments.ENTERED_FROM === '60')"
+                                [placeholder]="(isPaymentAvailable && p.claimPayments.ENTERED_FROM === '60') ? 'MM/DD/YYYY' : ''"
+                                [(ngModel)]="p.claimPayments.Date_Entry"
+                                (blur)="validateDateEntry(p.claimPayments.Date_Entry,ndx)" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control dark-disabled-color" style="width: 40px!important;"
+                                [(ngModel)]="p.claimPayments.Sequence_No" disabled />
+                        </td>
+                        <td>
+                            <input *ngIf="p.claimPayments.Charged_Proc_Code == 'interest'" type="text"
+                                class="form-control dark-disabled-color" style="width: 80px!important;"
+                                [value]="p.claimPayments.Charged_Proc_Code" disabled />
+                            
+                            <select *ngIf="p.claimPayments.Charged_Proc_Code != 'interest'" class="form-control dark-disabled-color" name="chargedProc" style="width: 100%;"
+                            [(ngModel)]="p.claimPayments.Charged_Proc_Code"
+                            (change)="calculateAdjustedAmount(ndx, $event.target.value)"
+                            (blur)="calculateAdjustedAmount(ndx, $event.target.value)"
+                            [attr.disabled]="p.claimPayments.Payment_Source == 'T'||p.claimPayments.T_payment_id != null ? true : null|| p.claimPayments.Payment_Source == 'C' || p.claimPayments.Payment_Source == 'I' ? true : null || isViewMode?true:null  || p.claimPayments.isfromPosting ?false:null||disableFields(p)== true ? true :null ">
+                            <option *ngIf="p.claimPayments.Payment_Source == 'P'||p.claimPayments.Payment_Source == 'T'" value=""></option>
+                            <option *ngFor="let pos of claimCharges" [value]="pos.claimCharges.Procedure_Code + ' ' + pos.claimCharges.claim_charges_id + ' '+ pos.claimCharges.Dos_From + ' ' + pos.claimCharges.Dos_To">
+                                {{pos.claimCharges.Procedure_Code}}  &nbsp; |{{pos.claimCharges.Modi_Code1}} &nbsp; | {{pos.claimCharges.Dos_From}} -
+                                &nbsp;{{pos.claimCharges.Dos_To}} &nbsp; | {{pos.claimCharges.Amount}}
+                            </option>
+                           <option hidden *ngFor="let pos of claimCharges" [value]="pos.claimCharges.Procedure_Code">  {{pos.claimCharges.Procedure_Code}}</option>
+                        </select>
+                        
+                        </td>
+                        <!-- <td>
+                            <select class="form-control dark-disabled-color" name="chargedProc" style="width: 100%;"
+                                [(ngModel)]="p.claimPayments.Charged_Proc_Code"
+                                (change)="calculateAdjustedAmount(ndx,$event)"
+                                (blur)="calculateAdjustedAmount(ndx,$event)"
+                                [attr.disabled]="p.claimPayments.Payment_Source == 'P' || p.claimPayments.Payment_Source == 'C' || p.claimPayments.Payment_Source == 'I' ? true : null || isViewMode?true:null  || p.claimPayments.isfromPosting ?false:null  ">
+                                <option *ngFor="let pos of claimCharges" value="{{pos.claimCharges.Procedure_Code}}">
+                                    {{pos.claimCharges.Procedure_Code}}</option>
+                            </select>
+                        </td> -->
+                        <!-- Update the dos_from and dos_to fields -->
+                        <td>
+                            <!--                                 <select class="form-control dark-disabled-color" name="dos_from"
+                                    style="width: 100px!important;" >
+                                    <option [value]="p.claimPayments.Dos_From"> {{ p.claimPayments.Dos_From}}
+                                    </option>
+                                </select> -->
+
+                            <input type="text" class="form-control dark-disabled-color" style="width: 80px!important;"
+                                [value]="p.claimPayments.DOS_From | date:'MM/dd/yyyy'" placeholder="MM/DD/YYYY"
+                                disabled />
+                        </td>
+                        <td>
+                            <!-- <select class="form-control dark-disabled-color" name="dos_to"
+                                    style="width: 100px!important;" >
+                                    <option [value]="p.claimPayments.Dos_To">{{ p.claimPayments.Dos_To }}
+                                    </option>
+                                </select> -->
+                            <input type="text" class="form-control dark-disabled-color" style="width: 80px!important;"
+                                [value]="p.claimPayments.Dos_To | date:'MM/dd/yyyy'" placeholder="MM/DD/YYYY"
+                                disabled />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control dark-disabled-color"
+                                [(ngModel)]="p.claimPayments.Paid_Proc_Code"
+                                [attr.disabled]="p.claimPayments.Payment_Source == 'T' ||p.claimPayments.Payment_Source == 'Q' || p.claimPayments.Payment_Source == 'O' || p.claimPayments.Payment_Source == 'P' || p.claimPayments.Payment_Source == 'C' || p.claimPayments.Payment_Source == 'I' ? true : null || isViewMode?true:null ||p.claimPayments.hoursSinceAdded >24?true:null  || p.claimPayments.isfromPosting ?false:null||p.claimPayments.T_payment_id != null ? true : null ||disableFields(p)== true ? true :null " />
+                        </td>
+                        <td>
+                            <input type="text" style="width: 60px!important;" class="form-control dark-disabled-color"
+                                [(ngModel)]="p.claimPayments.Units"
+                                [attr.disabled]="p.claimPayments.Payment_Source == 'T' ||p.claimPayments.Payment_Source == 'Q' || p.claimPayments.Payment_Source == 'O' || p.claimPayments.Payment_Source == 'P' || p.claimPayments.Payment_Source == 'C' || p.claimPayments.Payment_Source == 'I' ? true : null || isViewMode?true:null ||p.claimPayments.hoursSinceAdded >24?true:null  || p.claimPayments.isfromPosting ?false:null ||p.claimPayments.T_payment_id != null ? true : null ||disableFields(p)== true ? true :null " />
+                        </td>
+                        <!-- <td style="width:8%">
+                              <select [attr.disabled]="isViewMode?true:null" class="form-control"  style="width: 45px;" [(ngModel)]="p.claimPayments.MODI_CODE1">
+                                  <option value=""></option>
+                                  <option value="17">17</option>
+                                  <option value="1P">1P</option>
+                                  <option value="20">20</option>
+                                  <option value="21">21</option>
+                                  <option value="22">22</option>
+                                  <option value="23">23</option>
+                                  <option value="24">24</option>
+                                  <option value="25">25</option>
+                                  <option value="26">26</option>
+                                  <option value="27">27</option>
+                                  <option value="2P">2P</option>
+                                  <option value="32">32</option>
+                                  <option value="33">33</option>
+                                  <option value="3P">3P</option>
+                                  <option value="44">44</option>
+                                  <option value="50">50</option>
+                                  <option value="51">51</option>
+                                  <option value="52">52</option>
+                                  <option value="53">53</option>
+                                  <option value="54">54</option>
+                                  <option value="55">55</option>
+                                  <option value="56">56</option>
+                                  <option value="57">57</option>
+                                  <option value="58">58</option>
+                                  <option value="59">59</option>
+                                  <option value="62">62</option>
+                                  <option value="63">63</option>
+                                  <option value="66">66</option>
+                                  <option value="68">68</option>
+                                  <option value="73">73</option>
+                                  <option value="74">74</option>
+                                  <option value="76">76</option>
+                                  <option value="77">77</option>
+                                  <option value="78">78</option>
+                                  <option value="79">79</option>
+                                  <option value="80">80</option>
+                                  <option value="81">81</option>
+                                  <option value="82">82</option>
+                                  <option value="8P">8P</option>
+                                  <option value="90">90</option>
+                                  <option value="91">91</option>
+                                  <option value="92">92</option>
+                                  <option value="95">95</option>
+                                  <option value="99">99</option>
+                                  <option value="A1">A1</option>
+                                  <option value="A2">A2</option>
+                                  <option value="A3">A3</option>
+                                  <option value="A4">A4</option>
+                                  <option value="AA">AA</option>
+                                  <option value="AD">AD</option>
+                                  <option value="AF">AF</option>
+                                  <option value="AG">AG</option>
+                                  <option value="AH">AH</option>
+                                  <option value="AI">AI</option>
+                                  <option value="AJ">AJ</option>
+                                  <option value="AL">AL</option>
+                                  <option value="AM">AM</option>
+                                  <option value="AQ">AQ</option>
+                                  <option value="AR">AR</option>
+                                  <option value="AS">AS</option>
+                                  <option value="AT">AT</option>
+                                  <option value="AU">AU</option>
+                                  <option value="AV">AV</option>
+                                  <option value="AW">AW</option>
+                                  <option value="BP">BP</option>
+                                  <option value="CB">CBCBpt</option>
+                                  <option value="CC">CC</option>
+                                  <option value="CG">CG</option>
+                                  <option value="CH">CH</option>
+                                  <option value="CI">CI</option>
+                                  <option value="CJ">CJ</option>
+                                  <option value="CK">CK</option>
+                                  <option value="CL">CLCLpt</option>
+                                  <option value="CM">CM</option>
+                                  <option value="CN">CN</option>
+                                  <option value="CR">CR</option>
+                                  <option value="DA">DA</option>
+                                  <option value="DE">DE</option>
+                                  <option value="DR">DR</option>
+                                  <option value="E1">E1</option>
+                                  <option value="E2">E2</option>
+                                  <option value="E3">E3</option>
+                                  <option value="E4">E4</option>
+                                  <option value="EA">EA</option>
+                                  <option value="EB">EB</option>
+                                  <option value="EC">EC</option>
+                                  <option value="ED">ED</option>
+                                  <option value="EH">EH</option>
+                                  <option value="EJ">EJ</option>
+                                  <option value="EP">EP</option>
+                                  <option value="ET">ET</option>
+                                  <option value="F1">F1</option>
+                                  <option value="F2">F2</option>
+                                  <option value="F3">F3</option>
+                                  <option value="F4">F4</option>
+                                  <option value="F5">F5</option>
+                                  <option value="F6">F6</option>
+                                  <option value="F7">F7</option>
+                                  <option value="F8">F8</option>
+                                  <option value="F9">F9</option>
+                                  <option value="FA">FA</option>
+                                  <option value="FB">FB</option>
+                                  <option value="FP">FP</option>
+                                  <option value="G1">G1</option>
+                                  <option value="G2">G2</option>
+                                  <option value="G3">G3</option>
+                                  <option value="G4">G4</option>
+                                  <option value="G5">G5</option>
+                                  <option value="G6">G6</option>
+                                  <option value="G8">G8</option>
+                                  <option value="G9">G9</option>
+                                  <option value="GA">GA</option>
+                                  <option value="GB">GB</option>
+                                  <option value="GC">GC</option>
+                                  <option value="GG">GG</option>
+                                  <option value="GN">GN</option>
+                                  <option value="GO">GO</option>
+                                  <option value="GP">GP</option>
+                                  <option value="GQ">GQ</option>
+                                  <option value="GT">GT</option>
+                                  <option value="GV">GV</option>
+                                  <option value="GW">GW</option>
+                                  <option value="GY">GY</option>
+                                  <option value="GZ">GZ</option>
+                                  <option value="HA">HA</option>
+                                  <option value="HB">HB</option>
+                                  <option value="HE">HE</option>
+                                  <option value="HF">HF</option>
+                                  <option value="HJ">HJ</option>
+                                  <option value="HL">HL</option>
+                                  <option value="HN">HN</option>
+                                  <option value="HO">HO</option>
+                                  <option value="HP">HP</option>
+                                  <option value="HQ">HQ</option>
+                                  <option value="HR">HR</option>
+                                  <option value="HS">HS</option>
+                                  <option value="HU">HU</option>
+                                  <option value="J1">J1</option>
+                                  <option value="J3">J3</option>
+                                  <option value="JA">JA</option>
+                                  <option value="JC">JC</option>
+                                  <option value="JE">JE</option>
+                                  <option value="JH">JH</option>
+                                  <option value="JP">JP</option>
+                                  <option value="JR">JR</option>
+                                  <option value="JW">JW</option>
+                                  <option value="K1">K1</option>
+                                  <option value="KF">KF</option>
+                                  <option value="KH">KH</option>
+                                  <option value="KL">KL</option>
+                                  <option value="KM">KM</option>
+                                  <option value="KN">KN</option>
+                                  <option value="KX">KX</option>
+                                  <option value="KY">KY</option>
+                                  <option value="LC">LC</option>
+                                  <option value="LD">LD</option>
+                                  <option value="LM">LM</option>
+                                  <option value="LR">LR</option>
+                                  <option value="LT">LT</option>
+                                  <option value="NH">NH</option>
+                                  <option value="NP">NP</option>
+                                  <option value="NU">NU</option>
+                                  <option value="P1">P1</option>
+                                  <option value="P2">P2</option>
+                                  <option value="P3">P3</option>
+                                  <option value="P4">P4</option>
+                                  <option value="P5">P5</option>
+                                  <option value="PD">PD</option>
+                                  <option value="PE">PE</option>
+                                  <option value="PI">PI</option>
+                                  <option value="PJ">PJ</option>
+                                  <option value="PN">PN</option>
+                                  <option value="PR">PR</option>
+                                  <option value="PS">PS</option>
+                                  <option value="PT">PT</option>
+                                  <option value="Q0">Q0</option>
+                                  <option value="Q5">Q5</option>
+                                  <option value="Q6">Q6</option>
+                                  <option value="Q7">Q7</option>
+                                  <option value="Q8">Q8</option>
+                                  <option value="Q9">Q9</option>
+                                  <option value="QB">QB</option>
+                                  <option value="QF">QF</option>
+                                  <option value="QG">QG</option>
+                                  <option value="QH">QH</option>
+                                  <option value="QK">QK</option>
+                                  <option value="QO">QO</option>
+                                  <option value="QR">QR</option>
+                                  <option value="QS">QS</option>
+                                  <option value="QU">QU</option>
+                                  <option value="QW">QW</option>
+                                  <option value="QX">QX</option>
+                                  <option value="QY">QY</option>
+                                  <option value="QZ">QZ</option>
+                                  <option value="R1">R1</option>
+                                  <option value="RC">RC</option>
+                                  <option value="RD">RD</option>
+                                  <option value="RH">RH</option>
+                                  <option value="RI">RI</option>
+                                  <option value="RJ">RJ</option>
+                                  <option value="RP">RP</option>
+                                  <option value="RR">RR</option>
+                                  <option value="RT">RT</option>
+                                  <option value="SA">SA</option>
+                                  <option value="SB">SB</option>
+                                  <option value="SC">SC</option>
+                                  <option value="SE">SE</option>
+                                  <option value="SL">SL</option>
+                                  <option value="SU">SU</option>
+                                  <option value="T1">T1</option>
+                                  <option value="T2">T2</option>
+                                  <option value="T3">T3</option>
+                                  <option value="T4">T4</option>
+                                  <option value="T5">T5</option>
+                                  <option value="T6">T6</option>
+                                  <option value="T7">T7</option>
+                                  <option value="T8">T8</option>
+                                  <option value="T9">T9</option>
+                                  <option value="TA">TA</option>
+                                  <option value="TC">TC</option>
+                                  <option value="TD">TD</option>
+                                  <option value="TG">TG</option>
+                                  <option value="TH">TH</option>
+                                  <option value="TJ">TJ</option>
+                                  <option value="TS">TS</option>
+                                  <option value="U1">U1</option>
+                                  <option value="U2">U2</option>
+                                  <option value="U3">U3</option>
+                                  <option value="U4">U4</option>
+                                  <option value="U6">U6</option>
+                                  <option value="U7">U7</option>
+                                  <option value="U9">U9</option>
+                                  <option value="UA">UA</option>
+                                  <option value="UB">UB</option>
+                                  <option value="UC">UC</option>
+                                  <option value="UE">UE</option>
+                                  <option value="UK">UK</option>
+                                  <option value="UN">UN</option>
+                                  <option value="V1">V1</option>
+                                  <option value="V2">V2</option>
+                                  <option value="V3">V3</option>
+                                  <option value="V4">V4</option>
+                                  <option value="V5">V5</option>
+                                  <option value="V6">V6</option>
+                                  <option value="V7">V7</option>
+                                  <option value="V8">V8</option>
+                                  <option value="V9">V9</option>
+                                  <option value="WP">WP</option>
+                                  <option value="XE">XE</option>
+                                  <option value="XS">XS</option>
+                                  <option value="XU">XU</option>
+                                  <option value="ZB">ZB</option>
+                                  <option value="ZL">ZL</option>
+                                  <option value="ZO">ZO</option>
+                                  <option value="ZP">ZP</option>
+                              </select>
+                          </td>
+                          <td style="width:8%">
+                              <select class="form-control"  style="width: 45px;" [(ngModel)]="p.claimPayments.MODI_CODE2">
+                                  <option value=""></option>
+                                  <option value="17">17</option>
+                                  <option value="1P">1P</option>
+                                  <option value="20">20</option>
+                                  <option value="21">21</option>
+                                  <option value="22">22</option>
+                                  <option value="23">23</option>
+                                  <option value="24">24</option>
+                                  <option value="25">25</option>
+                                  <option value="26">26</option>
+                                  <option value="27">27</option>
+                                  <option value="2P">2P</option>
+                                  <option value="32">32</option>
+                                  <option value="33">33</option>
+                                  <option value="3P">3P</option>
+                                  <option value="44">44</option>
+                                  <option value="50">50</option>
+                                  <option value="51">51</option>
+                                  <option value="52">52</option>
+                                  <option value="53">53</option>
+                                  <option value="54">54</option>
+                                  <option value="55">55</option>
+                                  <option value="56">56</option>
+                                  <option value="57">57</option>
+                                  <option value="58">58</option>
+                                  <option value="59">59</option>
+                                  <option value="62">62</option>
+                                  <option value="63">63</option>
+                                  <option value="66">66</option>
+                                  <option value="68">68</option>
+                                  <option value="73">73</option>
+                                  <option value="74">74</option>
+                                  <option value="76">76</option>
+                                  <option value="77">77</option>
+                                  <option value="78">78</option>
+                                  <option value="79">79</option>
+                                  <option value="80">80</option>
+                                  <option value="81">81</option>
+                                  <option value="82">82</option>
+                                  <option value="8P">8P</option>
+                                  <option value="90">90</option>
+                                  <option value="91">91</option>
+                                  <option value="92">92</option>
+                                  <option value="95">95</option>
+                                  <option value="99">99</option>
+                                  <option value="A1">A1</option>
+                                  <option value="A2">A2</option>
+                                  <option value="A3">A3</option>
+                                  <option value="A4">A4</option>
+                                  <option value="AA">AA</option>
+                                  <option value="AD">AD</option>
+                                  <option value="AF">AF</option>
+                                  <option value="AG">AG</option>
+                                  <option value="AH">AH</option>
+                                  <option value="AI">AI</option>
+                                  <option value="AJ">AJ</option>
+                                  <option value="AL">AL</option>
+                                  <option value="AM">AM</option>
+                                  <option value="AQ">AQ</option>
+                                  <option value="AR">AR</option>
+                                  <option value="AS">AS</option>
+                                  <option value="AT">AT</option>
+                                  <option value="AU">AU</option>
+                                  <option value="AV">AV</option>
+                                  <option value="AW">AW</option>
+                                  <option value="BP">BP</option>
+                                  <option value="CB">CB</option>
+                                  <option value="CC">CC</option>
+                                  <option value="CG">CG</option>
+                                  <option value="CH">CH</option>
+                                  <option value="CI">CI</option>
+                                  <option value="CJ">CJ</option>
+                                  <option value="CK">CK</option>
+                                  <option value="CL">CL</option>
+                                  <option value="CM">CM</option>
+                                  <option value="CN">CN</option>
+                                  <option value="CR">CR</option>
+                                  <option value="DA">DA</option>
+                                  <option value="DE">DE</option>
+                                  <option value="DR">DR</option>
+                                  <option value="E1">E1</option>
+                                  <option value="E2">E2</option>
+                                  <option value="E3">E3</option>
+                                  <option value="E4">E4</option>
+                                  <option value="EA">EA</option>
+                                  <option value="EB">EB</option>
+                                  <option value="EC">EC</option>
+                                  <option value="ED">ED</option>
+                                  <option value="EH">EH</option>
+                                  <option value="EJ">EJ</option>
+                                  <option value="EP">EP</option>
+                                  <option value="ET">ET</option>
+                                  <option value="F1">F1</option>
+                                  <option value="F2">F2</option>
+                                  <option value="F3">F3</option>
+                                  <option value="F4">F4</option>
+                                  <option value="F5">F5</option>
+                                  <option value="F6">F6</option>
+                                  <option value="F7">F7</option>
+                                  <option value="F8">F8</option>
+                                  <option value="F9">F9</option>
+                                  <option value="FA">FA</option>
+                                  <option value="FB">FB</option>
+                                  <option value="FP">FP</option>
+                                  <option value="G1">G1</option>
+                                  <option value="G2">G2</option>
+                                  <option value="G3">G3</option>
+                                  <option value="G4">G4</option>
+                                  <option value="G5">G5</option>
+                                  <option value="G6">G6</option>
+                                  <option value="G8">G8</option>
+                                  <option value="G9">G9</option>
+                                  <option value="GA">GA</option>
+                                  <option value="GB">GB</option>
+                                  <option value="GC">GC</option>
+                                  <option value="GG">GG</option>
+                                  <option value="GN">GN</option>
+                                  <option value="GO">GO</option>
+                                  <option value="GP">GP</option>
+                                  <option value="GQ">GQ</option>
+                                  <option value="GT">GT</option>
+                                  <option value="GV">GV</option>
+                                  <option value="GW">GW</option>
+                                  <option value="GY">GY</option>
+                                  <option value="GZ">GZ</option>
+                                  <option value="HA">HA</option>
+                                  <option value="HB">HB</option>
+                                  <option value="HE">HE</option>
+                                  <option value="HF">HF</option>
+                                  <option value="HJ">HJ</option>
+                                  <option value="HL">HL</option>
+                                  <option value="HN">HN</option>
+                                  <option value="HO">HO</option>
+                                  <option value="HP">HP</option>
+                                  <option value="HQ">HQ</option>
+                                  <option value="HR">HR</option>
+                                  <option value="HS">HS</option>
+                                  <option value="HU">HU</option>
+                                  <option value="J1">J1</option>
+                                  <option value="J3">J3</option>
+                                  <option value="JA">JA</option>
+                                  <option value="JC">JC</option>
+                                  <option value="JE">JE</option>
+                                  <option value="JH">JH</option>
+                                  <option value="JP">JP</option>
+                                  <option value="JR">JR</option>
+                                  <option value="JW">JW</option>
+                                  <option value="K1">K1</option>
+                                  <option value="KF">KF</option>
+                                  <option value="KH">KH</option>
+                                  <option value="KL">KL</option>
+                                  <option value="KM">KM</option>
+                                  <option value="KN">KN</option>
+                                  <option value="KX">KX</option>
+                                  <option value="KY">KY</option>
+                                  <option value="LC">LC</option>
+                                  <option value="LD">LD</option>
+                                  <option value="LM">LM</option>
+                                  <option value="LR">LR</option>
+                                  <option value="LT">LT</option>
+                                  <option value="NH">NH</option>
+                                  <option value="NP">NP</option>
+                                  <option value="NU">NU</option>
+                                  <option value="P1">P1</option>
+                                  <option value="P2">P2</option>
+                                  <option value="P3">P3</option>
+                                  <option value="P4">P4</option>
+                                  <option value="P5">P5</option>
+                                  <option value="PD">PD</option>
+                                  <option value="PE">PE</option>
+                                  <option value="PI">PI</option>
+                                  <option value="PJ">PJ</option>
+                                  <option value="PN">PN</option>
+                                  <option value="PR">PR</option>
+                                  <option value="PS">PS</option>
+                                  <option value="PT">PT</option>
+                                  <option value="Q0">Q0</option>
+                                  <option value="Q5">Q5</option>
+                                  <option value="Q6">Q6</option>
+                                  <option value="Q7">Q7</option>
+                                  <option value="Q8">Q8</option>
+                                  <option value="Q9">Q9</option>
+                                  <option value="QB">QB</option>
+                                  <option value="QF">QF</option>
+                                  <option value="QG">QG</option>
+                                  <option value="QH">QH</option>
+                                  <option value="QK">QK</option>
+                                  <option value="QO">QO</option>
+                                  <option value="QR">QR</option>
+                                  <option value="QS">QS</option>
+                                  <option value="QU">QU</option>
+                                  <option value="QW">QW</option>
+                                  <option value="QX">QX</option>
+                                  <option value="QY">QY</option>
+                                  <option value="QZ">QZ</option>
+                                  <option value="R1">R1</option>
+                                  <option value="RC">RC</option>
+                                  <option value="RD">RD</option>
+                                  <option value="RH">RH</option>
+                                  <option value="RI">RI</option>
+                                  <option value="RJ">RJ</option>
+                                  <option value="RP">RP</option>
+                                  <option value="RR">RR</option>
+                                  <option value="RT">RT</option>
+                                  <option value="SA">SA</option>
+                                  <option value="SB">SB</option>
+                                  <option value="SC">SC</option>
+                                  <option value="SE">SE</option>
+                                  <option value="SL">SL</option>
+                                  <option value="SU">SU</option>
+                                  <option value="T1">T1</option>
+                                  <option value="T2">T2</option>
+                                  <option value="T3">T3</option>
+                                  <option value="T4">T4</option>
+                                  <option value="T5">T5</option>
+                                  <option value="T6">T6</option>
+                                  <option value="T7">T7</option>
+                                  <option value="T8">T8</option>
+                                  <option value="T9">T9</option>
+                                  <option value="TA">TA</option>
+                                  <option value="TC">TC</option>
+                                  <option value="TD">TD</option>
+                                  <option value="TG">TG</option>
+                                  <option value="TH">TH</option>
+                                  <option value="TJ">TJ</option>
+                                  <option value="TS">TS</option>
+                                  <option value="U1">U1</option>
+                                  <option value="U2">U2</option>
+                                  <option value="U3">U3</option>
+                                  <option value="U4">U4</option>
+                                  <option value="U6">U6</option>
+                                  <option value="U7">U7</option>
+                                  <option value="U9">U9</option>
+                                  <option value="UA">UA</option>
+                                  <option value="UB">UB</option>
+                                  <option value="UC">UC</option>
+                                  <option value="UE">UE</option>
+                                  <option value="UK">UK</option>
+                                  <option value="UN">UN</option>
+                                  <option value="V1">V1</option>
+                                  <option value="V2">V2</option>
+                                  <option value="V3">V3</option>
+                                  <option value="V4">V4</option>
+                                  <option value="V5">V5</option>
+                                  <option value="V6">V6</option>
+                                  <option value="V7">V7</option>
+                                  <option value="V8">V8</option>
+                                  <option value="V9">V9</option>
+                                  <option value="WP">WP</option>
+                                  <option value="XE">XE</option>
+                                  <option value="XS">XS</option>
+                                  <option value="XU">XU</option>
+                                  <option value="ZB">ZB</option>
+                                  <option value="ZL">ZL</option>
+                                  <option value="ZO">ZO</option>
+                                  <option value="ZP">ZP</option>
+                              </select>
+                          </td> -->
+                        <td>
+                            <input type="text" style="width: 80px!important;" id="Amtapproved"
+                                (blur)="calculateAdjustedAmount_Approved(ndx,$event)"
+                                [(ngModel)]="p.claimPayments.Amount_Approved" class="form-control dark-disabled-color"
+                                [attr.disabled]="p.claimPayments.Payment_Source == 'T' ||p.claimPayments.Payment_Source == 'Q' || p.claimPayments.Payment_Source == 'O' || p.claimPayments.Payment_Source == 'P' || p.claimPayments.Payment_Source == 'C' || p.claimPayments.Payment_Source == 'I' ? true : null || isViewMode?true:null ||p.claimPayments.hoursSinceAdded >24?true:null  || p.claimPayments.isfromPosting ?false:null ||p.claimPayments.T_payment_id != null ? true : null ||disableFields(p)== true ? true :null " />
+
+                        </td>
+                        <td>
+                            <input
+                                [attr.disabled]="isViewMode?true:null ||p.claimPayments.hoursSinceAdded >24?true:null || p.claimPayments.isfromPosting ?false:null||p.claimPayments.T_payment_id != null ? true : null ||disableFields(p)== true ? true :null "
+                                type="text" style="width: 80px!important;" id="paidAmt"
+                                [(ngModel)]="p.claimPayments.Amount_Paid" class="form-control dark-disabled-color"
+                                (blur)="AmountPaidChange($event,ndx)" />
+
+                        </td>
+                        <td>
+                            <input type="text" style="width: 80px!important;"
+                                [(ngModel)]="p.claimPayments.Amount_Adjusted" class="form-control dark-disabled-color"
+                                [attr.disabled]="p.claimPayments.Payment_Source == 'T' ||p.claimPayments.Payment_Source == 'Q' || p.claimPayments.Payment_Source == 'O' || p.claimPayments.Payment_Source == 'P' || p.claimPayments.Payment_Source == 'C' || p.claimPayments.Payment_Source == 'I' ? true : null || isViewMode?true:null  || p.claimPayments.isfromPosting ?false:null ||p.claimPayments.T_payment_id != null ? true : null ||disableFields(p)== true ? true :null " />
+                        </td>
+                        <td *ngIf="isPayExpand">
+                            <input type="text" style="width: 80px!important;"
+                                [(ngModel)]="p.claimPayments.Contractual_Amt" class="form-control dark-disabled-color"
+                                [attr.disabled]="p.claimPayments.Payment_Source == 'T' ||p.claimPayments.Payment_Source == 'Q' || p.claimPayments.Payment_Source == 'O' || p.claimPayments.Payment_Source == 'P' || p.claimPayments.Payment_Source == 'C' || p.claimPayments.Payment_Source == 'I' ? true : null || isViewMode?true:null ||p.claimPayments.hoursSinceAdded >24?true:null  || p.claimPayments.isfromPosting ?false:null ||p.claimPayments.T_payment_id != null ? true : null||disableFields(p)== true ? true :null " />
+                        </td>
+                        <td *ngIf="isPayExpand">
+                            <input type="text" [(ngModel)]="p.claimPayments.DEPOSITSLIP_ID"
+                                class="form-control dark-disabled-color"
+                                [attr.disabled]="p.claimPayments.T_payment_id != null ? true : null||p.claimPayments.Payment_Source == 'T' ||p.claimPayments.Payment_Source == 'Q' || p.claimPayments.Payment_Source == 'O' || p.claimPayments.Payment_Source == 'P' || p.claimPayments.Payment_Source == 'C' || p.claimPayments.Payment_Source == 'I' ? true : null || isViewMode?true:null || isViewMode?true:null ||p.claimPayments.hoursSinceAdded >24?true:null || p.claimPayments.isfromPosting ?false:null ||disableFields(p)== true ? true :null   " />
+                        </td>
+                        <td *ngIf="isPayExpand">
+                            <input class="form-control dark-disabled-color" type="text"
+                                [(ngModel)]="p.claimPayments.BATCH_NO" style="text-align:right;"
+                                [attr.disabled]="p.claimPayments.T_payment_id != null ? true : null||p.claimPayments.Payment_Source == 'T' ||p.claimPayments.Payment_Source == 'P' || p.claimPayments.Payment_Source == 'C' || p.claimPayments.Payment_Source == 'I' ? true : null || isViewMode?true:null ||p.claimPayments.hoursSinceAdded >24?true:null  || p.claimPayments.isfromPosting ?false:null ||disableFields(p)== true ? true :null  " />
+                        </td>
+                        <td *ngIf="isPayExpand">
+                            <input
+                                [attr.disabled]=" p.claimPayments.T_payment_id != null ? true : null||isViewMode?true:null ||p.claimPayments.Payment_Source == 'T' ||p.claimPayments.hoursSinceAdded >24?true:null  || p.claimPayments.isfromPosting ?false:null ||disableFields(p)== true ? true :null  "
+                                id="bDate" type="text" class="form-control w-100px dark-disabled-color"
+                                [(ngModel)]="p.claimPayments.BATCH_DATE" style="text-align:center; width:80px;"
+                                (blur)="validateDate(p.claimPayments.BATCH_DATE)"
+                                (keyup)="validateDateFormat(p.claimPayments.BATCH_DATE,'BatchDate',ndx, $event)"
+                                placeholder="MM/DD/YYYY" maxlength="10" />
+                        </td>
+                        <td *ngIf="isPayExpand">
+                            <input [attr.disabled]="p.claimPayments.T_payment_id != null ? true : null||isViewMode?true:null  || p.claimPayments.isfromPosting ?false:null ||disableFields(p)== true ? true :null  "
+                                type="text" class="form-control dark-disabled-color"
+                                [(ngModel)]="p.claimPayments.Check_No" />
+                        </td>
+                        <td *ngIf="isPayExpand">
+                            <input
+                                [attr.disabled]="p.claimPayments.T_payment_id != null ? true : null||isViewMode?true:null  || p.claimPayments.isfromPosting ?false:null ?false:null||disableFields(p)== true ? true :null "
+                                id="fDate" class="form-control dark-disabled-color" style="width: 80px!important;"
+                                type="text" [(ngModel)]="p.claimPayments.Date_Filing"
+                                (keyup)="validateDateFormat(p.claimPayments.Date_Filing,'FilingDate',ndx, $event)"
+                                placeholder="MM/DD/YYYY" maxlength="10" />
+                        </td>
+                        <td *ngIf="isPayExpand">
+                            <input
+                                [attr.disabled]="p.claimPayments.T_payment_id != null ? true : null||p.claimPayments.Payment_Source == 'Q' || p.claimPayments.Payment_Source == 'O' || isViewMode?true:null  || p.claimPayments.isfromPosting ?false:null ?false:null||disableFields(p)== true ? true :null  "
+                                id="fDate" class="form-control dark-disabled-color" style="width: 80px!important;"
+                                type="text" [(ngModel)]="p.claimPayments.DepositDate"
+                                (keyup)="validateDateFormat(p.claimPayments.DepositDate,'DepositDate',ndx, $event)"
+                                placeholder="MM/DD/YYYY" maxlength="10" />
+                        </td>
+                        <td *ngIf="isPayExpand">
+                            <select class="form-control dark-disabled-color" name="rejectionType" [title]="tempVariable"
+                                (mouseover)="Tooltip('rejectionType',ndx)" style="width: 100px;"
+                                [(ngModel)]="p.claimPayments.Reject_Type"
+                                [attr.disabled]="p.claimPayments.T_payment_id != null ? true : null||p.claimPayments.Payment_Source == 'T' ||p.claimPayments.Payment_Source == 'Q' || p.claimPayments.Payment_Source == 'O' || p.claimPayments.Payment_Source == 'P' || p.claimPayments.Payment_Source == 'C' || p.claimPayments.Payment_Source == 'I' ? true : null || isViewMode?true:null  || p.claimPayments.isfromPosting ?false:null ?false:null ||disableFields(p)== true ? true :null  ">
+                                <option value=""></option>
+                                <option value="1">Deductible</option>
+                                <option value="2">Coinsurance Amount</option>
+                                <option value="3">Copay</option>
+                                <option value="8">CPT Inconsistent with ICD</option>
+                                <option value="9">Invalid Modifier</option>
+                                <option value="6">Hospice admit same day</option>
+                                <option value="A">Deductible</option>
+                                <option value="B">Bank Charges</option>
+                                <option value="C">Copay</option>
+                                <option value="D">Duplicate</option>
+                                <option value="E">Ins need info from Patient</option>
+                                <option value="F">Finance Charges</option>
+                                <option value="L">Late Filing Adj</option>
+                                <option value="M">Pt responsibility has not been met</option>
+                                <option value="O">Other Charges</option>
+                                <option value="P">Insurance paid benefits to patient</option>
+                                <option value="R">Refund</option>
+                                <option value="T">Transferred From Other Claim</option>
+                                <option value="V">VFC Programme MCD</option>
+                                <option value="01">Benefits Exhausted</option>
+                                <option value="02">Non covered Benefits</option>
+                                <option value="03">Insurance Coverage lapsed/did not exist</option>
+                                <option value="04">Disallowed Cost Containment</option>
+                                <option value="06">Coinsurance Amount</option>
+                                <option value="07">Disallowed Other Amount</option>
+                                <option value="10">Invalid POS</option>
+                                <option value="11">Inconsistent with Patient Age</option>
+                                <option value="12">Inclusive in other procedure</option>
+                                <option value="13">Required Medical Notes</option>
+                                <option value="14">Inconsistent with Patient Gender</option>
+                                <option value="15">Pre-existing Condition</option>
+                                <option value="16">Covered by another payer</option>
+                                <option value="17">Duplicate/previously paid</option>
+                                <option value="18">Adjustment</option>
+                                <option value="19">Insurance needs COB information from patient</option>
+                                <option value="20">Lack of info</option>
+                                <option value="21">Not eligible charges</option>
+                                <option value="22">Services not authorized by Medipass PCP</option>
+                                <option value="23">Referring provider number not on file</option>
+                                <option value="24">NDC missing or invalid</option>
+                                <option value="25">Invalid/Missing Referral No.</option>
+                                <option value="26">Psychiatric Reduction</option>
+                                <option value="27">Patient Deceased</option>
+                                <option value="28">CPT Coding error</option>
+                                <option value="29">DX Coding Error</option>
+                                <option value="30">Bad Debt</option>
+                                <option value="60">SERVICE PERFORMED BY ANOTHER PCP WITHIN 60 DAYS</option>
+                                <option value="AR">Account Receivable</option>
+                                <option value="B9">Patient enrolled in a Hospice</option>
+                                <option value="BC">Bounce Check fee</option>
+                                <option value="CA">Patient responsibility towards collection agency</option>
+                                <option value="CO">Copay due</option>
+                                <option value="GF">Global Fee</option>
+                                <option value="IA">Invalid/Missing Authorization No</option>
+                                <option value="IR">Insurance reversal</option>
+                                <option value="LF">Late Filing</option>
+                                <option value="NP">Non-participating provider</option>
+                                <option value="OA">Other Amount Paid</option>
+                                <option value="OP">Out of network provider</option>
+                                <option value="PE">Provider was not eligible on DOS</option>
+                                <option value="PP">Provider is not patient's PCP</option>
+                                <option value="PR">Patient responsibility after insurance payment</option>
+                                <option value="RI">Refund to insurance</option>
+                                <option value="RP">Refund to the Patient</option>
+                                <option value="120">Missing/incomplete/invalid CLIA certification number</option>
+                                <option value="145">Premium Payment withholding</option>
+                                <option value="160">Injury/illness was the result of an activity that is benefit
+                                    exclusion</option>
+                                <option value="177">Patient has not met the required eligibility requirements</option>
+                                <option value="ARA">Account Receivable applied to</option>
+                                <option value="CAP">Covered under Capitation</option>
+                                <option value="NOF">NOT ON FILE</option>
+                                <option value="RSS">Rectification for Secondary Submission</option>
+                                <option value="N362">The number of units exceeds the maximum allowed limit</option>
+                                <option value="SBA">Small Balance Adjustments</option>
+                                <option value="D21">NOHCARD21</option>
+                            </select>
+                        </td>
+                        <td *ngIf="isPayExpand">
+                            <input type="text" class="form-control dark-disabled-color"
+                                [(ngModel)]="p.claimPayments.Reject_Amount"
+                                [attr.disabled]="p.claimPayments.T_payment_id != null ? true : null||p.claimPayments.Payment_Source == 'T' ||p.claimPayments.Payment_Source == 'Q' || p.claimPayments.Payment_Source == 'O' || p.claimPayments.Payment_Source == 'P' || p.claimPayments.Payment_Source == 'C' || p.claimPayments.Payment_Source == 'I' ? true : null || isViewMode?true:null  || p.claimPayments.isfromPosting ?false:null ?false:null  ||disableFields(p)== true ? true :null " />
+
+                        </td>
+                        <td *ngIf="isPayExpand">
+                            <input type="text" class="form-control dark-disabled-color" maxlength="3"
+                                [(ngModel)]="p.claimPayments.ERA_ADJUSTMENT_CODE"
+                                [attr.disabled]="p.claimPayments.T_payment_id != null ? true : null|| p.claimPayments.Payment_Source == 'T' ||p.claimPayments.Payment_Source == 'Q' || p.claimPayments.Payment_Source == 'O' || p.claimPayments.Payment_Source == 'P' || p.claimPayments.Payment_Source == 'C' || p.claimPayments.Payment_Source == 'I' ? true : null || isViewMode?true:null ||p.claimPayments.hoursSinceAdded >24?true:null  || p.claimPayments.isfromPosting ?false:null ?false:null ||disableFields(p)== true ? true :null " />
+
+                        </td>
+                        <td *ngIf="isPayExpand">
+                            <input type="text" class="form-control dark-disabled-color" maxlength="3"
+                                [(ngModel)]="p.claimPayments.ERA_Rejection_CATEGORY_CODE"
+                                [attr.disabled]="p.claimPayments.T_payment_id != null ? true : null||p.claimPayments.Payment_Source == 'T' ||p.claimPayments.Payment_Source == 'Q' || p.claimPayments.Payment_Source == 'O' || p.claimPayments.Payment_Source == 'P' || p.claimPayments.Payment_Source == 'C' || p.claimPayments.Payment_Source == 'I' ? true : null || isViewMode?true:null ||p.claimPayments.hoursSinceAdded >24?true:null || p.claimPayments.isfromPosting ?false:null ?false:null ||disableFields(p)== true ? true :null " />
+
+                        </td>
+                        <td *ngIf="isPayExpand">
+                            <input type="text" class="form-control dark-disabled-color"
+                                [(ngModel)]="p.claimPayments.Details"
+                                [attr.disabled]="p.claimPayments.T_payment_id != null ? true : null||p.claimPayments.Payment_Source == 'T' ||p.claimPayments.Payment_Source == 'P' || p.claimPayments.Payment_Source == 'C' || p.claimPayments.Payment_Source == 'I' ? true : null || isViewMode?true:null ||p.claimPayments.hoursSinceAdded >24?true:null  || p.claimPayments.isfromPosting ?false:null ?false:null ||disableFields(p)== true ? true :null  " />
+                        </td>
+                        <td align="center" *ngIf="isPayExpand">
+                            <i class="fa fa-file-o" [ngClass]="{'disabled': !(p.claimPayments.Payment_Source == 'T' &&p.claimPayments.claim_payments_id && p.claimPayments.claim_payments_id.toString().startsWith('500'))}"
+                            title="View ERA" (click)="viewERA(p.claimPayments.Check_No)"></i>
+                          </td>
+                    </tr>
+                    <tr>
+                        <td colspan="35">
+                            <button [attr.disabled]="isViewMode?true:null || isFromposting?false:null"
+                                (click)="AddNewPayment();callShow()" class="btn-white" style="border: none;"
+                                title="Add New Payment">
+                                Add New Payment
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<div  class="modal fade" id="claimEraView" tabindex="-1" role="dialog" aria-labelledby="claimDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="claimDetailModalLabel">View ERA
+          </h5>
+        </div>
+        <div class="modal-body">
+            <div id="Report" name="Report" *ngIf="isData">
+                <div id="RemitDataTbl" class="OuterTable">
+                    
+                    <table class="CheckTable" width="100%">
+                        <tbody>
+                            <tr>
+                                <th colspan="5">
+                                    <span style="float:left;">Check Information</span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                    <h2 *ngIf="data?.era && data?.era.length > 0">{{data.era[0]?.PAYERNAME}}</h2>
+                                    <p *ngIf="data?.era && data?.era.length > 0">{{data.era[0]?.PAYERADDRESS}}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <h3 *ngIf="data?.era && data?.era.length > 0">{{data.era[0]?.PAYEENAME}}</h3>
+                                    <p *ngIf="data?.era && data?.era.length > 0">{{data.era[0]?.PAYEEADDRRESS}}</p>
+                                </td>
+                                <td colspan="3" *ngIf="data?.era && data?.era.length > 0">
+                                    <br><span class="label">Provider #:</span> {{data?.era[0].Provider_}}<br><span
+                                        class="label">Provider Tax ID
+                                        #:</span> {{data?.era[0].ProviderTaxID_}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" *ngIf="data?.era && data?.era.length > 0"><span class="label">EFT #:</span> {{data.era[0]?.CHECKNUMBER}}</td>
+                                <td colspan="2" *ngIf="data?.era && data?.era.length > 0"><span class="label">NPI / Group Provider Number:</span>{{data.era[0]?.GRPNPI}} </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" *ngIf="data?.era && data?.era.length > 0"><span class="label">Check Date:</span>
+                                    {{data.era[0]?.CHECKDATE | date:'MM/dd/yyyy'}}</td>
+        
+                            </tr>
+                            <tr>
+                                <td colspan="5" *ngIf="data?.era && data?.era.length > 0"><span class="label">Check Amount:</span> {{data.era[0]?.CHECKAMOUNT | currency}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+        
+                    
+                    <div *ngFor="let eraClaim of data.eraClaims">
+                        <div *ngIf="eraClaim.claims.length>1 || eraClaim.claims[0].LOOPID !=0">
+                            <table class="ClaimTable" width="100%">
+                                <tbody>
+                                    <tr>
+                                        <th colspan="2">
+                                            <span style="float:left;">Claim Information</span>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="label">Patient Name:</span> {{eraClaim.claims[0].PATIENTNAME}}</td>
+                                        <td><span class="label">Member Identification #:</span>
+                                            {{eraClaim.claims[0].MEMBERIDENTIFICATION_}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="label">Insured Name:</span> {{eraClaim.claims[0].INSUREDNAME}}</td>
+                                        <td><span class="label">Insured Member Identification:</span>
+                                            {{eraClaim.claims[0].INSUREDMEMBERIDENTIFICATION_}}</td>
+                                    </tr>
+                                    <tr>
+                                        <!-- <td><span class="label">Claim ID:</span> 2012182568107</td> -->
+                                        <td><span class="label">Patient Account Number:</span>
+                                            {{eraClaim.claims[0].PATIENTACCOUNTNUMBER}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="label">Claim Status:</span> {{eraClaim.claims[0].CLAIMSTATUS}}</td>
+                                        <td><span class="label">Rendering Provider:</span> {{eraClaim.claims[0].RENNDERINGPROVIDER}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="label">Claim Payment Amount:</span>
+                                            {{eraClaim.claims[0].CLAIMPAYMENTAMOUNT | currency}}
+                                        </td>
+                                        <td><span class="label">Rendering NPI:</span> {{eraClaim.claims[0].RENDERINGNPI}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="label">Claim Adj Amt:</span> {{eraClaim.claims[0].CLAIMADJAMT}}</td>
+                                        <td><span class="label">Payer Claim Control # / ICN#:</span>
+                                            {{eraClaim.claims[0].PAYERCLAIMCONTROLNUMBERICN_}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="label">Claim Adj Codes:</span>{{eraClaim.claims[0].CLAIMADJCODES}}</td>
+                                        <td><span class="label">Patient
+                                                Responsibility:</span>{{eraClaim.claims[0].PATIENTRESPONSIBILITY | currency}}
+                                                <span *ngIf="eraClaim.claims[0].PRESAMT1 !=null">
+                                                    <span>,{{eraClaim.claims[0].PRESAMT1 | currency}}</span>
+                                                </span>
+                                                <span *ngIf="eraClaim.claims[0].PRESAMT2 !=null">
+                                                    <span>,{{eraClaim.claims[0].PRESAMT2 | currency}}</span>
+                                                </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="label">Claim Remark Codes:</span>{{eraClaim.claims[0].Claim_RMK_code}}
+                                        </td>
+                                        <td><span class="label">Patient Responsibility Reason Code:</span>
+                                            {{eraClaim.claims[0].PATIENTRESPONSIBILITYREASONCODE}}
+                                            <span *ngIf="eraClaim.claims[0].PRTYPE1 !=null">
+                                                <span>PR-{{eraClaim.claims[0].PRTYPE1}}</span>
+                                            </span>
+        
+        
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td><span class="label">Patient Group#:</span>{{eraClaim.claims[0].PATIENTGROUP_}}</td>
+                                    </tr>
+                                    <tr *ngFor="let Provider of data.ProviderAdjDetail">
+                                        <td *ngIf="eraClaim.claims[0].PATIENTACCOUNTNUMBER == Provider.plbClm && Provider.PLB_CODE == 'L6'"><span class="label" >Interest:</span>{{ -Provider.PLB_AMOUNT }}</td>
+                                    </tr>
+                                    <br>
+                                </tbody>
+                            </table>
+                            <div style="width: 100%;overflow-x: auto;">
+                                <table class="ServiceTable">
+                                    <tbody>
+                                        <tr>
+                                            <th class="title" colspan="15">Service Line Information</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Begin Service Date</th>
+                                            <th>End Service Date</th>
+                                            <th>Rendering NPI</th>
+                                            <th>Paid Units</th>
+                                            <th>Proc/Rev Code, Mods</th>
+                                            <th>Billed Amount</th>
+                                            <th>Allowed Amount</th>
+                                            <th>Deduct Amount</th>
+                                            <th>CoIns Amount</th>
+                                            <th>CoPay Amount</th>
+                                            <th>Other Adjusts</th>
+                                            <th>Adjust Codes</th>
+                                            <th>Provider Paid</th>
+                                            <th>Remark Codes</th>
+                                        </tr>
+                                        <ng-container *ngFor="let claim of eraClaim.claims">
+                                            
+                                            <tr *ngIf="claim.LOOPID != 0">
+                                                <td>{{claim.BEGINSERVICEDATE | date:'MM/dd/yyyy'}}</td>
+                                                <td>{{claim.ENDSERVICEDATE | date:'MM/dd/yyyy'}}</td>
+                                                <td>{{claim.RENDERINGNPI}}</td>
+                                                <td>{{claim.PAIDUNITS}}</td>
+                                                <td>
+                                                    {{claim.PROCCODE}}
+                                                    <span *ngIf="claim.ODI && claim.MODI.trim().length > 0">{{',' + claim.MODI}}</span>
+                                                </td>
+                                                <td>{{claim.BILLEDAMOUNT | currency}}</td>
+                                                <td>{{claim.ALLOWEDAMOUNT | currency}}</td>
+                                                <td>{{claim.DEDUCTAMOUNT | currency}}</td>
+                                                <td>{{claim.COINSAMOUNT | currency}}</td>
+                                                <td>{{claim.COPAYAMOUNT | currency}}</td>
+                                                <td>
+                                                    <span>{{claim.OTHERADJUSTMENT}}</span>
+                                                    <span *ngIf="claim.ADJAMT3 !=null">,{{claim.ADJAMT3}}</span>
+                                                </td>
+                                                <td>
+                                                    <span>{{claim.ADJCODE1 == '-' ? '' : claim.ADJCODE1}}</span>
+                                                    <span *ngIf="claim.ADJCODE4 !=null">,{{claim.adjfirst}}-{{claim.ADJCODE4}}</span>
+                                                    <span *ngIf="claim.ADJCODE5 !=null">,{{claim.ADJCODE5}}-{{claim.ADJCODE6}}</span>
+                                                </td>
+                                                <td>{{claim.PROVIDERPAID | currency}}</td>
+                                                <td>{{claim.Procedure_RMK_code}}</td>
+                                            </tr>
+                                        </ng-container>
+                                        <tr>
+                                            <td colspan="5" style="border-top:1px dotted black"><span class="label">SERVICE LINE
+                                                    TOTALS:</span>
+                                            </td>
+                                            <td style="border-top:1px dotted black">{{eraClaim.claimsTotal.BILLEDAMOUNT | currency}}
+                                            </td>
+                                            <td style="border-top:1px dotted black">{{eraClaim.claimsTotal.ALLOWEDAMOUNT | currency}}
+                                            </td>
+                                            <td style="border-top:1px dotted black">{{eraClaim.claimsTotal.DEDUCTAMOUNT | currency}}
+                                            </td>
+                                            <td style="border-top:1px dotted black">{{eraClaim.claimsTotal.COINSAMOUNT | currency}}</td>
+                                            <td style="border-top:1px dotted black">{{eraClaim.claimsTotal.COPAYAMOUNT | currency}}</td>
+                                            <td style="border-top:1px dotted black">{{eraClaim.claimsTotal.OTHERADJUSTMENT | currency}}
+                                            </td>
+                                            <td style="border-top:1px dotted black">&nbsp;</td>
+                                            <td style="border-top:1px dotted black">{{eraClaim.claimsTotal.PROVIDERPAID | currency}}
+                                            </td>
+                                            <td style="border-top:1px dotted black">&nbsp;</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <table class="CodesTable" width="100%">
+                        <tbody>
+                            <tr>
+                                <th class="title" colspan="12">Adjustment Codes Glossary</th>
+                            </tr>
+                            <tr>
+                                <td colspan="12">
+                                    <p>
+                                        <strong>
+                                            Additional Information Required – Missing/Invalid/Incomplete Data from Submitted
+                                            Claim
+                                        </strong>
+                                    </p>
+                                    <span *ngFor="let item of data.glossary">
+                                        <p>
+                                            <span>{{item.ADJCODE1}}</span> : <span>{{item.DESCRIPTION}}</span>
+                                        </p>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            
+          <button class="btn btn-primary btn-sm pull-right" (click)="downloadPDF()">Download</button>
+          <button class="btn btn-default btn-sm pull-right ml-2" (click)="closeModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>

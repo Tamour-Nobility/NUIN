@@ -1,0 +1,310 @@
+<div>
+  <div class="row">
+    <div class="col-lg-8">
+      <h3 style="color: black;">Claim Submission Report</h3>
+      <form [formGroup]="SearchForm">
+        <div class="row">
+          <div class="form-group col-lg-3">
+            <label class="control-label">Practices<span class="text-danger">*</span></label>
+            <ngx-select formControlName="PracCode" (change)="onchangePractices()" [items]="listPracticesList"
+              optionTextField="PracticeLabel" [allowClear]="false">
+            </ngx-select>
+          </div>
+          <div class="form-group col-lg-3">
+            <label class="control-label">Status<span class="text-danger">*</span></label>
+            <select class="form-control" formControlName="Status" (change)="onchangeStatus($event.target.value)"
+              placeholder="Select Status" [(ngModel)]="selectedStatus">
+              <option value="All">All</option>
+              <option *ngFor="let item of claimStatues" [value]="item.status">{{item.label}}</option>
+            </select>
+          </div>
+          <div class="form-group col-lg-3">
+            <label class="control-label" for="status">From - To<span class="text-danger">*</span></label>
+            <my-date-range-picker [options]="myDateRangePickerOptions" [placeholder]="'MM/DD/YYYY'"
+              formControlName="DOSRange" componentDisabled="true" (dateRangeChanged)="onDateChanged($event)">
+            </my-date-range-picker>
+          </div>
+          <!-- <div class="form-group col-lg-3">
+              <label class="control-label">Status<span class="text-danger">*</span></label>
+              <select class="form-control" formControlName="Status" (change)="onchangeStatus($event.target.value)" placeholder="Select Status">
+                  <option value="" disabled selected hidden>Select Status</option>
+                  <option *ngFor="let item of claimStatues" [value]="item.status">{{item.label}}</option>
+              </select>.
+            </div>                   -->
+
+          
+        </div>
+      </form>
+      <button class="btn btn-primary btn-sm pull-right" type="submit" (click)="onSearch()">Search</button>
+      <button type="button" class="btn btn-white pull-right ml-2 btn-sm" (click)="onClear()">Clear</button>
+    </div>
+  </div>
+  <div>
+    <div class="modal fade" bsModal #patientAttachments="bs-modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" aria-label="Close" (click)="patientAttachments.hide()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">All EDI History</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="table-responsive">
+                <div>
+                  <table class="table table-hover table-striped table-bordered DataTable ediHistoryTable" width="100%">
+                    <thead>
+                      <tr>
+                        <th>Claim No</th>
+                        <th>Submit Date</th>
+                        <th>Insurance Name</th>
+                        <th>DOS</th>
+                        <th>Status Date</th>
+                        <th>Status</th>
+                        <th>File277CA</th>
+                        <th>Response Level</th>
+                        <th>Code</th>
+                        <th>Rejection Reason</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of EDIHistory ;let i = index">
+                        <td>{{item.ClaimNo}}</td>
+                        <td>{{item.SubmitDate | date:'MM/dd/yyyy' }}</td>
+                        <td>{{item.InsuranceName}}</td>
+                        <td>{{item.DOS | date:'MM/dd/yyyy'}}</td>
+                        <td>{{item.StatusDate | date:'MM/dd/yyyy'}}</td>
+                        <td>{{item.Status}}</td>
+                        <td>{{item.File277CA}}</td>
+                        <td>{{item.statusLevel}}</td>
+                        <td>{{item.RejectionCode}}</td>
+                        <td>
+                          <ng-container *ngIf="!showFullMessage[i]">
+                            {{ item.message | slice:0:50 }}{{ item.message.length > 50 ? '...' : '' }}
+                            <button (click)="toggleFullMessage(i)">More</button>
+                          </ng-container>
+                          <ng-container *ngIf="showFullMessage[i]">
+                            {{ item.message}}
+                            <button (click)="toggleFullMessage(i)">Less</button>
+                          </ng-container>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="row">
+    <div class="col-lg-12 pt-20">
+      <div *ngIf="showHistory">
+        <table class="table table-hover table-striped table-bordered dataTable ClaimSubmissionReport" width="100%">
+          <thead>
+            <tr>
+              <th>Practice Code </th>
+              <th>Practice Name </th>
+              <th>Claim Number </th>
+              <th>Account Number</th>
+              <th>Patient Name</th>
+              <th>DOS</th>
+              <th>Status Date</th>
+              <th>Submission Date</th>
+              <th>Charge Amount</th>
+              <th>Insurance Name</th>
+              <th>Response Level</th>
+               <th>Status</th>
+              <th>Code</th>
+              <th>Rejection Reason</th>
+              <th>File Name</th>
+              <th>Edi History</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let rejection of ClaimSubmissionReportTable ">
+              <td>{{rejection.Practice_Code}}</td>
+              <td>{{rejection.Practice_Name}}</td>
+              <td>{{rejection.Claim_No}}</td>
+              <td>{{rejection.Account_No}}</td>
+              <td>{{rejection.Patient_Name}}</td>
+              <td>{{rejection.DOS | date:'MM/dd/yyyy'}}</td>
+              <td>{{rejection.Status_Date | date:'MM/dd/yyyy'}}</td>
+              <td>{{rejection.Submission_Date | date:'MM/dd/yyyy' }} {{rejection.SubmitDate  | date:'HH:mm:ss'}}</td> 
+              <td>${{rejection.Charge_amount}}</td>
+              <td>{{rejection.Insurance_Name}}</td>
+              <td>{{rejection.response_Level}}</td>
+              <td>{{rejection.Status}}</td>
+              <td>{{rejection.Code}}</td>
+              <td>{{ rejection.Rejection_reason | slice:0:50 }}{{ rejection.message.length > 60 ? '...' : '' }}</td>
+              <td>{{rejection.File_name}}</td>
+           <td>
+            <a (click)="fetchEdiHistory(rejection.Claim_No,rejection.Status,rejection.response_Level,rejection.File_name)"><i class="fa fa-paperclip"></i>History</a>
+           </td> 
+           </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div> -->
+  <div class="row justify-content-center" *ngIf="isSearchInitiated == true">
+    <div class="col-lg-12">
+      <h3> Claim Submission Report</h3>
+    </div>
+    <div *ngIf="ClaimSubmissionReport?.length > 0 || ddlPracticeCode != 0" class="col-lg-2 d-flex my-4"
+      style="display: flex; align-items: center; margin-top: 20px;">
+      <label style="font-weight: normal">Show</label>
+      <select (change)="countValueChanged($event)" class="form-control input-sm mx-2"
+        style="width: 3rem; margin-left: 5px; margin-right: 5px; max-width: 37% !important;">
+        <option [value]="10" [selected]="count === 10">10</option>
+        <option [value]="25" [selected]="count === 25">25</option>
+        <option [value]="50" [selected]="count === 50">50</option>
+        <option [value]="100" [selected]="count === 100">100</option>
+      </select>
+      <label style="font-weight: normal">entries</label>
+    </div>
+    <div class="col-lg-4  my-4" style="display: flex; align-items: center; margin-top: 20px;padding-left: 30%;"
+      *ngIf=" ddlPracticeCode != 0">
+      <button class="btn btn-default btn-sm" [disabled]="ClaimSubmissionReport?.length ===0" (click)="exportExcel()"><i
+          class="fa fa-file-excel-o"></i>&nbsp;Excel</button>
+
+    </div>
+
+    <div class="col-sm-6 d-flex my-4" style="display: flex; align-items: center; margin-top: 23px;padding-left: 33%;"
+      *ngIf="ClaimSubmissionReport?.length > 0 || ddlPracticeCode != 0">
+      <span>Search:&nbsp;</span><input class="form-control" type="text" [(ngModel)]="searchText">
+    </div>
+
+
+  </div>
+
+
+  <div class="col-lg-12 pt-20  table-horizontal-scroll">
+    <div class="row d-flex justify-content-between" *ngIf="ClaimSubmissionReport?.length > 0 || ddlPracticeCode != 0">
+
+      <table id="example" class="table table-striped table-hover table-bordered dataTableASR" width="100%"
+        *ngIf="(ClaimSubmissionReport | filter: searchText).length>0 || ddlPracticeCode!=0">
+        <thead>
+          <tr>
+            <th (click)="toggleSorting('Practice_Code')">Practice Code
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'Practice_Code' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+            <th (click)="toggleSorting('Practice_Name')">Practice Name
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'Practice_Name' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+            <th (click)="toggleSorting('Claim_No')">Claim Number
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'Claim_No' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+            <th (click)="toggleSorting('Account_No')">Account Number
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'Account_No' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+            <th (click)="toggleSorting('Patient_Name')">Patient Name
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'Patient_Name' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+            <th (click)="toggleSorting('DOS')">DOS
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'DOS' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+
+            <th (click)="toggleSorting('Status_Date')">Status Date
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'Status_Date' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+            <th (click)="toggleSorting('Submission_Date')">Submission Date
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'Submission_Date' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+            <th (click)="toggleSorting('Charge_amount')">Charge Amount
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'Charge_amount' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+            <th (click)="toggleSorting('Insurance_Name')">Insurance Name
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'Insurance_Name' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+            <th (click)="toggleSorting('response_Level')">Response Level
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'response_Level' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+            <th (click)="toggleSorting('Status')">Status
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'Status' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+            <th (click)="toggleSorting('Code')">Code
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'Code' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+            <th (click)="toggleSorting('Rejection_reason')">Rejection Reason
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'Rejection_reason' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+            <th (click)="toggleSorting('File_name')">File Name
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'File_name' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+            <th (click)="toggleSorting('Action_Taken')">Edi History
+              <i style="padding-left: 10px; color: lightgray;"
+                [ngClass]="sortingColumn === 'Action_Taken' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="ClaimSubmissionReport?.length === 0 && ddlPracticeCode !== 0">
+            <tr>
+              <td colspan="24" style="padding-left: 70vh ;">No data available</td>
+            </tr>
+          </ng-container>
+
+
+          <tr *ngFor="let rejection of ClaimSubmissionReport | filter: searchText;">
+            <td>{{rejection.Practice_Code}}</td>
+            <td>{{rejection.Practice_Name}}</td>
+            <td>{{rejection.Claim_No}}</td>
+            <td>{{rejection.Account_No}}</td>
+            <td>{{rejection.Patient_Name}}</td>
+            <td>{{rejection.DOS | date:'MM/dd/yyyy'}}</td>
+            <td>{{rejection.Status_Date | date:'MM/dd/yyyy'}}</td>
+            <td>{{rejection.Submission_Date | date:'MM/dd/yyyy' }} </td>
+            <td>{{rejection.Charge_amount | currency}}</td>
+            <td>{{rejection.Insurance_Name}}</td>
+            <td>{{rejection.response_Level}}</td>
+            <td>{{rejection.Status}}</td>
+            <td>{{rejection?.Code}}</td>
+            <td>{{ rejection.Rejection_reason | slice:0:50 }}{{ rejection.Rejection_reason?.length > 60 ? '...' : '' }}
+            </td>
+            <td>{{rejection.File_name}}</td>
+            <td>
+              <a
+                (click)="fetchEdiHistory(rejection.Claim_No,rejection.Status,rejection.response_Level,rejection.File_name)"><i
+                  class="fa fa-paperclip"></i>History</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+
+  <div *ngIf="ClaimSubmissionReport?.length > 0 || ddlPracticeCode != 0" class="row d-flex"
+    style="margin-left: 5px; margin-right: 5px; margin-top: 15px">
+    <span>Showing {{ (filteredRecords) }} of {{ totalResults }} entries</span>
+    <div style="float: right;margin-top: 0.5%;">
+      <button (click)="loadPreviousPage()" [disabled]="currentPage === 1">
+        Previous
+      </button>
+      {{ currentPage }}/{{ totalPages }}
+      <button (click)="loadNextPage()" [disabled]="currentPage === totalPages">
+        Next
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<table class="table table-striped table-hover table-bordered dataTableEmployee">
+    <thead>
+        <tr>
+            <!-- <th>ID</th> -->
+            <th>First Name</th>
+            <!-- <th>MI</th> -->
+            <th>Last Name</th>
+            <th>NIC</th>
+            <th>Gender</th>
+            <th>Marital Status</th>
+            <th style="text-align:center">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let e of listEmployee let ndx=index" [class.selected]="ndx === selectedRow">
+            <!-- <td>{{e.Employee_Id}}</td> -->
+            <td>{{e.FirstName | titlecase}}</td>
+            <!-- <td>{{e.MiddleInitial | titlecase}}</td> -->
+            <td>{{e.LastName | titlecase}}</td>
+            <td>{{e.Nic_Number | mask:'00000-0000000-0' }}</td>
+            <td>{{e.Gender | titlecase}}</td>
+            <td>{{e.Marital_Status | titlecase }}</td>
+            <td class="text-center footable-visible footable-last-column">
+                <div class="btn-group">
+                    <button class="btn-white btn btn-xs gridbtn" (click)="onViewClick(ndx)">View</button>
+                    <button class="btn-white btn btn-xs gridbtn" (click)="onEditClick(ndx)">Edit</button>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

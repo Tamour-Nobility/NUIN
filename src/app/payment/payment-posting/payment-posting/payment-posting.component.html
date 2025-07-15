@@ -1,0 +1,214 @@
+<!-- Nav tabs -->
+<div class="tabs-container">
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#patient-based" (click)="toggleStatusForPat()" aria-controls="home" role="tab"
+        data-toggle="tab">Patient
+        Based</a>
+    </li>
+    <li role="presentation"><a href="#insurance-based" (click)="toggleStatusForIns()" aria-controls="profile" role="tab" data-toggle="tab">Insurance
+        Based</a>
+    </li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <!--Patient tab contents-->
+    <div role="tabpanel" class="tab-pane active" id="patient-based">
+      <div class="ibox-content">
+        <!--Search form-->
+        <form [formGroup]="patientBasedClaimForm">
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label class="control-label">Patient Name</label>
+              <div class="has-feedback custom-search">
+                <input type="search" readonly placeholder="Search" (click)="showPatientSearch()" class="form-control"
+                  formControlName="PatientName">
+                <span (click)="showPatientSearch()" class="form-control-feedback text-grey"><i
+                    class="text-blue glyphicon glyphicon-search"></i></span>
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <label class="control-label">Facility</label>
+              <div class="has-feedback custom-search">
+                <input type="search" readonly placeholder="Search" (click)="showFacility()" class="form-control"
+                  formControlName="Facility">
+                <span (click)="showFacility()" class="form-control-feedback text-grey"><i
+                    class="text-blue glyphicon glyphicon-search"></i></span>
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <label class="control-label">Balance (> 0)</label>
+              <input class="form-control input-sm m-b" formControlName="Balance" class="form-control">
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-lg-12">
+              <button class="btn btn-primary btn-sm ml-2 pull-right" [disabled]="!patientBasedClaimForm.valid"
+                type="submit" (click)="onSearch()">Search</button>
+            </div>
+          </div>
+        </form>
+        <!--Table to show search records-->
+        <div class="row mt-5" *ngIf="isSearchInitiated == true">
+          <div class="col-lg-12">
+            <table class="table table-striped table-hover table-bordered table-responsive dtClaims">
+              <thead>
+                <tr>
+                  <th class="text-center">
+                    <input type='checkbox' title="Select all" (change)="onToggleCheckAll($event.target.checked)"
+                    [(ngModel)]="checkAll"  *ngIf="dataClaims && dataClaims.length>0" />
+                  </th>
+                  <th> Patient </th>
+                  <th> Claim No </th>
+                  <th> DOS </th>
+                  <th> Provider </th>
+                  <th> Facility </th>
+                  <th> Claim Amount </th>
+                  <th> Claim Balance </th>
+                  <th> Patient Balance </th>
+                  <th> Responsibility </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let dc of dataClaims">
+                  <td></td>
+                  <td>{{dc.PatientFirstName}} {{dc.PatientLastName}}</td>
+                  <td>{{dc.Claim_No}}</td>
+                  <td>{{dc.DOS | date:'MM/dd/yyyy'}}</td>
+                  <td>{{dc.Practice_name}}</td>
+                  <td>{{dc.Facility_Code}}</td>
+                  <td>{{dc.claim_total}}</td>
+                  <td>{{dc.amt_due}}</td>
+                  <td>{{dc.Patient_payment}}</td>
+                  <td>{{dc.pri_sec}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Insurance tab contents-->
+    <div role="tabpanel" class="tab-pane" id="insurance-based">
+      <div class="ibox-content">
+        <!--Search form-->
+        <form [formGroup]="insuranceBasedClaimForm">
+          <div class="row">
+            <div class="form-group col-lg-4 col-md-6">
+              <label class="control-label">Insurance Name</label>
+              <div class="has-feedback custom-search">
+                <input type="text" readonly (click)="showInsSearch()" placeholder="Search" class="form-control"
+                  formControlName="InsuranceName">
+                  <span (click)="showInsSearch()" class="form-control-feedback text-grey"><i
+                    class="text-blue glyphicon glyphicon-search"></i></span>
+              </div>
+          
+            </div>
+            <div class="form-group col-lg-4 col-md-6">
+              <label class="control-label">from Date</label>
+              <my-date-picker [options]="myDatePickerOptions" [placeholder]="placeholder"
+                (dateChanged)="onDateChanged($event,'FromDate')" formControlName="FromDate">
+              </my-date-picker>
+            </div>
+            <div class="form-group col-lg-4 col-md-6">
+              <label class="control-label">To Date</label>
+              <my-date-picker [options]="myDatePickerOptions" [placeholder]="placeholder"
+                (dateChanged)="onDateChanged($event,'ToDate')" formControlName="ToDate">
+              </my-date-picker>
+            </div>
+            <div class="form-group col-lg-4 col-md-6">
+              <label class="control-label">Facility</label>
+              <div class="has-feedback custom-search">
+                <input type="search" readonly placeholder="Search" (click)="showFacility()" class="form-control"
+                  formControlName="Facility">
+                <span (click)="showFacility()" class="form-control-feedback text-grey"><i
+                    class="text-blue glyphicon glyphicon-search"></i></span>
+              </div>
+            </div>
+            <div class="form-group col-lg-4 col-md-6">
+              <label class="control-label">Balance (> 0)</label>
+              <input class="form-control input-sm m-b" formControlName="Balance" class="form-control">
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-lg-12">
+              <button class="btn btn-primary btn-sm ml-2 pull-right" [disabled]="!patientBasedClaimForm.valid"
+                type="submit" (click)="onSearch()">Search</button>
+            </div>
+          </div>
+        </form>
+        <!--Table to show search records-->
+        <div class="row mt-5" *ngIf="isSearchInitiated == true">
+          <div class="col-lg-12">
+            <table class="table table-striped table-hover table-bordered table-responsive datatable dtInsClaims ">
+              <thead>
+                <tr>
+                  <th class="text-center">
+                    <input type='checkbox' title="Select all" (change)="onToggleCheckAll($event.target.checked)"
+                    [(ngModel)]="checkAll"  *ngIf="dataInsClaims && dataInsClaims.length>0" />
+                  </th>
+                  <th> Patient </th>
+                  <th> Claim No </th>
+                  <th> DOS </th>
+                  <th> Provider </th>
+                  <th> Facility </th>
+                  <th> Claim Amount </th>
+                  <th> Claim Balance </th>
+                  <th> Patient Balance </th>
+                  <th> Responsibility </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let dc of dataInsClaims">
+                  <td></td>
+                  <td>{{dc.PatientFirstName}} {{dc.PatientLastName}}</td>
+                  <td>{{dc.Claim_No}}</td>
+                  <td>{{dc.DOS | date:'MM/dd/yyyy'}}</td>
+                  <td>{{dc.Practice_name}}</td>
+                  <td>{{dc.Facility_Code}}</td>
+                  <td>{{dc.claim_total}}</td>
+                  <td>{{dc.amt_due}}</td>
+                  <td>{{dc.Patient_payment}}</td>
+                  <td>{{dc.pri_sec}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="row">
+        <div class="form-group col-lg-12">
+          <button class="btn btn-primary btn-sm ml-2 pull-right"  type="submit" (click)="sendData()"
+            >OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Facility Information Search -->
+<modal-window [title]="'Facility Search'" #facilitySearch (onHidden)="onCloseFacSearch()">
+  <ng-container body>
+    <app-facilities (onSelectFacility)="getFacilityName($event)"></app-facilities>
+  </ng-container>
+</modal-window>
+
+<modal-window [title]="'Patient Search'" #patientSearchModalTemplate (onHidden)="onClosePatSearch()" >
+  <ng-container body>
+
+    <app-patient-search (onSelectpatient)="getPatientName($event)"></app-patient-search>
+
+  </ng-container>
+
+</modal-window>
+<modal-window [title]="'Insurance Search'" #InsuranceSearchModalTemplate (onHidden)="onCloseinsSearch()" >
+  <ng-container body>
+
+    <insurance-search (onSelectInsurance)="onSelectInsurance($event)"></insurance-search>
+
+  </ng-container>
+
+</modal-window>

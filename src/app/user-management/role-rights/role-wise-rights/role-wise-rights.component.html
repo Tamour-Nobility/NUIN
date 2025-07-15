@@ -1,0 +1,21 @@
+<h4><i class="fa fa-key"></i>&nbsp;Role wise Rights</h4>
+<div class="row">
+  <div class="form-group col-lg-5">
+    <label for="">Roles</label>
+    <select class="form-control" (change)="onRoleClick($event.target.value)">
+      <option value=0 disabled>Select Role</option>
+      <option [value]="role.Id" *ngFor="let role of rolesList">{{role.Name | titlecase }}</option>
+    </select>
+  </div>
+  <div class="col-lg-7 pt-26" *ngIf="items!=null && items.length>0">
+    <ngx-treeview [config]="config" [items]="items" (selectedChange)="onSelectedChange($event)"
+      (filterChange)="onFilterChange($event)">
+    </ngx-treeview>
+  </div>
+</div>
+<div class="row" *ngIf="items!=null && items.length>0">
+  <div class="col-lg-12 pt-20">
+    <button class="btn btn-sm btn-primary pull-right" type="submit" (click)="onSaveClick()">Update</button>
+    <button class="btn btn-sm btn-default pull-right" (click)="onCancelClick()">Reset</button>
+  </div>
+</div>

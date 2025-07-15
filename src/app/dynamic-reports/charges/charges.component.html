@@ -1,0 +1,21 @@
+<h3>Charges Reports</h3>
+<div class="tabs-container">
+    <ul class="nav nav-tabs">
+        <li [routerLink]="['overall']" [routerLinkActive]="['active']"><a aria-expanded="true">Overall</a></li>
+        <li [routerLink]="['by-hospital']" [routerLinkActive]="['active']"><a aria-expanded="true">By Hospital</a></li>
+        <li [routerLink]="['by-cpt']" [routerLinkActive]="['active']"><a aria-expanded="true">By CPT</a></li>
+        <li [routerLink]="['by-primary-dx-dos']" [routerLinkActive]="['active']"><a aria-expanded="true">By Primary
+                DX</a></li>
+        <li [routerLink]="['by-carrier']" [routerLinkActive]="['active']"><a aria-expanded="true">By Carrier
+            </a></li>
+        <li [routerLink]="['cpa']" [routerLinkActive]="['active']"><a aria-expanded="true">CPA
+            </a></li>
+    </ul>
+    <div class="tab-content">
+        <div id="tab-1" class="tab-pane active">
+            <div class="panel-body">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+</div>

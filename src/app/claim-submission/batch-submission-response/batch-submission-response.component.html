@@ -1,0 +1,481 @@
+<div class="row">
+  <div class="form-group col-lg-3">
+    <label for="" class="control-label col-form-label">Provider</label>
+    <ngx-select [items]="providerSelectList" optionValueField="Id" optionTextField="Name"
+      [(ngModel)]="requestModel.Provider_Code">
+    </ngx-select>
+  </div>
+  <form [formGroup]="claimsForm">
+    <div class="form-group col-lg-2">
+      <label for="" class="control-label col-form-label">Batch type</label>
+      <select class="form-control" formControlName="type" (change)="onBillingTypeChange($event.target.value)">
+        <option *ngIf = "BillingType=='all'"   [value]="'all'">All</option>
+        <option *ngIf = "BillingType=='P' || BillingType=='all'"  [value]="'professional'">Professional</option>
+        <option *ngIf = "BillingType=='I' || BillingType=='all'" [value]="'institutional'">Institutional</option>
+      </select>
+    </div>
+  </form>
+  <form [formGroup]="claimsForm1">
+    <div class="form-group col-lg-2">
+      <label for="" class="control-label col-form-label">Submission Type</label>
+      <select class="form-control" formControlName="type" (change)="onSubmissionTypeChange($event.target.value)">
+        <option [value]="'electronic'">Electronic</option>
+        <option [value]="'paper'">Paper</option>
+      </select>
+    </div>
+  </form>
+  <div class="form-group col-lg-3">
+    <label class="control-label" for="status">By</label>
+    <select id="dateRangeType" class="form-control" name="dateRangeType" [(ngModel)]="requestModel.Date_Type"
+      (change)="onChangeDateType()">
+      <option value="null" selected>Select</option>
+      <option *ngFor="let type of dateRangeTypes" value={{type.id}}>
+        {{type.label}}
+      </option>
+    </select>
+  </div>
+  <div class="form-group col-lg-3">
+    <label class="control-label" for="status">From - To</label>
+    <my-date-range-picker [options]="myDateRangePickerOptions" [placeholder]="'MM/DD/YYYY'"
+      (dateRangeChanged)="onDateRangeChanged($event)">
+    </my-date-range-picker>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12 col-md-12">
+    <button class="btn btn-sm btn-primary pull-right" type="submit" (click)="GetBatchResponseList()">Search</button>
+  </div>
+</div>
+<div class="row mt10" *ngIf="(batchResponseList && batchResponseList.length>0) || isSearchInitiated">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        Submitted Batches
+      </div>
+      <div class="panel-body">
+
+        <!-- <div *ngIf="filteredBatchList.length === 0">
+          <p style="text-align: center;">No data available.</p>
+        </div> -->
+        <div>
+          <div class="row">
+            <div class="col-sm-6"><div class="dataTables_length" id="DataTables_Table_0_length"><label class="label"><p style="margin-top: 5px;margin-right: 5px;font-size: 13px;color: #676a6c;">Show</p> <select name="DataTables_Table_0_length" aria-controls="DataTables_Table_0" class="form-control input-sm" id="pageSize" [(ngModel)]="pageSize" (change)="updatePagination(pageSize)">
+              <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option></select> <p style="margin-top: 5px;margin-left: 5px;font-size: 13px;color: #676a6c;">entries</p></label></div></div>
+            <div class="col-sm-6"><div id="DataTables_Table_0_filter" class="dataTables_filter"><label class="label"><p style="margin-top: 5px;margin-right: 5px;font-size: 13px;color: #676a6c;">Search:</p> <input type="search" [(ngModel)]="searchTerm" (input)="onSearch()" class="form-control input-sm" placeholder="" aria-controls="DataTables_Table_0"></label></div></div></div>
+
+
+          
+          
+          <table *ngIf="this.requestModel.Sub_type == 'electronic'" class="table  table-bordered" width="100%">
+            <thead>
+              <tr>
+                <th class="center" colspan="2">Batch</th>
+                <th class="center">Provider</th>
+                <th class="center">Status</th>
+                <th class="center">Created On</th>
+                <th class="center">Uploaded By</th>
+                <th class="center">Uploaded On</th>
+                <th class="center">Regenerate</th>
+                <th class="center">Download</th>
+                <th class="center">Claim 999 Status</th>
+                <th class="center">CSI Batch</th>
+                <th class="center">CSI 999 Status</th>
+                <th class="center">CSI 277 Status</th>
+                <th class="center">Claim Count</th>
+                <th class="center">CSI Count</th>
+              </tr>
+            </thead>
+            <tbody *ngFor="let response of filteredBatchList | paginate: { itemsPerPage: pageSize, currentPage: currentPage }; let i = index">
+              <tr class="trHead" >
+                <td  (click)="GetBatchDetailsList(response.Batch_Id);toggleRow(i)"><i class="fa fa-plus-circle"></i></td>
+                <td>{{response.Batch_Name}}</td>
+                <td align="center">{{response.Provider_Name | titlecase}}</td>
+                <td align="center">{{response.Batch_Status | titlecase}}</td>
+                <td align="center">{{response.Created_Date | date:'MM/dd/yyyy'}}</td>
+                <td align="center">{{response.Uploaded_User_Name | titlecase}}</td>
+                <td align="center">{{response.Uploaded_Date | date:'MM/dd/yyyy'}}</td>
+                <td align="center">
+                  <a (click)="onRegenerate(response.Batch_Id)">Regenerate</a>
+                </td>
+                <td align="center"><a *ngIf="response.File_Path"
+                    (click)="onDownload(response.Batch_Id,response.Batch_Name)">Download</a> </td>
+                  <td align="center">{{response.Batch_Status999}}</td>
+                  <td align="center">
+                    <a
+                        [ngClass]="{'disabled': response.Batch_CSI === 'Pending' || response.Batch_CSI === 'Completed' || response.CSI_Count == 0}"
+                        (click)="UploadCSIBatch(response.Batch_Id)">
+                        Upload CSI
+                  </a>
+                  </td>
+                  <td align="center">{{response.CSI_999_Status}}</td>
+                  <td align="center">{{response.CSI_277_Status}}</td>
+                  <td align="center">{{response.Claim_Count}}</td>
+                  <td align="center">{{response.CSI_Count}}</td>
+              </tr>
+              <tr>
+                <td colspan="15"  *ngIf="expandedRowIndex === i">
+                  <div class="inner-table">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Claim_No</th>
+                          <th>DOS</th>
+                          <th>Billed Amount</th>
+                          <th>Insurance Name</th>
+                          <th>Claim CSI Status</th>
+                          <th>Claim Status</th>
+                          <th>CSI Request</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let b of batchDetailsList">
+                          <td>{{b.Claim_No}}</td>
+                          <td>{{b.DOS | date:'MM/dd/yyyy'}}</td>
+                          <td>{{b.Billed_Amount}}</td>
+                          <td>{{b.insurance_Name}}</td>
+                          <td>{{b.Claim_CSI_Status}}</td>
+                          <td (click)="GetCSIClaimResponse(b.batch_id,b.Claim_No)" [ngClass]="{'disabled': b.Medicare_Claim == 0 || b.Claim_CSI_Status === 'Pending' || b.Claim_CSI_Status === '' ||  b.Claim_CSI_Status === null}"><a>View</a></td>
+                          <td (click)="UploadCSIClaim(b.Claim_No, b.Insurance_Id, b.batch_id)" [ngClass]="{'disabled': b.Medicare_Claim == 0 || b.Claim_CSI_Status === 'Pending'}"><a>Request CSI</a></td>
+                          <td>
+                            {{b.Internal_status}}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody *ngIf="filteredBatchList.length === 0">
+              <tr>
+                <td colspan="15" class="text-center">No data found</td>
+              </tr>
+            </tbody>
+          </table>
+          <table *ngIf="this.requestModel.Sub_type == 'paper'" class="table  table-bordered" width="100%">
+            <thead>
+              <tr>
+                <th class="center" colspan="2">Batch</th>
+                <th class="center">Provider</th>
+                <th class="center">Status</th>
+                <th class="center">Created On</th>
+                <th class="center">Printed On</th>
+                <th class="center">Regenerate</th>
+              </tr>
+            </thead>
+            <tbody *ngFor="let response of filteredBatchList | paginate: { itemsPerPage: pageSize, currentPage: currentPage }; let i = index">
+              <tr class="trHead" >
+                <td  (click)="GetBatchDetailsList(response.Batch_Id);toggleRow(i)"><i class="fa fa-plus-circle"></i></td>
+                <td>{{response.Batch_Name}}</td>
+                <td align="center">{{response.Provider_Name | titlecase}}</td>
+                <td align="center">{{response.Batch_Status | titlecase}}</td>
+                <td align="center">{{response.Created_Date | date:'MM/dd/yyyy'}}</td>
+                <td align="center">{{response.Uploaded_Date | date:'MM/dd/yyyy'}}</td>
+                <td align="center">
+                  <a (click)="regeneratePrint(response.Batch_Id,response.Batch_Name)">Regenerate</a>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="15"  *ngIf="expandedRowIndex === i">
+                  <div class="inner-table">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Claim_No</th>
+                          <th>DOS</th>
+                          <th>Billed Amount</th>
+                          <th>Insurance Name</th>
+                          <th>Claim CSI Status</th>
+                          <th>Claim Status</th>
+                          <th>CSI Request</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let b of batchDetailsList">
+                          <td>{{b.Claim_No}}</td>
+                          <td>{{b.DOS | date:'MM/dd/yyyy'}}</td>
+                          <td>{{b.Billed_Amount}}</td>
+                          <td>{{b.insurance_Name}}</td>
+                          <td>{{b.Claim_CSI_Status}}</td>
+                          <td (click)="GetCSIClaimResponse(b.batch_id,b.Claim_No)" [ngClass]="{'disabled': b.Medicare_Claim == 0 || b.Claim_CSI_Status === 'Pending' || b.Claim_CSI_Status === '' ||  b.Claim_CSI_Status === null}"><a>View</a></td>
+                          <td (click)="UploadCSIClaim(b.Claim_No, b.Insurance_Id, b.batch_id)" [ngClass]="{'disabled': b.Medicare_Claim == 0 || b.Claim_CSI_Status === 'Pending'}"><a>Request CSI</a></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody *ngIf="filteredBatchList.length === 0">
+              <tr>
+                <td colspan="15" class="text-center">No data found</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        
+        <pagination-controls 
+  (pageChange)="currentPage = $event" 
+  [responsive]="true" 
+  [maxSize]="5" 
+  [directionLinks]="true" 
+  [autoHide]="true">
+</pagination-controls>
+
+        
+        <!-- Pagination Controls -->
+        <!-- <pagination-controls (pageChange)="currentPage = $event"></pagination-controls> -->
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CSI Claim Model s-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-xlg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="border-bottom: solid 1px;background-color: #eff3f6;">
+        <h3 class="modal-title font-weight-bolder" id="exampleModalLabel" style="color: black;"><b>Claim Status</b>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeCSIModel()" >
+            <span aria-hidden="true" style="color: red;font-size: 30px;">&times;</span>
+          </button>
+        </h3>
+      </div>
+      <div class="modal-body">
+          
+<!--          
+        <div *ngIf="CSINonParAccess_CSIParPayer" class="d-flex justify-content-center align-items-center" style="height: 350px;width: 100%;justify-content: center;align-items: center;">
+          <h1 class="text-center text-danger"><b>Not authorized for Non-Par payer</b></h1>
+        </div>
+
+        <div *ngIf="CSIEnrollmentRequired" class="d-flex justify-content-center align-items-center" style="height: 350px;width: 100%;justify-content: center;align-items: center;">
+          <h1 class="text-center text-danger "><b>Enrollment missing with payer</b></h1>
+        </div>
+
+        <div *ngIf="Status999" class="d-flex justify-content-center align-items-center" style="height: 350px;width: 100%;justify-content: center;align-items: center;">
+          <h1 class="text-center text-danger "><b>Transaction cannot be completed</b></h1>
+        </div>
+         -->
+        <div *ngIf="Status277">
+
+
+
+          <div class="row">
+              <div class="col-lg-4">
+                  <div class="d-flex mtop">
+                      <div class="text"><b class="text-success">Visit#</b></div>
+                      <div class="box">{{Response277.REFEJ?.split('*').slice(2,3) || 'N/A'}}</div>
+                  </div>
+                  <div class="d-flex mtop">
+                      <div class="text"><b class="text-success">Last Name</b></div>
+                      <div class="box">{{Response277.NM1IL?.split('*').slice(3,4) || 'N/A'}}</div>
+                  </div>
+                  <div class="d-flex mtop">
+                      <div class="text"><b class="text-success">First Name</b></div>
+                      <div class="box">{{Response277.NM1IL?.split('*').slice(4,5) || 'N/A'}}</div>
+                  </div>
+                  <div class="d-flex mtop">
+                      <div class="text"><b class="text-success">Payer claim#</b></div>
+                      <div class="box">{{Response277.REFEJ?.split('*').slice(2,3) || 'N/A'}}</div>
+                  </div>
+                  <div class="d-flex mtop">
+                      <div class="text"><b class="text-success">Check#</b></div>
+                      <div class="box">
+                        {{ firstStcSegment.length > 33 ? firstStcSegment.split('*').slice(9, 10)[0] || 'N/A' : 'N/A' }}
+                      </div>
+                      <!-- <div class="box">{{firstStcSegment.length>33?.split('*').slice(9,10) || 'N/A'}}</div> -->
+                    </div>
+              </div>
+              
+              <div class="col-lg-4">
+                  <div class="d-flex mtop">
+                      <div class="text"><b class="text-success">Plan</b></div>
+                      <div class="box">{{Response277.NM1PR?.split('*').slice(3,4) || 'N/A'}}</div>
+                  </div>
+                  <div class="d-flex mtop">
+                      <div class="text"><b class="text-success">Provider</b></div>
+                      <div class="box">{{Response277.NM11P?.split('*').slice(3,4) || 'N/A'}} {{Response277.NM11P?.split('*').slice(4,5) || 'N/A'}}</div>
+                  </div>
+                  <div class="d-flex mtop">
+                      <div class="text"><b class="text-success">Provider NPI</b></div>
+                      <div class="box">{{Response277.NM11P?.split('*').slice(9,10) || 'N/A'}}</div>
+                  </div>
+                  <div class="d-flex mtop">
+                      <div class="text"><b class="text-success">Charge</b></div>
+                      <div class="box">${{firstStcSegment?.split('*').slice(4,5) || 'N/A'}}</div>
+                  </div>
+                  <!-- <div class="d-flex mtop">
+                      <div class="text"><b class="text-success">Charge</b></div>
+                      <div class="box">${{ firstStcSegment.length > 3 ? firstStcSegment.split('*').slice(5).join(', ') : 'N/A' }}</div>
+                      
+                  </div> -->
+                  
+                  <div class="d-flex mtop">
+                      <div class="text"><b class="text-success">Check date</b></div>
+                      <div class="box">{{formatDate(firstStcSegment?.split('*').slice(6, 7)[0]) || 'N/A'}}</div>
+                  </div>
+              </div>
+              
+              <div class="col-lg-4">
+                  <div class="d-flex mtop">
+                      <div class="text"><b class="text-success">Status</b></div>
+                      <div class="box">{{STCStatus || 'N/A'}}</div>
+                  </div>
+                  <div class="d-flex mtop">
+                      <div class="text"><b class="text-success">Entered by</b></div>
+                      <div class="box">{{EnteredBy || 'N/A'}}</div>
+                  </div>
+                  <div class="d-flex mtop">
+                      <div class="text"><b class="text-success">Payment</b></div>
+                      <div class="box">${{firstStcSegment?.split('*').slice(5,6) || 'N/A'}}</div>
+                  </div>
+                  <div class="d-flex mtop">
+                      <div class="text"><b class="text-success">Status date</b></div>
+                      <div class="box">{{formatDate(Response277.GSHN?.split('*').slice(4,5)[0]) || 'N/A'}}</div>
+                  </div>
+              </div>
+          </div>
+          
+          <div class="row" style="margin-top: 20px;">
+              <div class="col-lg-12">
+                  <div class="d-flex mtop">
+                      <div class="text1"><b class="text-success">Prov Status Category</b></div>
+                      <div class="box1"></div>
+                      <div class="box"></div>
+                  </div>
+                  <div class="d-flex mtop">
+                      <div class="text1"><b class="text-success">Prov Status</b></div>
+                      <div class="box1"></div>
+                      <div class="box"></div>
+                  </div>
+                  <div class="d-flex mtop">
+                      <div class="text1"><b class="text-success">Prov Entity Code</b></div>
+                      <div class="box1"></div>
+                      <div class="box"></div>
+                  </div>
+                  <div class="d-flex mtop">
+                      <div class="text1"><b class="text-success">Status Category</b></div>
+                      <div class="box1">{{ (firstStcSegment?.split('*')[1].slice(0,2)) || 'N/A' }}</div>
+                      <div class="box">{{STCDescription || 'N/A'}}</div>
+                    </div>
+                    <div class="d-flex mtop">
+                      <div class="text1"><b class="text-success">Status Code</b></div>
+                      <div class="box1">{{firstStcSegment?.split('*')[1].slice(3) || 'N/A'}}</div>
+                      <div class="box">{{stcStatusCategoryDescription || 'N/A'}}</div>
+                    </div>
+                  <!-- <div class="d-flex">
+                      <div class="text1"><b class="text-success">Status Category</b></div>
+                      <div class="box1">{{ (Response277.STCF0_107?.split('*').slice(1,2)[1]) || 'N/A' }}</div>
+                      <div class="box">{{STCDescription || 'N/A'}}</div>
+                  </div>
+                  <div class="d-flex">
+                      <div class="text1" id="status-code-box"><b class="text-success">Status Code</b></div>
+                      <div class="box1" id="status-code-box">{{Response277.STCF0_107?.split('*').slice(2,3)[0] || 'N/A'}}</div>
+                      <div class="box" id="status-code-box">{{stcStatusCategoryDescription || 'N/A'}}</div>
+                  </div> -->
+                  <div class="d-flex mtop">
+                      <div class="text1"><b class="text-success">Entity Code</b></div>
+                      <div class="box1"></div>
+                      <div class="box">{{StcEntitySegments || 'N/A'}}</div>
+                  </div>
+                  <div class="d-flex mtop">
+                      <div class="text1"><b class="text-success">Comments</b></div>
+                      <div class="box1"></div>
+                      <div class="box"></div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div  class="row" style="margin-top: 20px;">
+          <div class="col-lg-12">
+              <table #ediTable class="table table-striped table-hover table-bordered display dataTable1" style="table-layout: fixed; width: 100%;">
+                  <thead>
+                      <tr>
+                          <th>Service Date</th>
+                          <th>Procedure Code</th>
+                          <th>Status Category</th>
+                          <th>Status Code</th>
+                          <th>Total Charge</th>
+                          <th>Allowed Amount</th>
+                          <th>Paid Amount</th>
+                          <th>Patient Responsibility</th>
+                          <th>Denied Amount</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let item of EDIHistory">
+                          <td>{{ formatDate(item.serviceDate) || 'N/A' }}</td>
+                          <td>{{ item.procedureCode || 'N/A' }}</td>
+                          <td>{{ item.stcCode || 'N/A' }}</td>
+                          <td>{{ item.codeCategory || 'N/A' }}</td>
+                          <td>${{ item.totalCharge || 'N/A' }}</td>
+                          <td>${{ item.allowedAmount || 'N/A' }}</td>
+                          <td>${{ item.paidAmount || 'N/A' }}</td>
+                          <td>${{ item.patientResponsibility || 'N/A' }}</td>
+                          <td>${{ item.deniedAmount || 'N/A' }}</td>
+                      </tr>
+                  </tbody>
+              </table>
+              <table class="CodesTable" width="100%" style="margin-top: 25px;">
+                  <tbody>
+                      <tr>
+                          <th class="title" colspan="12">Adjustment Codes Glossary</th>
+                      </tr>
+                      <tr>
+                          <td colspan="12">                            
+                                  <p>{{StcStatusDescription}}</p>
+                                  <p>{{StcCategoryDescription}}</p>
+                          </td>  
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeCSIModel()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- CSI Claim Model e -->
+<div class="modal fade" bsModal #modalWindow="bs-modal" tabindex="-1" role="dialog"
+  aria-labelledby="dialog-nested-name">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close">
+          <span aria-hidden="true" (click)="modalWindow.hide();">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h3 class="modal-title">
+          {{errorTitle}}
+        </h3>
+        <small class="font-bold">{{errorDescription}}</small>
+      </div>
+      <div class="modal-body" style="padding:10px">
+        <table class="table table-hover table-striped table-bordered" width="100%" *ngIf="errors">
+          <thead>
+            <tr>
+              <th>Claim No</th>
+              <th>Error</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of errors | keyvalue">
+              <td>{{item.key}}</td>
+              <td>{{item.value}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="modalWindow.hide()">Cancel</button>
+        <button *ngIf="errorStatus==='1'" type="button" class="btn btn-primary" data-dismiss="modal"
+          (click)="onConfirm()">Proceed</button>
+      </div>
+    </div>
+  </div>
+</div>

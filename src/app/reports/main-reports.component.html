@@ -1,0 +1,205 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title" *ngIf="!isRouted">
+        <h5><i class="fa fa-bar-chart"></i>&nbsp;Reports</h5>
+        <div class="ibox-tools">
+        </div>
+      </div>
+      <div class="ibox-content">
+        <div class="row" *ngIf="!isRouted">
+          <div class="col-lg-3">
+            <ul class="list-unstyled">
+              <li>
+                <a [routerLinkActive]="['custom-link-active']"
+                  [routerLink]="['/ReportSetup/practice-analysis-by-facility']">Practice
+                  Analysis by Facility Report</a>
+              </li>
+              <li>
+                <a [routerLinkActive]="['custom-link-active']"
+                  [routerLink]="['/ReportSetup/practice-analysis-by-provider']">Practice Analysis by Provider Report</a>
+              </li>
+               
+              <li>
+                <a [routerLinkActive]="['custom-link-active']"
+                  [routerLink]="['/ReportSetup/patient-birth-days']">Patient Birthday Report</a>
+              </li>
+              <li>
+                <a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/acount-assignmentreport']">
+                  Account Assignment Report
+                </a>
+              </li>
+              <li>
+                <a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/claim-assignmentreport']">
+                  Claim Assignment Report
+                </a>
+              </li>
+              <li>
+                <a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/hold-claims-report']">
+                  Hold Claims Report
+                </a>
+              </li>
+              
+              <!-- <li>
+                <a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/AgingSummaryPat']">Patient
+                  wise
+                  Aging Summary</a>
+              </li> -->
+              <!-- <li>
+                <a [routerLinkActive]="['custom-link-active']"
+                  [routerLink]="['/ReportSetup/FinancialSummaryProvider']">Provider wise Financial Summary</a>
+              </li> -->
+              <!-- <li>
+                <a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/FinancialSummaryCPT']">CPT
+                  wise
+                  Financial Summary</a>
+              </li> -->
+              <!-- <li>
+                <a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/RecallVisits']">Recall
+                  Visits</a>
+              </li> -->
+            
+       
+           
+           
+               <!--  <li>
+                <a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/appointment-detail']">
+                  Appointment Detail Report</a>
+              </li>
+              <li>
+                <a [routerLinkActive]="['custom-link-active']"
+                  [routerLink]="['/ReportSetup/missing-appointment-detail']">
+                  Appointment Missing Claims Report</a>
+              </li> -->
+              <!-- <li>
+                <a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/claim-payment-report']">
+                  Claims Payment Report</a>
+              </li> -->
+            
+            </ul>
+            </div>
+              <div class="col-lg-3">
+                <ul class="list-unstyled">
+                  <li>
+                    <a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/user-report']">
+                      CPT Wise Charges Detail Report
+                    </a>
+                  </li>
+                  <li>
+                    <a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/ctp-wise-payment-details']">
+                      CPT Wise Payment Detail Report</a>
+                </li>
+                <li>
+                  <a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/payment-detail']">Payment
+                    Detail Report</a>
+                </li>
+                
+                <li>
+                  <a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/Negative-Balance-Report']">Negative Balance Report</a>
+                </li>
+                <li>
+                  <a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/Charges-BreakDown-report']">
+                    Charges BreakDown Report
+                  </a>
+                </li>
+                <li>
+                  <a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/Visit-Claim-Activity-report']">
+                    Visit Claim Activity Report</a>
+                </li>
+                <li>
+                  <a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/unposted-adjustment-report']">
+                    Unposted Adjustment Report
+                  </a>
+                </li>
+               
+              
+
+              
+             
+            </ul>
+          </div>
+            <div class="col-lg-3">
+              <ul class="list-unstyled">
+                <li><a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/AgingSummary']">Aging
+                  Summary Report</a>
+              </li>
+              <!-- <li [hidden]="!isDHF"> -->
+                <li>
+                <a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/rollingsummary']">
+                  Summary AR Report
+                </a>
+              </li> 
+              <li>
+                <a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/insurance-detail-report']">
+                  Insurance Aging Analysis Report
+                </a>
+              </li>
+              <li>
+                <a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/scrubber-rejection-report']">
+                  Scrubber Rejection Report
+                </a>
+              </li> 
+              <li>
+                <a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/claim-submission-report']">
+                  Claim Submission Report
+                </a>
+              </li>
+              <li>
+                <a [routerLinkActive]="['denial-report']" [routerLink]="['/ReportSetup/denial-report']">
+                  Denial Report
+                </a>
+              </li>
+              <li>
+                <a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/pending-batch-report']">
+                  Pending 999 Report
+                </a>
+              </li>
+          
+            </ul>
+          </div>
+            <div class="col-lg-3">
+              <ul class="list-unstyled">
+                <li >
+                  <a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/patient-statement-report']">
+                   Patient Statement Report
+                  </a>
+                </li> 
+                <li>
+                  <a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/patient-aging-report']">
+                    Patient Aging Report</a>
+                </li>
+              <li>
+                <a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/collection-analysis-report']">
+                  Collection Analysis Report</a>
+              </li>
+              <li>
+                <a [routerLinkActive]="['custom-link-active']" [routerLink]="['/ReportSetup/patient-aging-analysis-report']">
+                  Patient Aging Analysis Report</a>
+              </li>
+              <li>
+                <a [routerLinkActive]="['custom-link-active']"
+                  [routerLink]="['/ReportSetup/credit-balance-report']">Credit Balance Report</a>
+              </li>
+              <li>
+                <a [routerLinkActive]="['custom-link-active']"
+                  [routerLink]="['/ReportSetup/esha-patient-aging']">Patient Aging Summary Report</a>
+              </li>
+               
+              <li>
+                <a [routerLinkActive]="['custom-link-active']"
+                  [routerLink]="['/ReportSetup/esha-plan-aging']">Plan Aging Report</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 pt-10">
+            <router-outlet></router-outlet>
+          </div>
+        </div>
+      </div>
+    </div>
+   
+  </div>
+  
+</div>

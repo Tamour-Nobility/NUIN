@@ -1,0 +1,227 @@
+<div class="row">
+  <div class="col-lg-3">
+    <label class="control-label">Practices</label>
+    <div style="display: flex; align-items: center;">
+      <ngx-select style="flex-grow: 1; margin-right: 0px;" [(ngModel)]="ddlPracticeCode"
+        (ngModelChange)="onchangePractice($event)" [items]=" listPractice" optionTextField="PracticeLabel"
+        [allowClear]="false">
+      </ngx-select>
+      <span class="input-group-btn">
+        <button class="btn btn-primary btn-sm lh-1_2" type="button" [disabled]="ddlPracticeCode==0"
+          (click)="onchangePractice(0)"><i class="fa fa-refresh"></i></button>
+      </span>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12 pt-20">
+    <table table class="table table-striped table-hover table-bordered dt-responsive display dtProviderCPTFee"
+      style="width: 100%;" *ngIf="listProviderCPTFee.length>0 || ddlPracticeCode!==0">
+      <thead>
+        <tr>
+          <th>Provider CPT Id</th>
+          <th>Practice Code</th>
+          <th>Provider Code</th>
+          <th>InsPayer Id</th>
+          <th>Insurance State</th>
+          <th>Location Code</th>
+          <th>Facility Code</th>
+          <th>CPT Plan</th>
+          <th>Percentage Higher</th>
+          <th>Effective Date</th>
+          <th>Expiry Date</th>
+          <th>Self Pay</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of listProviderCPTFee  let ndx=index" [class.selected]="ndx === nSelectedRow"
+          (click)="selectRow(ndx)" (dblclick)="fillCPTDetails(p.Provider_Cpt_Plan_Id)">
+          <td> {{p.Provider_Cpt_Plan_Id}}</td>
+          <td>{{p.Practice_Code}}</td>
+          <td>{{p.Provider_Code}} {{p.Provid_FName |titlecase}} {{p.Provid_LName|titlecase}}</td>
+          <td>{{p.InsPayer_Id}}</td>
+          <td>{{p.Insurance_State}}</td>
+          <td>{{p.Location_Code}}</td>
+          <td>{{p.Facility_Code}}</td>
+          <td>{{p.Cpt_Plan}}</td>
+          <td>{{p.Percentage_Higher}}</td>
+          <td>{{ p.Effective_Date | date:'MM/dd/yyyy' }}</td>
+          <td>{{ p.Expiry_Date | date:'MM/dd/yyyy' }}</td>
+
+          <td>{{p.self_pay}}</td>
+        </tr>
+      </tbody>
+      <tr #cpt *ngIf="isNewCPT2">
+        <td>
+          <input type="text" id="providerCptPlanId" disabled>
+        </td>
+
+        <td>
+          <input type="text" id="Practice_Code" maxlength="10" [(ngModel)]="postproviderplancpt.Practice_Code" disabled>
+        </td>
+        <td>
+          <select id="Provider" (change)="SetProvider($event.target.value)"
+            [(ngModel)]="postproviderplancpt.Provider_Code">
+            <option value=0 disabled>Select Provider</option>
+            <option *ngFor="let c of providercode; let i=index" value={{c}}>{{c}}</option>
+          </select>
+        </td>
+        <td>
+          <input type="text" id="InsPayer_Id" [(ngModel)]="postproviderplancpt.InsPayer_Id" disabled>
+        </td>
+        <td>
+          <!-- <input type="text" maxlength="2" id="Insurance_State" [(ngModel)]="postproviderplancpt.Insurance_State" > -->
+
+          <select id="Insurance_State" (change)="SetInsstate($event.target.value)"
+            [(ngModel)]="postproviderplancpt.Insurance_State">
+            <option value=0 disabled>Select Location State</option>
+            <option *ngFor="let c of Location_State" value={{c}}>{{c}}</option>
+          </select>
+        </td>
+        <td>
+          <select id="Location_Code" (change)="Setlocationcode($event.target.value)"
+            [(ngModel)]="postproviderplancpt.Location_Code">
+            <option value=0 disabled>Select Location Code</option>
+            <option *ngFor="let c of location_code" value={{c}}>{{c}}</option>
+          </select>
+        </td>
+        <td>
+          <input type="number" maxlength="10" id="Facility_Code" [(ngModel)]="postproviderplancpt.Facility_Code"
+            disabled>
+        </td>
+        <td>
+          <input type="text" maxlength="5" id="Cpt_Plan" [(ngModel)]="postproviderplancpt.Cpt_Plan" disabled>
+        </td>
+        <td>
+          <input type="number" maxlength="10" id="Percentage_Higher" [(ngModel)]="postproviderplancpt.Percentage_Higher"
+            disabled>
+        </td>
+        <td>
+          <!-- <input type="text" maxlength="5" id="self_pay" [(ngModel)]="postproviderplancpt.self_pay"> -->
+          <select id="self_pay" (change)="Setselfpay($event.target.value)">
+            <option value=0 disabled>Select Self Pay</option>
+            <option value="true">true</option>
+            <option value="false">false</option>
+          </select>
+        </td>
+      </tr>
+
+      <tr #btnTr *ngIf="isNewCPT2">
+        <td colspan="8"></td>
+        <td>
+          <button class="btn btn-danger" (click)="onCanclenewprovidercptplan()">Cancel</button>
+          <button class="btn btn-primary ml-2" (click)="saveNewProviderCptPlan(postproviderplancpt)">Add</button>
+        </td>
+      </tr>
+      <!-- <tr *ngIf="!isNewCPT2" (click)="addNewProviderCptPlan($event)" class="new-row">
+        <td colspan="8" class="btn btn-primary ml-2"> Add New Provider CPT Plan </td>
+      </tr> -->
+
+    </table>
+  </div>
+</div>
+
+<div class="row" *ngIf="showPlanTable">
+  <div class="col-lg-12 pt-20">
+    <table class="table table-striped table-hover table-bordered dt-responsive display dtProviderDetailCPTFee"
+      width="100%">
+      <thead>
+        <tr>
+          <th>Plan Id</th>
+          <th>CPT Code</th>
+          <th>CPT Description</th>
+          <th>Alternate Code</th>
+          <th>Revenue Code</th>
+          <th>Revenue Description</th>
+          <th>Modifier</th>
+          <th>Charges</th>
+          <th>NFPF</th>
+          <th>NFNPF</th>
+          <th>FPF</th>
+          <th>FNPF</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of listCPTDetail">
+          <td class="ellipsis" [title]="p.Provider_Cpt_Plan_Id"> {{p.Provider_Cpt_Plan_Id}}</td>
+          <td>{{p.Cpt_Code}}</td>
+          <td>{{p.Cpt_Description}}</td>
+          <td>{{p.Alternate_Code}}</td>
+          <td>{{p.Revenue_Code}}</td>
+          <td>{{p.Revenue_Description}}</td>
+          <td>{{p.Cpt_Modifier}}</td>
+          <td>{{p.Charges | number : '1.2' | noComma }}</td>
+          <td>{{p.Non_Facility_Participating_Fee | number : '1.2' | noComma}}</td>
+          <td>{{p.Non_Facility_Non_Participating_Fee | number : '1.2' | noComma}}</td>
+          <td>{{p.Facility_Participating_Fee | number : '1.2' | noComma}}</td>
+          <td>{{p.Facility_Non_Participating_Fee | number : '1.2' | noComma}}</td>
+        </tr>
+      </tbody>
+      <tr #cpt *ngIf="isNewCPT">
+        <td>
+          <input type="text" id="providerCptPlanId" [(ngModel)]="ProviderCptPDetailsModel.Provider_Cpt_Plan_Id"
+            disabled>
+        </td>
+        <td>
+          <input type="text" id="cptCode" maxlength="6" [(ngModel)]="ProviderCptPDetailsModel.Cpt_Code"
+            (keydown)="onKeypressCpt($event)">
+        </td>
+        <td>
+          <input type="text" id="cptDescription" [(ngModel)]="ProviderCptPDetailsModel.Cpt_Description"
+            style="width: 100%;">
+        </td>
+        <td>
+          <input type="text" id="cptAlternateCode" maxlength="5" [(ngModel)]="ProviderCptPDetailsModel.Alternate_Code"
+            (keydown)="onKeypressAlternateCode($event)" style="width: 100%;">
+        </td>
+        <td> <input type="text" id="RevenueCode" [(ngModel)]="ProviderCptPDetailsModel.Revenue_Code"
+            style="width: 100%;" (keydown)="onKeypressRevenue($event)">
+        </td>
+        <td> <input type="text" id="Revenue_Description" [(ngModel)]="ProviderCptPDetailsModel.Revenue_Description"
+            style="width: 100%;">
+        </td>
+        <td>
+          <input type="text" id="cptModifier" [(ngModel)]="ProviderCptPDetailsModel.Cpt_Modifier">
+
+          <!-- Added By Hamza Akhlaq for Fee Schedule -->
+        <td>
+          <input type="number" id="Charges" [(ngModel)]="ProviderCptPDetailsModel.Charges">
+
+          <!-- <td> -->
+          <!-- <input type="text" id="cptModifier" [(ngModel)]="ProviderCptPDetailsModel.Cpt_Modifier"> -->
+          <!-- </td> -->
+
+          <!-- <td> -->
+          <!-- <input type="text" id="cptModifier" [(ngModel)]="ProviderCptPDetailsModel.Cpt_Modifier"> -->
+          <!-- </td> -->
+        </td>
+        <td>
+          <input type="number" maxlength="10" id="nonFacilityParticipatingFee"
+            [(ngModel)]="ProviderCptPDetailsModel.Non_Facility_Participating_Fee">
+        </td>
+        <td>
+          <input type="number" maxlength="10" id="nonFacilityNonParticipatingFee"
+            [(ngModel)]="ProviderCptPDetailsModel.Non_Facility_Non_Participating_Fee">
+        </td>
+        <td>
+          <input type="number" maxlength="10" id="facilityParticipatingFee"
+            [(ngModel)]="ProviderCptPDetailsModel.Facility_Participating_Fee">
+        </td>
+        <td>
+          <input type="number" maxlength="10" id="facilityNonParticipatingFee"
+            [(ngModel)]="ProviderCptPDetailsModel.Facility_Non_Participating_Fee">
+        </td>
+      </tr>
+      <tr #btnTr *ngIf="isNewCPT">
+        <td colspan="11"></td>
+        <td>
+          <button class="btn btn-danger" (click)="onCancleCPT()">Cancel</button>
+          <button class="btn btn-primary ml-2" (click)="saveCPT(ProviderCptPDetailsModel)">Add</button>
+        </td>
+      </tr>
+      <tr *ngIf="!isNewCPT" (click)="addNewCPT($event)" class="new-row">
+        <td colspan="8" class="btn btn-primary ml-2"> Add New CPT </td>
+      </tr>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,221 @@
+/* Modal's Style 
+==========================================*/
+.modal-section {
+    position: relative;
+}
+
+.modal-open {
+    padding-right: 17px !important;
+}
+
+/* .modal {
+} */
+
+.modal-dialog {
+    border-radius: 3px;
+}
+
+.modal-header {
+    border: none;
+    padding: 5px 15px;
+}
+
+    .modal-header h4 {
+        color: #fff;
+        font-weight: 600;
+        padding-top: 3px;
+    }
+
+    .modal-header .close {
+        font-size: 13px;
+        color: #fff;
+        opacity: 1;
+        margin-top: 0;
+        line-height: 25px;
+    }
+
+        .modal-header .close i {
+            font-size: 13px;
+        }
+
+        .modal-header .close:hover {
+            color: #fff;
+        }
+
+.modal-content {
+    border-radius: 0px;
+    border: none;
+    box-shadow: none;
+}
+
+.legend-footer {
+    background: #eff3f6;
+    border-top: 1px solid #e3e3e3;
+    border-right: 0px;
+    border-bottom: 0px;
+    border-left: 0px;
+    margin-bottom: -10px;
+    margin-left: -10px;
+    margin-right: -10px;
+    padding: 10px;
+}
+
+.modal-table-footer {
+    background: #eff3f6;
+    border-top: 1px solid #e3e3e3;
+    border-right: 0px;
+    border-bottom: 0px;
+    border-left: 0px;
+    margin-bottom: -5px;
+    margin-left: -5px;
+    margin-right: -5px;
+    padding: 5px 10px;
+}
+
+.bottom-fixed {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 0px;
+    width: 100%;
+}
+
+.modal-footer {
+    background: #eff3f6;
+    /* border-top: 1px solid #8d8e90; */
+    padding: 10px 15px;
+}
+.modal-headern {
+    background: #eff3f6;
+    /* border-top: 1px solid #8d8e90; */
+    padding: 10px 15px;
+}
+/*Modal Primary Css*/
+.modal.modal-primary .modal-header {
+    background: #104d8c;
+}
+
+.modal.modal-primary .modal-dialog {
+    border: 3px solid #fff;
+}
+
+/*Modal Extral large Style*/
+.modal .modal-dialog.modal-xlg {
+    width: 1170px;
+}
+
+/*Modal Double Extral large Style*/
+.modal .modal-dialog.modal-xxlg {
+    width: 95%;
+}
+.legend-footer {
+    background: #eff3f6;
+    border-top: 1px solid #e3e3e3;
+    border-right: 0px;
+    border-bottom: 0px;
+    border-left: 0px;
+    margin-bottom: -10px;
+    margin-left: -10px;
+    margin-right: -10px;
+    padding: 10px;
+}
+
+/* below classes are for time picker styling to add cross button on timepicker */
+.time-picker-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .time-picker-input {
+    padding-right: 24px; /* Add space for the clear icon */
+  }
+  
+  .clear-icon {
+    position: absolute;
+    top: 50%;
+    right: 0px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+  }
+.validationError{
+        border: 1px solid red; /* Apply a red border */
+      }
+      .custom-dropdown-menu {
+
+        min-width: 130px; 
+        left: auto;       
+        right: 0;  
+        margin-top: -15px       
+    }
+    
+    .custom-dropdown-item {
+        color: #7F7F7F;
+        padding-top: 5px;
+        padding-left: 10px; 
+    }
+ 
+      
+    .custom-dropdown-item.disabled {
+        cursor: no-drop !important;
+        pointer-events: none;
+              }
+      
+              .disabled {
+                cursor: no-drop !important;
+                opacity: 0.6;
+                pointer-events: none; 
+            }
+            
+            .disabled-link {
+                color: grey;
+                pointer-events: none; /* Prevents mouse clicks */
+                cursor: not-allowed;
+              }
+
+
+
+              .modal {
+                text-align: center;
+                padding   : 0 !important;
+            }
+            
+            .modal::before {
+                content       : '';
+                display       : inline-block;
+                height        : 100%;
+                vertical-align: middle;
+                margin-right  : -4px;
+            }
+            
+            .modal-dialog {
+                display       : inline-block;
+                text-align    : left;
+                vertical-align: middle;
+            }
+
+    .green-border {
+        border: 2px solid green; /* Change the border color to green */
+        border-radius: 5px; 
+        height: auto;/* Optional: add some rounding to the corners */
+    }
+    .label-bold {
+        font-size: 12px; /* Keep this as needed */
+        font-weight: bold;
+        margin-left: 10; /* Set to 0 to remove left margin */
+    }
+    
+    .input-small {
+        width: 200px; /* Adjust this as needed */
+        margin-left: 0; /* Set to 0 to remove left margin */
+    }
+    .edit-icon.disabled {
+        pointer-events: none;  /* Prevents click events */
+        opacity: 0.5;          /* Makes the icon look faded */
+        cursor: not-allowed;   /* Shows a not-allowed cursor */
+      }
+      
+
+ 
+    

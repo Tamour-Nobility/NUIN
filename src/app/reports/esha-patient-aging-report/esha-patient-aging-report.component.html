@@ -1,0 +1,152 @@
+<h3>
+  Patient Aging Summary Report
+</h3>
+<div class="row">
+  <form [formGroup]="PDForm">
+      
+    <!-- Practice Field -->
+    <div class="col-lg-3 form-group">
+      <label>Practices<span class="text-danger">*</span></label>
+      <ngx-select [(ngModel)]="PracticeCode" formControlName="practice" (blur)="onPracticeChange()"
+        [items]="listPracticesList" optionTextField="PracticeLabel" [allowClear]="false">
+      </ngx-select>
+    </div>
+  </form>
+</div>
+
+<!-- Buttons Section -->
+<div class="row col-lg-12">
+  <button class="btn btn-primary btn-sm pull-right" type="submit" [disabled]="PDForm.invalid"
+    (click)="onsearch()">Search</button>
+  <button type="button" class="btn btn-white pull-right ml-2 btn-sm" (click)="onClear()">Clear</button>
+</div>
+<div class="row justify-content-center" *ngIf="isSearchInitiated == true">
+  <div class="col-lg-12">
+    <h3> Patient <B></B>Aging Summary Report</h3>
+  </div>
+  <div *ngIf="patientBalanceReport.length > 0" class="col-lg-2 d-flex my-4"
+    style="display: flex; align-items: center; margin-top: 20px;">
+    <label style="font-weight: normal">Show</label>
+    <select (change)="countValueChanged($event)" class="form-control input-sm mx-2"
+      style="width: 3rem; margin-left: 5px; margin-right: 5px; max-width: 37% !important;">
+      <option [value]="10" [selected]="count === 10">10</option>
+      <option [value]="25" [selected]="count === 25">25</option>
+      <option [value]="50" [selected]="count === 50">50</option>
+      <option [value]="100" [selected]="count === 100">100</option>
+    </select>
+    <label style="font-weight: normal">entries</label>
+  </div>
+  <div class="col-lg-5 my-4" style="display: flex; align-items: center; margin-top: 20px; padding-left: 25%;"
+    *ngIf="patientBalanceReport.length > 0">
+
+    <button class="btn btn-default btn-sm" (click)="exportExcelPDF('excel') " [disabled]="patientBalanceReport.length < 1">
+      <i class="fa fa-file-excel-o"></i>&nbsp;Excel
+    </button>
+
+    <button class="btn btn-default btn-sm" style="margin-left: 20px;" (click)="exportExcelPDF('pdf')"
+      [disabled]="patientBalanceReport.length < 1">
+      <i class="fa fa-file-pdf-o"></i>&nbsp;PDF
+    </button>
+
+  </div>
+
+
+  <div class="col-sm-5 d-flex my-4" style="display: flex; align-items: center; margin-top: 23px; padding-left: 25%;"
+    *ngIf="patientBalanceReport.length > 0">
+    <span>Search:&nbsp;</span>
+    <input class="form-control" type="text" [(ngModel)]="searchText">
+  </div>
+</div>
+
+
+
+
+
+<div class="col-lg-12 pt-20  table-horizontal-scroll">
+  <div class="row d-flex justify-content-between" >
+
+    <table id="example" class="table table-striped table-hover table-bordered dataTableASR" width="100%"
+    *ngIf="isSearchInitiated == true">
+      <thead>
+        <tr>
+          <th (click)="toggleSorting('PATIENT_NAME')">Patient Name
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'PATIENT_NAME' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('PATIENT_ACCOUNT')">Patient Account
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'PATIENT_ACCOUNT' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('POLICY_NUMBER')">Policy Number
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'POLICY_NUMBER' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('BALANCE')">Balance
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'BALANCE' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Current')">Current
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Current' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('C30_Days')">30 Days
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'C30_Days' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('C60_Days')">60 Days
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'C60_Days' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('C90_Days')">90 Days
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'C90_Days' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('C120_Days')">120 Days
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'C120_Days' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+         
+              </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="patientBalanceReport.length === 0">
+          <tr>
+            <td colspan="24" style="padding-left: 70vh ;">No data available</td>
+          </tr>
+        </ng-container>
+
+
+
+        <tr *ngFor="let p of patientBalanceReport | filter: searchText;">
+          <td>{{ p.PATIENT_NAME }}</td>
+          <td>{{ p.PATIENT_ACCOUNT }}</td> <!-- Show 'null' if last row -->
+          <td>{{p.POLICY_NUMBER }}</td>
+          <td style="text-align: right;">{{(p.BALANCE !== null && p.BALANCE !== undefined) ? ('$ ' +( p.BALANCE | number:'1.2-2'))  : '$ 0.00'}}</td>
+          <td style="text-align: right;">{{(p.Current !== null && p.Current !== undefined) ? ('$ ' + (p.Current | number:'1.2-2'))  : '$ 0.00'}}</td>
+          <td style="text-align: right;">{{(p.C30_Days !== null && p.C30_Days !== undefined) ? ('$ ' + (p.C30_Days | number:'1.2-2'))  : '$ 0.00'}}</td>
+          <td style="text-align: right;">{{(p.C60_Days !== null && p.C60_Days !== undefined) ? ('$ ' +(p.C60_Days | number:'1.2-2'))  : '$ 0.00'}}</td>
+          <td style="text-align: right;">{{(p.C90_Days !== null && p.C90_Days !== undefined) ?('$ ' + (p.C90_Days | number:'1.2-2'))  : '$ 0.00'}}</td>
+          <td style="text-align: right;">{{(p.C120_Days !== null && p.C120_Days !== undefined) ? ('$ ' + (p.C120_Days | number:'1.2-2')) : '$ 0.00'}}</td>
+       
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+
+<div *ngIf="patientBalanceReport.length > 0" class="row d-flex"
+  style="margin-left: 5px; margin-right: 5px; margin-top: 15px">
+  <span>Showing {{ (filteredRecords) }} of {{ totalResults }} entries</span>
+  <div style="float: right;margin-top: 0.5%;">
+    <button (click)="loadPreviousPage()" [disabled]="currentPage === 1">
+      Previous
+    </button>
+    {{ currentPage }}/{{ totalPages }}
+    <button (click)="loadNextPage()" [disabled]="currentPage === totalPages">
+      Next
+    </button>
+  </div>
+</div>

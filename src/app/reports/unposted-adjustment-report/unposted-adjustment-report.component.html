@@ -1,0 +1,118 @@
+<!-- <h3>Unposted Adjustment Report</h3>
+<div class="row">
+  <form [formGroup]="PDForm">
+    <div class="form-group col-lg-3">
+      <label>Practices<span class="text-danger">*</span></label>
+      <ngx-select [(ngModel)]="PracticeCode" formControlName="practice" [items]="listPracticesList"
+        optionTextField="PracticeLabel" [allowClear]="false" placeholder="select practice">
+      </ngx-select>
+    </div>
+    <div class="form-group col-lg-3">
+      <label>Date From<span class="text-danger">*</span></label>
+      <my-date-picker id="dtpFrom" [options]="myDatePickerOptions" [selDate]="strFromDate" placeholder="MM/DD/YYYY"
+        (dateChanged)="onDateChanged($event,'From')" formControlName="dateFrom">
+      </my-date-picker>
+    </div>
+    <div class="form-group col-lg-3">
+      <label>Date To<span class="text-danger">*</span></label>
+      <my-date-picker id="dtpTo" [selDate]="strToDate" formControlName="dateTo"
+        (dateChanged)="onDateChanged($event,'To')" [options]="myDatePickerOptions" aria-placeholder="select date" placeholder="MM/DD/YYYY">
+      </my-date-picker>
+    </div>
+  </form>
+</div>
+<div class="row col-lg-12">
+  <button class="btn btn-primary btn-sm pull-right" type="submit"
+    (click)="onsearch()">Search</button>
+  <button type="button" class="btn btn-white pull-right ml-2 btn-sm" (click)="onClear()">Clear</button>
+</div> -->
+
+
+<h3>Unposted Adjustment Report</h3>
+<div class="row">
+  <form [formGroup]="PDForm">
+    <div class="form-group col-lg-3">
+      <label>Practices<span class="text-danger">*</span></label>
+      <ngx-select [(ngModel)]="PracticeCode" formControlName="practice" [items]="listPracticesList"
+        optionTextField="PracticeLabel" [allowClear]="false" placeholder="Select Practice">
+      </ngx-select>
+    </div>
+    <div class="form-group col-lg-3">
+      <label>Date From<span class="text-danger">*</span></label>
+      <my-date-picker id="dtpFrom" [options]="myDatePickerOptions" [selDate]="strFromDate" placeholder="MM/DD/YYYY"
+        (dateChanged)="onDateChanged($event,'From')" formControlName="dateFrom">
+      </my-date-picker>
+    </div>
+    <div class="form-group col-lg-3">
+      <label>Date To<span class="text-danger">*</span></label>
+      <my-date-picker id="dtpTo" [selDate]="strToDate" formControlName="dateTo"
+        (dateChanged)="onDateChanged($event,'To')" [options]="myDatePickerOptions" aria-placeholder="select date" placeholder="MM/DD/YYYY">
+      </my-date-picker>
+    </div>
+  </form>
+</div>
+<div class="row col-lg-12">
+  <button 
+    class="btn btn-primary btn-sm pull-right" 
+    type="submit" 
+    (click)="onsearch()" 
+    [disabled]="!PDForm.valid">Search</button>
+  <button 
+    type="button" 
+    class="btn btn-white pull-right ml-2 btn-sm" 
+    (click)="onClear()">Clear</button>
+</div>
+<div class="row" *ngIf="isSearchInitiated == true">
+  <h3 [ngClass]="isRouted == true ? 'center-heading' : null" style="margin-left: 15px;" *ngIf="firstLoad">Unposted Adjustment Report</h3>
+  <div class="col-lg-12 pt-20">
+    <div class="table-responsive">
+      <div id="Report" name="Report">
+        <table class="table table-striped table-hover table-bordered dataTablePR" width="100%" *ngIf="firstLoad" >
+          <thead>
+            <tr>
+              <th>Claim #</th>
+              <th>DOS</th>
+              <th>Patient Account#</th>
+              <th>Patient Name</th>
+              <th>CPT Code</th>
+              <th>Billing Provider</th>
+              <th>Entry Date</th>
+              <th>Payment Source</th>
+              <th>Amount Paid</th>
+              <th>Skipped Adjustment</th>
+              <th>Amount Rejected</th>
+              <th>Insurance Name</th>
+              <th>Check#</th>
+              <th>Check Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="UnpostedAdjustmentReports.length === 0 && ddlPracticeCode !== 0">
+              <tr>
+                <td colspan="24" style="padding-left: 70vh ;">No data available</td>
+              </tr>
+            </ng-container>
+    
+            <tr *ngFor="let assigned of UnpostedAdjustmentReports | filter: searchText;">
+              <td> {{assigned.CLAIM_NO}}</td>
+              <td>{{assigned.DOS | date:'MM/dd/yyyy'}}</td>
+              <td>{{assigned.Patient_Account }}</td>
+              <td>{{assigned.PATIENT_NAME}}</td>
+              <td>{{assigned.PAID_PROC_CODE}}</td>
+              <td>{{assigned.BILLING_PHYSICIAN}} </td>
+              <td>{{assigned.DATE_ENTRY | date:'MM/dd/yyyy'}} </td>
+              <td>{{assigned.PAYMENT_SOURCE}}</td>
+              <td>{{ assigned.AMOUNT_PAID | currency }}</td>
+              <td>{{ assigned.SKIPPED_AMOUNT | currency }}</td>
+              <td>{{ assigned.REJECT_AMOUNT | currency }}</td>
+              <td>{{assigned.Insurance_NAME}}</td>
+              <td>{{assigned.CHECK_NO}}</td>
+              <td>{{assigned.CHECK_DATE | date:'MM/dd/yyyy'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+  </div>
+</div>

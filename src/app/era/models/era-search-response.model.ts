@@ -1,0 +1,20 @@
+export class ERASearchResponseModel {
+    ERAID: number;
+    CHECKDATE: Date;
+    PAYERNAME: string;
+    CHECKNUMBER: string;
+    PAYMENTMETHOD: string;
+    TRANHADLINGCODE: string;
+    PAYERADDRESS: string;
+    PAYEENAME: string;
+    PAYEEADDRRESS: string;
+    CHECKAMOUNT: string;
+    CLAIMNO: string;
+    PATFULLNAME: string;
+    ProviderAdjAmt: string;
+    Provider_: string;
+    ProviderTaxID_: string;
+    GRPNPI: string;
+    ERAPOSTEDSTATUS: string;
+    CLAIMPOSTEDSTATUS: string;
+};

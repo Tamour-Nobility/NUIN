@@ -1,0 +1,40 @@
+<div class="ibox float-e-margins">
+  <div class="ibox-title">
+    <h5>{{iboxAddEditTitle}}</h5>
+  </div>
+  <div class="ibox-content">
+    <form [formGroup]="SubModulePropertiesForm">
+      <div class="row">
+        <div class="col-lg-12 form-group">
+          <label>Name<span class="text-danger">*</span></label>
+          <input type="text" [(ngModel)]="objSubModuleProperties.Property_Name" class="form-control"
+            formControlName="propertyName" maxlength="50" autocomplete="off">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12 form-group" [ngClass]="{'has-error':ModuleFilterSelectControl.errors}">
+          <label>Select Module<span class="text-danger">*</span></label>
+          <ngx-select [items]="modulesSelectList" (typed)="onTypeModules($event)" optionValueField="Id"
+            optionTextField="Name" [allowClear]="true" [formControl]="ModuleFilterSelectControl"
+            [(ngModel)]="SelectModuleId" (select)="onSelectModule($event)" (remove)="onSelectModule($event)">
+          </ngx-select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12 form-group" [ngClass]="{'has-error':SubModuleFilterSelectControl.errors}">
+          <label>Select Sub Module<span class="text-danger">*</span></label>
+          <ngx-select [items]="subModuleSelectList" (typed)="onTypeSubModules($event)" optionValueField="Id"
+            optionTextField="Name" [allowClear]="true" [formControl]="SubModuleFilterSelectControl"
+            [(ngModel)]="objSubModuleProperties.Sub_Module_Id"></ngx-select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <button class="btn btn-sm btn-primary pull-right" type="submit" (click)="onSaveClick()"
+            [disabled]="!SubModulePropertiesForm.valid || !SubModuleFilterSelectControl.valid">Save</button>
+          <button class="btn btn-sm btn-default pull-right" type="reset" (click)="onCancelClick()">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

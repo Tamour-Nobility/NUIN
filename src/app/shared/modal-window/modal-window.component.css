@@ -1,0 +1,5 @@
+@media (min-width: 576px) {
+    .modal-dialog-centered {
+        min-height: calc(100% - 3.5rem);
+    }
+}

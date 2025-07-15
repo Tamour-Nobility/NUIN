@@ -1,0 +1,11 @@
+.btn {
+    margin-right: 10px; /* Adjust the value to add the desired space */
+  }
+
+  .bold{
+    font-weight: bold;
+  }
+  .green-tab.active a {
+    background-color: green;
+    color: white; /* Set text color to white for better contrast */
+  }

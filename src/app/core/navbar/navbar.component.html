@@ -1,0 +1,333 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+  <div class="sidebar-collapse">
+    <ul class="nav metismenu" id="side-menu">
+      <li class="nav-header">
+        <div class="dropdown profile-element">
+          <a data-toggle="dropdown" class="dropdown-toggle">
+            <span class="clear">
+              <span class="block m-t-xs">
+                <strong class="font-bold">{{loggedInUser.unique_name | uppercase}}</strong>
+              </span> <span class="text-muted text-xs block">{{loggedInUser.role}} <b class="caret"></b></span>
+            </span>
+          </a>
+          <ul class="dropdown-menu animated fadeInRight m-t-xs">
+            <li>
+              <a (click)="onClickChangePassword()"><i class="fa fa-key">
+                </i>
+                Change Password</a>
+              <!-- <a (click)="onClickAlert()"><i class="fa-regular fa-bell"></i>  Alert</a> -->
+              <a *ngIf="alertRole()" (click)="showAlert()"><i class="fa-regular fa-bell"></i>&nbsp;Set Alert</a>
+
+              <a (click)="onClickLogout()"><i class="fa fa-sign-out">
+                </i>
+                Logout</a>
+            </li>
+          </ul>
+        </div>
+        <div class="logo-element">
+          PM
+        </div>
+      </li>
+      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" *ngIf="!Hide('Dashboard')">
+        <a [routerLink]='["/"]'><i class="fa fa-tachometer"></i><span class="nav-label">Dashboard</span></a>
+      </li>
+      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" *ngIf="!isDisabled">
+        <a [routerLink]='["/reporting/charges/overall"]'><i class="fa fa-bar-chart"></i><span
+            class="nav-label">Reporting</span></a>
+      </li>
+      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" *ngIf="!Hide('Scheduler')">
+        <a [routerLink]='["/appointments/scheduler"]'><i class="fa fa-clock-o"></i><span
+            class="nav-label">Scheduler</span></a>
+      </li>
+      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" *ngIf="!isDisabled">
+        <a [routerLink]='["/Tasks/claimlevel"]'><i class="fa fa-bell-o"></i>
+          <span class="nav-label">Tasks
+            <span class="position-absolute top-0 start-100 translate-middle 
+                        badge rounded-pill badge-danger">
+              {{(countclaimnotifications + countaccountnotifications) }}
+            </span>
+          </span></a>
+      </li>
+      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" *ngIf="!Hide('Patient Search')">
+        <a [routerLink]='["/patient/PatientSearch"]'><i class="fa fa-search"></i><span class="nav-label">Patient
+            Search</span></a>
+      </li>
+      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" *ngIf="!Hide('Claim Submission')">
+        <a [routerLink]="['/claimsubmission/scrubber/scrubberType']"><i class="fa fa-handshake-o"></i> <span
+            class="nav-label">Claim
+            Submission</span></a>
+      </li>
+      <!-- <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"
+                >
+                <a [routerLink]="['/referal/physician']"><i class="fa fa-handshake-o"></i> <span
+                        class="nav-label">Referral Physician</span></a>
+            </li> -->
+      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" *ngIf="!Hide('era')">
+        <a [routerLink]="['/era/era']"><i class="fa fa-file-text"></i> <span class="nav-label">ERA
+          </span></a>
+      </li>
+      <!-- <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" *ngIf="!isDisabled">
+        <a [routerLink]="['/payment']"><i class="fa fa-money"></i> <span class="nav-label">Payment
+          </span></a>
+      </li> -->
+      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" *ngIf="!Hide('Practice Setup')">
+        <a [routerLink]='["/PracticeList"]'><i class="fa fa-hospital-o"></i><span class="nav-label">Practice
+            Profile
+          </span></a>
+      </li>
+      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" *ngIf="!Hide('Reports')">
+        <a [routerLink]='["/ReportSetup"]'><i class="fa fa-bar-chart"></i><span class="nav-label">Reports</span></a>
+      </li>
+      <!-- Added BY Hamza Akhlaq for Ticket Tracker -->
+      <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a [routerLink]="['/ticket-tracker']"> <i class="fas fa-phone-volume"></i> <span class="nav-label">Ticket
+            Tracker</span></a>
+      </li>
+      <li [style.visibility]="isSetup?'visible':'hidden'">
+        <a (click)="collapse=!collapse" data-toggle="collapse" href="#setups">
+          <i class="fa fa-cog"></i> <span class="nav-label">Global Setups</span>
+          <span class="navbar-collapse-plus-minus-icon"
+            [ngClass]="collapse?'fa fa-plus-circle':'fa fa-minus-circle'"></span>
+        </a>
+        <ul class="nav nav-second-level collapse" id="setups" #setups>
+          <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" *ngIf="!Hide('Facility')">
+            <a [routerLink]='["/Facility"]'><i class="fa fa-university"></i> Facility</a>
+          </li>
+          <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" *ngIf="!Hide('Insurance Setup')">
+            <a [routerLink]='["/InsuranceSetup/insGroup"]' style="width: 185px;"><i
+                class="fa fa-universal-access"></i>Insurance
+              Setup</a>
+          </li>
+          <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" *ngIf="!Hide('Fee Schedule')">
+            <a [routerLink]='["/FeeSchedule/Standard"]'><i class="fa fa-credit-card"></i>Fee
+              Schedule</a>
+          </li>
+          <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" *ngIf="!Hide('Procedures')">
+            <a [routerLink]='["/procedures"]'><i class="fa fa-medkit"></i><span class="nav-label">Procedures</span></a>
+          </li>
+          <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" *ngIf="!Hide('Guarantor')">
+            <a [routerLink]='["/guarantors"]'><i class="fa fa-user-secret"></i> Guarantor</a>
+          </li>
+          <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" *ngIf="!Hide('Diagnosis')">
+            <a [routerLink]='["/diagnosis"]'><i class="fa fa-medkit"></i> Diagnosis</a>
+          </li>
+          <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" *ngIf="!Hide('NDC')">
+            <a [routerLink]='["/ndc"]'><i class="fa fa-plus-square"></i> NDC</a>
+          </li>
+          <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"
+            *ngIf="!Hide('Office Management')">
+            <a [routerLink]='["/OfficeMGM"]'><i class="fa fa-building"></i> Offices
+            </a>
+          </li>
+          <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"
+            *ngIf="!Hide('Referral Physicians')">
+            <a [routerLink]="['/referral-physician']"><i class="fa fa-handshake-o"></i> <span
+                class="nav-label">Referring Physician</span></a>
+          </li>
+          <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"
+            *ngIf="!Hide('Users Management')">
+            <a [routerLink]="['/users/module']"><i class="fa fa-users"></i> Users
+            </a>
+          </li>
+          <!-- <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"
+                        *ngIf="!Hide('EDI Setup')">
+                        <a [routerLink]='["/EDISetup"]'><i class="fa fa-th-large"></i><span class="nav-label">EDI
+                                Setup</span></a>
+                    </li> -->
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
+<!-- Change Password  -->
+<div class="modal inmodal fade" id="passwordResetfORUserModal" tabindex="-1" role="dialog" aria-hidden="true"
+  style="display: none;">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="hide()"><span aria-hidden="true">×</span><span
+            class="sr-only">Close</span></button>
+        <h4 class="modal-title">Change Password</h4>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="PasswordResetForm">
+          <div class="row">
+            <div class="form-group" formGroupName="pGroup">
+              <div class="col-lg-12">
+                <div class="row" style="display: flex; align-items: center;">
+                  <div class="col-lg-6">
+                    <label>Username<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" [(ngModel)]="objResetPasswordViewModel.UserName"
+                      formControlName="userName" maxlength="100" readonly
+                      [ngClass]="{'password-group-error':(PasswordResetForm.get('pGroup').get('userName').errors) && (PasswordResetForm.get('pGroup').get('userName').touched || PasswordResetForm.get('pGroup').get('userName').dirty)}">
+                    <div style="height: 21px;"></div>
+                    <label>Old Password<span class="text-danger">*</span></label>
+                    <input type="password" class="form-control" [(ngModel)]="objResetPasswordViewModel.OldPassword"
+                      formControlName="OldPassword" maxlength="100" autocomplete="new-password"
+                      [ngClass]="{'password-group-error':(PasswordResetForm.get('pGroup').get('OldPassword').errors) && (PasswordResetForm.get('pGroup').get('OldPassword').touched || PasswordResetForm.get('pGroup').get('OldPassword').dirty)}">
+
+                  </div>
+                  <div class="col-lg-6">
+                    <label><i class="fa fa-info-circle" [popover]="myPopover"></i>New Password<span
+                        class="text-danger">*</span></label>
+                    <input type="password" class="form-control" [(ngModel)]="objResetPasswordViewModel.Password"
+                      formControlName="password" maxlength="100" autocomplete="new-password"
+                      [ngClass]="{'password-group-error':(PasswordResetForm.get('pGroup').get('password').errors) && (PasswordResetForm.get('pGroup').get('password').touched || PasswordResetForm.get('pGroup').get('password').dirty)}">
+                    <popover-content #myPopover title="Password Criteria" placement="left" [animation]="true"
+                      [closeOnClickOutside]="true">
+                      <p><b>1.</b> Must be eight characters or longer.</p>
+                      <p><b>2.</b> At least 1 lowercase alphabetical character.</p>
+                      <p><b>3.</b> At least 1 uppercase alphabetical character.</p>
+                      <p><b>4.</b> At least 1 numeric character.</p>
+                      <p><b>5.</b> At least one special character.</p>
+                      <p><b>6.</b> Password and Verify Password should match.</p>
+                    </popover-content>
+                    <ng2-password-strength-bar [passwordToCheck]="objResetPasswordViewModel.Password">
+                    </ng2-password-strength-bar>
+
+
+                    <label>Verify Password<span class="text-danger">*</span></label>
+                    <input type="password" class="form-control" [(ngModel)]="objResetPasswordViewModel.ConfirmPassword"
+                      formControlName="confirmPassword" maxlength="100" autocomplete="new-password"
+                      [ngClass]="{'password-group-error':(PasswordResetForm.get('pGroup').get('confirmPassword').errors) && (PasswordResetForm.get('pGroup').get('confirmPassword').touched || PasswordResetForm.get('pGroup').get('confirmPassword').dirty)}">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-white" type="reset" (click)="hide()" data-dismiss="modal">Cancel</button>
+        <button class="btn btn-sm btn-primary" type="submit" (click)="onSaveClick()" data-dismiss="modal"
+          [disabled]="!PasswordResetForm.valid">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Alert Modal -->
+<!-- <div class="modal inmodal fade" id="UserModal" tabindex="-1" role="dialog" aria-hidden="true" 
+  *ngIf="isModalOpen">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" (click)="hide()"><span aria-hidden="true">×</span><span
+            class="sr-only">Close</span></button>
+        <h4 class="modal-title">Change Password</h4>
+      </div>
+      <div class="modal-body">
+     
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-white" type="reset" (click)="hide()">Cancel</button>
+        <button class="btn btn-sm btn-primary" type="submit" (click)="onSaveClick()"
+          [disabled]="!PasswordResetForm.valid">Save</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!-- Alert Modal -->
+<div class="modal fade" bsModal #alertModal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="dialog-nested-name"
+  data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-md col-6 w-100" style="float: right; width: 450px; height: 100%;">
+    <div class="modal-content animated bounceInUp">
+      <div class="modal-header" style="padding-top: 15px; padding-bottom: 15px;">
+        <button type="button" (click)="onclose()" #closebutton class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h2 class="modal-title center bold">Alert</h2>
+        <form [formGroup]="LoginAlertModelForm">
+          <div style="margin-top: 20px;">
+            <div class="form-group col-12">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                  <span style="font-weight: bold; font-size: 20px;" *ngIf="isExpired" class="text-danger">Alert
+                    Expired*</span>
+                </div>
+                <div class="checkbox checkbox-primary">
+                  <input formControlName="Inactive" type="checkbox">
+                  <label>Inactive</label>
+                </div>
+              </div>
+
+            </div>
+            <div class="form-group col-12">
+              <div style="display: flex; align-items: center;">
+                <h4 style="width: 100px; text-align: start;">Type<span class="text-danger">*</span></h4>
+                <select style="width: 220px; margin-left: 16px; height: 25px;" formControlName="Type">
+                  <option value="N">Announcement</option>
+                </select>
+
+              </div>
+              <!-- <div *ngIf="f.Type.invalid && (f.Type.dirty || f.Type.touched)" class="text-danger">
+                <div *ngIf="f.Type.errors.required">Type is required.</div>
+              </div> -->
+            </div>
+            <div class="form-group col-12">
+              <div style="display: flex; align-items: center;">
+                <h4>Effective From<span class="text-danger">*</span></h4>
+                <my-date-picker style="width: 220px; margin-left: 10px;" [placeholder]="'MM/DD/YYYY'"
+                  formControlName="EffectiveFrom" [selDate]="selDateDD" [options]="myDateRangePickerOptions"
+                  (dateChanged)="onStartDateChangeStart($event)" (keydown)="onDateInputKeydown($event)">
+                </my-date-picker>
+                <!-- [options]="myDateRangePickerOptions" 
+                (dateChanged)="onStartDateChangeStart($event)"
+                  (keydown)="onDateInputKeydown($event)" -->
+              </div>
+            </div>
+            <div class="form-group col-12">
+              <div style="display: flex; align-items: center;">
+                <h4 style="width: 100px; text-align: start;">Priority<span class="text-danger">*</span></h4>
+                <select style="width: 220px; margin-left: 16px; height: 25px;" formControlName="Priority">
+                  <option value="H">High</option>
+                  <option value="M">Medium</option>
+                  <option value="L">Low</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-12">
+              <div style="display: flex; align-items: center;">
+                <h4>Applicable For<span class="text-danger">*</span></h4>
+                <select style="width: 220px; margin-left: 12px; height: 25px;" formControlName="ApplicableFor">
+                  <option value="A">All users</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-12">
+              <div style="display: flex; align-items: center;">
+                <h4 style="width: 100px; text-align: start;">Effective To</h4>
+                <my-date-picker style="width: 221px; margin-left: 15px;" [options]="myDatePickerOptions"
+                  [placeholder]="'MM/DD/YYYY'" (dateChanged)="onDueDateChangeStart($event)"
+                  formControlName="EffectiveTo" [selDate]="selDateET">
+                </my-date-picker>
+              </div>
+
+            </div>
+            <div class="form-group col-12" style="text-align: left;">
+              <h4>Notes<span class="text-danger">*</span></h4>
+              <textarea formControlName="AlertMessage" rows="5" maxlength="300"
+                style="width: 100%; max-width: 100%;"></textarea>
+            </div>
+
+            <div class="form-group col-lg-12" style="text-align: left; margin-top: 10px;">
+              <h4 style="width: 100px; text-align: start;">Apply To</h4>
+              <div class="checkbox checkbox-primary">
+                <input disabled checked type="checkbox">
+                <label style="width: 100px; text-align: start;">Login</label>
+              </div>
+
+              <button id="Savebutton" type="button" (click)="saveLoginAlert()" class="btn btn-w-m btn-primary"
+                style="float: right;">
+                {{ isCreateMode ? 'Save' : 'Update' }}
+              </button>
+            </div>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,1 @@
+{"ast":null,"code":"export class GurantorResponse {\n  constructor() {\n    this.Response = new Response();\n  }\n}\nexport class Response {}","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

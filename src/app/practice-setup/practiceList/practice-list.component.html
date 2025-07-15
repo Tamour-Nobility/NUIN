@@ -1,0 +1,56 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5><i class="fa fa-hospital-o"></i>&nbsp;Practices</h5>
+                <div class="ibox-tools">
+                    <a class="link" (click)="AddEditPractice(0)">
+                        <i class="fa fa-plus"></i>&nbsp;Add New Practice
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-lg-12 pt-20">
+                        <div *ngIf="(practices && practices.length>0)">
+                            <table class="table table-hover table-striped table-bordered dataTable pracTable"
+                                width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Practice Code</th>
+                                        <th>Practice Name</th>
+                                        <th>City</th>
+                                        <th width="30" class="text-center">State</th>
+                                        <th>Status</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let prac of practices"
+                                        [ngStyle]="{'color':(prac.Is_Active === true ?'black':'red')}">
+                                        <td>{{prac.Practice_Code}}</td>
+                                        <td>{{prac.Prac_Name | uppercase}}</td>
+                                        <td>{{prac.Prac_City | titlecase}}</td>
+                                        <td class="text-center">{{prac.Prac_State | uppercase}}</td>
+                                        <td *ngIf="prac.Is_Active==true">Active</td>
+                                        <td *ngIf="prac.Is_Active==false">Inactive</td>
+                                        <td class="text-center footable-visible footable-last-column">
+                                            <div class="btn-group">
+                                                <button class="btn-white btn btn-xs gridbtn" *ngIf='prac.Is_Active'
+                                                    (click)="viewPractice(prac.Practice_Code,prac.Prac_Name)">View</button>
+                                                <button class="btn-white btn btn-xs gridbtn" *ngIf='prac.Is_Active'
+                                                    (click)="AddEditPractice(prac.Practice_Code,prac.Prac_Name)">Edit</button>
+                                                <button class="btn-red btn btn-xs gridbtn"
+                                                    (click)="ActiveInActivePractice(prac.Practice_Code)">{{prac.Is_Active?'Inactive':'Activate'}}</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

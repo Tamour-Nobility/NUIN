@@ -1,0 +1,37 @@
+<div class="row border-bottom">
+    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <a class="navbar-minimalize minimalize-styl-2 btn btn-custom "><i class="fa fa-bars"></i> </a>
+        </div>
+        <ul class="nav navbar-top-links navbar-right">
+            <li>
+            </li>
+            <li (click)="onChangePracticeClick()">
+                <a>
+                    <i class="fa fa-hospital-o">
+                    </i>
+                    <ng-container
+                        [ngTemplateOutlet]="loggedInUser.selectedPractice.PracticeCode!=undefined?hasPractice:noPractice">
+                    </ng-container>
+                    <ng-template #hasPractice>
+                        {{loggedInUser.selectedPractice.PracticeName}}
+                    </ng-template>
+                    <ng-template #noPractice>
+                        {{'No Assigned Practice'}}
+                    </ng-template>
+                </a>
+            </li>
+            <li><a (click)="onClickLogout()">
+                    <i class="fa fa-sign-out"></i>Log out</a>
+            </li>
+        </ul>
+
+    </nav>
+</div>
+<!-- 
+<div class="row  blue-main-bg dashboard-header">
+
+</div> -->
+<!-- Practice Selection -->
+<app-change-practice></app-change-practice>
+<!-- Practice Selection -->

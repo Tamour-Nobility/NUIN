@@ -1,0 +1,28 @@
+<div class="ibox float-e-margins">
+  <div class="ibox-title">
+    <h5>Group Detail</h5>
+  </div>
+  <div class="ibox-content">
+    <div class="row">
+      <div class="col-lg-12">
+        <ul class="list-group">
+          <li class="list-group-item">
+            <b>Name: </b> <span> {{objInsGroupRsp.Response.Insgroup_Name | titlecase}}</span>
+          </li>
+          <li class="list-group-item">
+            <b>Created By: </b> <span> {{objInsGroupRsp.Response.Created_By_Name | titlecase}}</span>
+          </li>
+          <li class="list-group-item">
+            <b>Created Date: </b> <span> {{objInsGroupRsp.Response.Created_Date | date:'MM/dd/yyyy'}}</span>
+          </li>
+          <li class="list-group-item">
+            <b>Modified By: </b> <span> {{objInsGroupRsp.Response.Modified_By_Name | titlecase}}</span>
+          </li>
+          <li class="list-group-item">
+            <b>Modified Date: </b> <span> {{objInsGroupRsp.Response.Modified_Date | date:'MM/dd/yyyy'}}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

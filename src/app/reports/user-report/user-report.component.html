@@ -1,0 +1,436 @@
+<h3>CPT Wise Charges Detail Report</h3>
+<div class="row">
+  <form [formGroup]="CPDForm">
+
+
+    <div class="form-group col-lg-3">
+      <label class="control-label">Practices<span class="text-danger">*</span></label>
+      <ngx-select formControlName="PracCode" (blur)="onchangeuser()" [items]="listPracticesList"
+        optionTextField="PracticeLabel" [allowClear]="false">
+      </ngx-select>
+    </div>
+    <!-- <span class="input-group-btn">
+        <button class="btn btn-primary btn-sm lh-1_2" type="button" [disabled]="this.CPDForm.value.PracCode ==0"
+          (click)="onchangePractice()"><i class="fa fa-refresh"></i></button>
+      </span> -->
+
+    <div class="form-group col-lg-3">
+      <label class="control-label">Users</label>
+      <select class="form-control" formControlName="userid">
+        <option value=0 disabled>All</option>
+        <option *ngFor="let c of listUserList" value={{c.Id}}>{{c.Name}}</option>
+      </select>
+
+    </div>
+    <!-- <span class="input-group-btn">
+        <button class="btn btn-primary btn-sm lh-1_2" type="button" [disabled]="this.CPDForm.value.userid ==0"
+          (click)="onchangePractice()"><i class="fa fa-refresh"></i></button>
+      </span> -->
+    <div class="form-group col-lg-3">
+      <label>Date From</label>
+      <my-date-picker id="dtpFrom" [options]="myDatePickerOptions" [placeholder]="placeholder"
+        (dateChanged)="onDateChanged($event,'From')" formControlName="dateFrom">
+      </my-date-picker>
+    </div>
+    <div class="form-group col-lg-3">
+      <label>Date To</label>
+      <my-date-picker id="dtpTo" [placeholder]="placeholder" formControlName="dateTo"
+        (dateChanged)="onDateChanged($event,'To')" [options]="myDatePickerOptions">
+      </my-date-picker>
+    </div>
+
+
+  </form>
+
+</div>
+<div class="row col-lg-12">
+  <button class="btn btn-primary btn-sm pull-right" type="submit" (click)="onchangePractice()">Search</button>
+  <button type="button" class="btn btn-white pull-right ml-2 btn-sm" (click)="onClear()">Clear</button>
+</div>
+
+
+
+<!-- <div class="row" *ngIf="isSearchInitiated == true">
+
+  <div class="col-lg-12">
+    <h3>CPT Wise Charges Detail Report</h3>
+  </div>
+  <div class="col-lg-18">
+    <table class="table table-striped table-hover table-bordered datatable dtuserReportdetials">
+      <thead>
+        <tr>
+          <th>Practice Code</th>
+          <th>Practice Name</th>
+          <th>Patient Account</th>
+          <th> Patient Name </th>
+          <th>Claim No</th>
+          <th>Location Name</th>
+          <th>Attending Physician</th>
+          <th>Rendering Provider</th>
+          <th>Resource Provider</th>
+          <th>Procedure Code</th>
+          <th>Procedure Description </th>
+        
+          <th>Primary Carrier</th>
+          <th>Primary Policy Number</th>
+          <th> Secondary Carrier </th>
+          <th>Secondary Policy Number</th>
+        
+         
+          <th>Created by</th>
+          <th>Ceated Date</th>
+          <th>Modified By</th>
+          <th>Modified Date</th>
+          <th>DOS</th>
+          <th>Entry Date</th>
+          <th>Billed Charge</th>
+          <th>Units</th>
+          <th>Claim Charges Id</th>
+          <th>Modifier 1</th>
+          <th>Modifier 2</th>
+          <th>Modifier 3</th>
+          <th>Modifier 4</th>
+          <th>Diagnosis 1</th>
+          <th>Diagnosis 2</th>
+          <th>Diagnosis 3</th>
+          <th>Diagnosis 4</th>
+          <th>Diagnosis 5</th>
+          <th>Diagnosis 6</th>
+          <th>Diagnosis 7</th>
+          <th>Diagnosis 8</th>
+          <th>Diagnosis 9</th>
+          <th>Diagnosis 10 </th>
+          <th>Diagnosis 11</th>
+          <th>Diagnosis 12</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cp of usersDetailReport">
+          <td>{{cp.Practice_Code}}</td>
+          <td>{{cp.Prac_Name}}</td>
+          <td>{{cp.Patient_Account}}</td>
+          <td>{{cp.Patient_Name}}</td>
+          <td>{{cp.CLAIM_NO}}</td>
+          <td>{{cp.Location_Name}}</td>
+          <td>{{cp.Attending_Physician}}</td>
+          <td>{{cp.RENDERRING_PROVIDER}}</td>
+          <td>{{cp.RESOURCE_PROVIDER}}</td>
+          <td>{{cp.PROCEDURE_CODE}}</td>
+          <td>{{cp.ProcedureDescription}}</td>
+         
+          <td>{{cp.Primary_Carrier}}</td>
+          <td>{{cp.Primary_Policy_Number_}}</td>
+          <td>{{cp.Secondary_Carrier}}</td>
+          <td>{{cp.Secondary_Policy_Number_}}</td>
+         
+          <td><span *ngIf="cp.useridbycreated == null">Imported</span>
+            
+            {{cp.created_byN}}</td>
+            <td><span *ngIf="cp.useridbycreated == null">Imported</span>
+            
+              {{cp.CreatedDate  | date:'MM/dd/yyyy'}}</td>
+          <td><span *ngIf="cp.useridbymodified == null">Not Updated</span>
+            
+            {{cp.Modified_ByN}}</td>
+          
+            <td><span *ngIf="cp.useridbymodified == null">Not Updated</span>
+              
+              {{cp.ModifiedDate  | date:'MM/dd/yyyy'}}</td>
+          <td>{{cp.DOS  | date:'MM/dd/yyyy'}}</td>
+          <td>{{cp.Entry_Date  | date:'MM/dd/yyyy'}}</td>
+          <td>{{cp.BILLED_CHARGE}}</td>
+          <td>{{cp.UNITS}}</td>
+          <td>{{cp.claim_charges_id}}</td>
+          <td>{{cp.Modi_Code1}}</td>
+          <td>{{cp.Modi_Code2}}</td>
+          <td>{{cp.modi_code3}}</td>
+          <td>{{cp.modi_code4}}</td>        
+          <td>{{cp.DX_Code1}}</td>
+          <td>{{cp.DX_Code2}}</td>
+          <td>{{cp.DX_Code3}}</td>
+          <td>{{cp.DX_Code4}}</td>
+          <td>{{cp.DX_Code5}}</td>
+          <td>{{cp.DX_Code6}}</td>
+          <td>{{cp.DX_Code7}}</td>
+          <td>{{cp.DX_Code8}}</td>
+          <td>{{cp.DX_Code9}}</td>
+          <td>{{cp.DX_Code10}}</td>
+          <td>{{cp.DX_Code11}}</td>
+          <td>{{cp.DX_Code12}}</td>
+     
+          
+
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div> -->
+<div class="row justify-content-center" *ngIf="isSearchInitiated == true">
+  <div class="col-lg-12">
+    <h3> CPT Wise Charges Detail Report</h3>
+  </div>
+  <div *ngIf="usersDetailReport.length > 0 || ddlPracticeCode != 0" class="col-lg-2 d-flex my-4"
+    style="display: flex; align-items: center; margin-top: 20px;">
+    <label style="font-weight: normal">Show</label>
+    <select (change)="countValueChanged($event)" class="form-control input-sm mx-2"
+      style="width: 3rem; margin-left: 5px; margin-right: 5px; max-width: 37% !important;">
+      <option [value]="10" [selected]="count === 10">10</option>
+      <option [value]="25" [selected]="count === 25">25</option>
+      <option [value]="50" [selected]="count === 50">50</option>
+      <option [value]="100" [selected]="count === 100">100</option>
+    </select>
+    <label style="font-weight: normal">entries</label>
+  </div>
+  <div class="col-lg-4  my-4" style="display: flex; align-items: center; margin-top: 20px;padding-left: 30%;"
+    *ngIf=" ddlPracticeCode != 0">
+    <button class="btn btn-default btn-sm" (click)="exportExcel()"><i
+        class="fa fa-file-excel-o"></i>&nbsp;Excel</button>
+
+  </div>
+
+  <div class="col-sm-6 d-flex my-4" style="display: flex; align-items: center; margin-top: 23px;padding-left: 33%;"
+    *ngIf="usersDetailReport.length > 0 || ddlPracticeCode != 0">
+    <span>Search:&nbsp;</span><input class="form-control" type="text" [(ngModel)]="searchText">
+  </div>
+
+
+</div>
+
+
+<div class="col-lg-12 pt-20  table-horizontal-scroll">
+  <div class="row d-flex justify-content-between" *ngIf="usersDetailReport.length > 0 || ddlPracticeCode != 0">
+
+    <table id="example" class="table table-striped table-hover table-bordered dataTableASR" width="100%"
+      *ngIf="(usersDetailReport | filter: searchText).length>0 || ddlPracticeCode!=0">
+      <thead>
+        <tr>
+          <th (click)="toggleSorting('Practice_Code')">Practice Code
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Practice_Code' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Practice_Name')">Practice Name
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Practice_Name' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Patient_Account')">Patient Account
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Patient_Account' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Patient_Name')">Patient Name
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Patient_Name' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('CLAIM_NO')">Claim No
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'CLAIM_NO' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Location_Name')">Location Name
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Location_Name' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Facility')">Facility
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Facility' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Attending_Physician')">Attending Physician
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Attending_Physician' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('RENDERING_PROVIDER')">Rendering Provider
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'RENDERING_PROVIDER' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('RESOURCE_PROVIDER')">Resource Provider
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'RESOURCE_PROVIDER' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('PROCEDURE_CODE')">Procedure Code
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'PROCEDURE_CODE' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Procedure_Description')">Procedure Description
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Procedure_Description' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Primary_Carrier')">Primary Carrier
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'PAYMENT_TYPE' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Primary_Policy_Number')">Primary Policy Number
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Primary_Policy_Number' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Secondary_Carrier')">Secondary Carrier
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Secondary_Carrier' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Secondary_Policy_Number')">Secondary Policy Number
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Secondary_Policy_Number' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('created_by')">Created By
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'created_by' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('DOS')">DOS
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'DOS' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Entry_Date')">Date Entry
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Entry_Date' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('BILLED_CHARGE')">Billed Charge
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'BILLED_CHARGE' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('UNITS')">Units
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'UNITS' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('claim_charges_id')">Claim Charges Id
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'claim_charges_id' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Modifier_1')">Modifier 1
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Modifier_1' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Modifier_2')">Modifier 2
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Modifier_1' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Modifier_3')">Modifier 3
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Modifier_1' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Modifier_4')">Modifier 4
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Modifier_1' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+
+
+          <th (click)="toggleSorting('Diagnosis_1')">Diagnosis 1
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Diagnosis_1' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Diagnosis_2')">Diagnosis 2
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Diagnosis_2' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Diagnosis_3')">Diagnosis 3
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Diagnosis_3' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Diagnosis_4')">Diagnosis 4
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Diagnosis_4' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Diagnosis_5')">Diagnosis 5
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Diagnosis_5' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Diagnosis_6')">Diagnosis 6
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Diagnosis_6' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Diagnosis_7')">Diagnosis 7
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Diagnosis_7' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Diagnosis_8')">Diagnosis 8
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Diagnosis_8' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Diagnosis_9')">Diagnosis 9
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Diagnosis_9' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Diagnosis_10')">Diagnosis 10
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Diagnosis_10' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Diagnosis_11')">Diagnosis 11
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Diagnosis_11' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+          <th (click)="toggleSorting('Diagnosis_12')">Diagnosis 12
+            <i style="padding-left: 10px; color: lightgray;"
+              [ngClass]="sortingColumn === 'Diagnosis_12' && sortingDirection === 1 ? 'fa-solid fa-arrow-up-short-wide' : 'fa-solid fa-arrow-down-wide-short'"></i>
+          </th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="usersDetailReport.length === 0 && ddlPracticeCode !== 0">
+          <tr>
+            <td colspan="24" style="padding-left: 70vh ;">No data available</td>
+          </tr>
+        </ng-container>
+
+
+
+        <tr *ngFor="let p of usersDetailReport | filter: searchText;">
+          <td>{{p.Practice_Code}}</td>
+          <td>{{p.Practice_Name}}</td>
+          <td>{{p.Patient_Account}}</td>
+          <td>{{p.Patient_Name}}</td>
+          <td>{{p.CLAIM_NO}}</td>
+
+          <td>{{p.Location_Name }}</td>
+          <td>{{p.Facility }}</td>
+          <td>{{p.Attending_Physician}}</td>
+          <td>{{p.RENDERING_PROVIDER}}</td>
+          <td>{{p.RESOURCE_PROVIDER}}</td>
+          <td>{{p.PROCEDURE_CODE}}</td>
+          <td>{{p.Procedure_Description}}</td>
+          <td>{{p.Primary_Carrier}}</td>
+          <td>{{p.Primary_Policy_Number }}</td>
+          <td>{{p.Secondary_Carrier}}</td>
+          <td>{{p.Secondary_Policy_Number}}</td>
+          <td>{{p.created_by }}</td>
+          <td>{{p.DOS| date:'MM/dd/yyyy'}}</td>
+          <td>{{p.Entry_Date| date:'MM/dd/yyyy'}}</td>
+          <td>{{p.BILLED_CHARGE | currency}}</td>
+          <td>{{p.UNITS}}</td>
+          <td>{{p.claim_charges_id}}</td>
+          <td>{{p.Modifier_1}}</td>
+          <td>{{p.Modifier_2}}</td>
+          <td>{{p.Modifier_3}}</td>
+          <td>{{p.Modifier_4}}</td>
+          <td>{{p.Diagnosis_1}}</td>
+          <td>{{p.Diagnosis_2}}</td>
+          <td>{{p.Diagnosis_3}}</td>
+          <td>{{p.Diagnosis_4}}</td>
+          <td>{{p.Diagnosis_5}}</td>
+          <td>{{p.Diagnosis_6}}</td>
+          <td>{{p.Diagnosis_7}}</td>
+          <td>{{p.Diagnosis_8}}</td>
+          <td>{{p.Diagnosis_9}}</td>
+          <td>{{p.Diagnosis_10}}</td>
+          <td>{{p.Diagnosis_11}}</td>
+          <td>{{p.Diagnosis_12}}</td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+
+<div *ngIf="usersDetailReport.length > 0 || ddlPracticeCode != 0" class="row d-flex"
+  style="margin-left: 5px; margin-right: 5px; margin-top: 15px">
+  <span>Showing {{ (filteredRecords) }} of {{ totalResults }} entries</span>
+  <div style="float: right;margin-top: 0.5%;">
+    <button (click)="loadPreviousPage()" [disabled]="currentPage === 1">
+      Previous
+    </button>
+    {{ currentPage }}/{{ totalPages }}
+    <button (click)="loadNextPage()" [disabled]="currentPage === totalPages">
+      Next
+    </button>
+  </div>
+</div>

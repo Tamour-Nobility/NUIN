@@ -1,0 +1,23 @@
+<div class="modal fade" bsModal #modalWindow="bs-modal" tabindex="-1" role="dialog" aria-labelledby="dialog-nested-name"
+  (onShown)="onModalShown($event)" (onHidden)="onModalHidden($event)">
+  <div class="{{ 'modal-dialog ' + size}}">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close">
+          <span aria-hidden="true" (click)="modalWindow.hide();">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h3 class="modal-title" [ngClass]="titleClass">{{title}}
+        </h3>
+        <small class="font-bold">{{description}}</small>
+        <ng-content select="[header-right-link]">
+        </ng-content>
+      </div>
+      <div class="modal-body">
+        <ng-content select="[body]"></ng-content>
+      </div>
+      <div class="modal-footer" *ngIf="hasFooter">
+        <ng-content select="[footer]"></ng-content>
+      </div>
+    </div>
+  </div>
+</div>

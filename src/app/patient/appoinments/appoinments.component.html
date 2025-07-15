@@ -1,0 +1,57 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="pull-left">
+      <h3>
+        <label class="control-label">Patient:<b>
+            {{patientInfo.PatientLastName | titlecase}},
+            {{patientInfo.PatientFirstName | titlecase}}</b></label>&nbsp;|&nbsp;<label class="control-label">Account
+          #:
+          <b>{{patientInfo.Patient_Account}}</b></label>
+      </h3>
+    </div>
+    <div class="pull-right">
+      <div class="box red"></div><span>Cancelled</span>
+      <div class="box blue"> </div><span>Pending</span>
+      <div class="box green"> </div><span>Completed</span>
+    </div>
+  </div>
+  <div class="col-lg-12">
+    <div class="table-responsive">
+      <table class="table table-striped table-hover table-bordered datatableAppointments">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Duration</th>
+            <th>Status</th>
+            <th>Balance</th>
+            <th>App. Type</th>
+            <!-- <th>Reason</th> -->
+            <th>Notes</th>
+            <th>Facility</th>
+            <th>Att Phy</th>
+            <th>Billing Phy</th>
+            <th>Ref Phy</th>
+            <!-- <th>Action</th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of listPatientAppoinments let ndx=index"
+            (click)="onClickAppointmentRow(item.APPOINTMENT_ID)" style="cursor: pointer;">
+            <td [ngStyle]="setPaymentRptStyle(ndx)">{{item.DATE |date:'MM/dd/yyyy'}}</td>
+            <td [ngStyle]="setPaymentRptStyle(ndx)">{{item.TIME}}</td>
+            <td [ngStyle]="setPaymentRptStyle(ndx)">{{item.DURATION}}</td>
+            <td [ngStyle]="setPaymentRptStyle(ndx)">{{item.STATUS}}</td>
+            <td [ngStyle]="setPaymentRptStyle(ndx)" align="center">${{item.PREVIOUS_BALANCE}}</td>
+            <td [ngStyle]="setPaymentRptStyle(ndx)">{{item.APPOINTMENT_TYPE}} </td>
+            <td [ngStyle]="setPaymentRptStyle(ndx)">{{item.NOTES}} </td>
+            <td [ngStyle]="setPaymentRptStyle(ndx)">{{item.FACILITY}}</td>
+            <td [ngStyle]="setPaymentRptStyle(ndx)">{{item.ATTENDING_PHYSICIAN}}</td>
+            <td [ngStyle]="setPaymentRptStyle(ndx)">{{item.BILLING_PHYSICIAN}}</td>
+            <td [ngStyle]="setPaymentRptStyle(ndx)">{{item.REFFERRING_PHYSICIAN}} </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
